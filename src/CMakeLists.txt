@@ -58,35 +58,32 @@ SET(LIB_LIST
 	# libgrpc++_unsecure.a 
 	# libz.a
 
-
+	# libtensorflow.so
+	# libtensorflow_framework.so
 	
-	libgrpc++.a
-	libprotobuf.a
+	libgrpc++.a	
 	libprotoc.a
 	libgrpc++_error_details.a
 	libgrpc++_reflection.a
 	libgrpc_unsecure.a
-
 	libaddress_sorting.a
 	libcares.a
-
 	libgrpc++_alts.a
-
 	libgrpc.a
 	libgrpc_cronet.a
 	libgrpc_plugin_support.a
-	
 	libgrpcpp_channelz.a
-	# libprotobuf-lite.a
-
+	libprotobuf-lite.a
 	libupb.a
+	libgpr.a
+	libprotobuf.a
 	libz.a
 
-	libgpr.a
-
-
-	libtensorflow.so
-	libtensorflow_framework.so
+	libabsl_strings.a
+	# libabsl_str_format_internal.a
+	# libabsl_strings_internal.a
+	# libabsl_base.a
+	libabsl_throw_delegate.a
 
 	m
 	dl

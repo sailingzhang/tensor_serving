@@ -10,11 +10,55 @@
 
 using namespace std;
 
+#include <dlfcn.h>
+
 
 struct signatureRelation{
     string modelname;
     string signature;
     vector<string> outputname;
+};
+
+
+template<typename T>
+void mydlsym(void * handle,T & a, string funname) {
+     a = (T)(dlsym(handle, funname.c_str()));
+}
+
+
+
+
+
+class tensorflowOp{
+public:
+    tensorflowOp(string filename){
+        auto handle = dlopen(filename.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
+        if (! handle) {
+            dlerror();
+            // LOG_ERROR("dlopen error="<<dlerror());
+            return;
+        }
+        this->TF_DeleteBuffer = decltype(this->TF_DeleteBuffer)(dlsym(handle, "TF_DeleteBuffer"));
+        mydlsym(handle,this->TF_DeleteSessionOptions,"TF_DeleteSessionOptions");
+        mydlsym(handle,this->TF_LoadSessionFromSavedModel,"TF_LoadSessionFromSavedModel");
+        mydlsym(handle,TF_NewBuffer, "TF_NewBuffer");
+        mydlsym(handle,TF_NewBufferFromString, "TF_NewBufferFromString");
+        mydlsym(handle,TF_NewGraph, "TF_NewGraph");
+        mydlsym(handle, TF_NewSessionOptions,"TF_NewSessionOptions");
+        mydlsym(handle,TF_NewStatus,"TF_NewSessionOptions");
+        mydlsym(handle,TF_Version,"TF_Version");
+        
+    };
+    virtual ~tensorflowOp(){};
+    TF_SessionOptions* (*TF_NewSessionOptions)(void);
+    TF_Buffer* (*TF_NewBufferFromString)(const void* proto,size_t proto_len);
+    TF_Buffer* (*TF_NewBuffer)(void);
+    void (*TF_DeleteBuffer)(TF_Buffer*);
+    TF_Status* (*TF_NewStatus)(void);
+    TF_Graph* (*TF_NewGraph)(void);
+    TF_Session* (*TF_LoadSessionFromSavedModel)(const TF_SessionOptions* session_options, const TF_Buffer* run_options,const char* export_dir, const char* const* tags, int tags_len,TF_Graph* graph, TF_Buffer* meta_graph_def, TF_Status* status);
+    void (*TF_DeleteSessionOptions)(TF_SessionOptions*);
+    char* (*TF_Version)(void);
 };
 
 
