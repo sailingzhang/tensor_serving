@@ -19,6 +19,13 @@ struct signatureRelation{
     vector<string> outputname;
 };
 
+struct modelSource{
+    TF_Session * t_sess;
+	TF_Graph * t_graph;
+    // TF_Buffer* metagraph;
+    tensorflow::MetaGraphDef metagraph_def;
+};
+
 
 template<typename T>
 void mydlsym(void * handle,T & a, string funname) {
@@ -31,25 +38,42 @@ void mydlsym(void * handle,T & a, string funname) {
 
 class tensorflowOp{
 public:
+    tensorflowOp(){
+        this->handle= nullptr;
+    };
     tensorflowOp(string filename){
-        auto handle = dlopen(filename.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
-        if (! handle) {
+        this->handle = nullptr;
+        this->handle = dlopen(filename.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
+        if (! this->handle) {
             dlerror();
             // LOG_ERROR("dlopen error="<<dlerror());
             return;
         }
         this->TF_DeleteBuffer = decltype(this->TF_DeleteBuffer)(dlsym(handle, "TF_DeleteBuffer"));
-        mydlsym(handle,this->TF_DeleteSessionOptions,"TF_DeleteSessionOptions");
-        mydlsym(handle,this->TF_LoadSessionFromSavedModel,"TF_LoadSessionFromSavedModel");
-        mydlsym(handle,TF_NewBuffer, "TF_NewBuffer");
-        mydlsym(handle,TF_NewBufferFromString, "TF_NewBufferFromString");
-        mydlsym(handle,TF_NewGraph, "TF_NewGraph");
-        mydlsym(handle, TF_NewSessionOptions,"TF_NewSessionOptions");
-        mydlsym(handle,TF_NewStatus,"TF_NewSessionOptions");
-        mydlsym(handle,TF_Version,"TF_Version");
+        mydlsym(this->handle,this->TF_DeleteSessionOptions,"TF_DeleteSessionOptions");
+        mydlsym(this->handle,this->TF_LoadSessionFromSavedModel,"TF_LoadSessionFromSavedModel");
+        mydlsym(this->handle,TF_NewBuffer, "TF_NewBuffer");
+        mydlsym(this->handle,TF_NewBufferFromString, "TF_NewBufferFromString");
+        mydlsym(this->handle,TF_NewGraph, "TF_NewGraph");
+        mydlsym(this->handle,TF_NewSessionOptions,"TF_NewSessionOptions");
+        mydlsym(this->handle,TF_NewStatus,"TF_NewStatus");
+        mydlsym(this->handle,TF_Version,"TF_Version");
+        mydlsym(this->handle,TF_DeleteTensor,"TF_DeleteTensor");
+        mydlsym(this->handle,TF_NewTensor,"TF_NewTensor");
+        mydlsym(this->handle,TF_GraphOperationByName,"TF_GraphOperationByName");
+        mydlsym(this->handle,TF_TensorData,"TF_TensorData");
+        mydlsym(this->handle,TF_SessionRun,"TF_SessionRun");
+        mydlsym(this->handle,TF_GetCode,"TF_GetCode");
+        mydlsym(this->handle,TF_NumDims,"TF_NumDims");
+        mydlsym(this->handle,TF_Dim,"TF_Dim");
+        mydlsym(this->handle,TF_DeleteStatus,"TF_DeleteStatus");
         
     };
-    virtual ~tensorflowOp(){};
+    virtual ~tensorflowOp(){
+        if(nullptr != this->handle){
+            // dlclose(this->handle);
+        }
+    };
     TF_SessionOptions* (*TF_NewSessionOptions)(void);
     TF_Buffer* (*TF_NewBufferFromString)(const void* proto,size_t proto_len);
     TF_Buffer* (*TF_NewBuffer)(void);
@@ -59,6 +83,17 @@ public:
     TF_Session* (*TF_LoadSessionFromSavedModel)(const TF_SessionOptions* session_options, const TF_Buffer* run_options,const char* export_dir, const char* const* tags, int tags_len,TF_Graph* graph, TF_Buffer* meta_graph_def, TF_Status* status);
     void (*TF_DeleteSessionOptions)(TF_SessionOptions*);
     char* (*TF_Version)(void);
+    void (*TF_DeleteTensor)(TF_Tensor*);
+    TF_Tensor* (*TF_NewTensor)(TF_DataType, const int64_t* dims, int num_dims, void* data, size_t len,void (*deallocator)(void* data, size_t len, void* arg),void* deallocator_arg);
+    TF_Operation* (*TF_GraphOperationByName)(TF_Graph* graph, const char* oper_name);
+    void* (*TF_TensorData)(const TF_Tensor*);
+    void (*TF_SessionRun)(TF_Session* session,const TF_Buffer* run_options,const TF_Output* inputs, TF_Tensor* const* input_values, int ninputs,const TF_Output* outputs, TF_Tensor** output_values, int noutputs,const TF_Operation* const* target_opers, int ntargets,TF_Buffer* run_metadata,TF_Status*);
+    TF_Code (*TF_GetCode)(const TF_Status* s);
+    int (*TF_NumDims)(const TF_Tensor*);
+    int64_t (*TF_Dim)(const TF_Tensor* tensor, int dim_index);
+    void (*TF_DeleteStatus)(TF_Status*);
+private:
+    void * handle;
 };
 
 
@@ -78,9 +113,13 @@ public:
     // GetModelMetadata - provides access to metadata for loaded models.
     virtual ::grpc::Status GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response);
 private:
-    std::map<string,map<string,signatureRelation>> signatureRelationMap;
-    TF_Session * t_sess;
-	TF_Graph * t_graph;
+    // std::map<string,map<string,signatureRelation>> signatureRelationMap;
+    // shared_ptr<TF_Tensor> TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from);
+    TF_Tensor * TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from);
+    int32_t run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
+    int32_t loadModel(string modelname,string modeldir);
+    tensorflowOp TfOp;
+    std::map<string,modelSource> modelsourceMap;
 };
 
 #endif
