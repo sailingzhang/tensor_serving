@@ -68,7 +68,7 @@ TF_Tensor * tensorflow_service_driver::TensorProto_To_TF_Tensor(const tensorflow
     LOG_DEBUG("enter");
     int32_t allsize = 1;
     auto &dim = from.tensor_shape().dim();
-    int64_t dimarr[100];
+    vector<int64_t> dimarr(dim.size(),0);
     for(auto i =0;i < dim.size();i++){
         auto dimsize = dim[i].size();
         dimarr[i] = dimsize;
@@ -76,20 +76,8 @@ TF_Tensor * tensorflow_service_driver::TensorProto_To_TF_Tensor(const tensorflow
         LOG_DEBUG("one dim="<<dimarr[i]);
     }
     auto allbytes = sizeof(float) * allsize;
-    
-    auto pData =malloc(allbytes);
-    // memcopy(pData,from.float_val().begin(),allbytes);
-    float * p = (float *)pData;
-    for(auto i = 0;i < allsize;i++){
-        (*p) = from.float_val()[i];
-        p++;
-    }
-    // auto gettensorptr = this->TfOp.TF_NewTensor(TF_FLOAT,dimarr,dim.size(),pData,allbytes,dummy_deallocator,nullptr);
-    auto gettensorptr = this->TfOp.TF_NewTensor(TF_FLOAT,dimarr,dim.size(),(void *)from.float_val().begin(),allbytes,dummy_deallocator,nullptr);
+    auto gettensorptr = this->TfOp.TF_NewTensor(TF_FLOAT,dimarr.data(),dim.size(),(void *)from.float_val().begin(),allbytes,dummy_deallocator,nullptr);
     return gettensorptr;
-    // auto deleteop = this->TfOp.TF_DeleteTensor;
-    // shared_ptr<TF_Tensor> sp(gettensorptr,[=](TF_Tensor *p){ (*deleteop)(p);});
-    // return sp;
 }
 
 std::tuple<string,int32_t> split_tensorname(string namestr){
@@ -104,6 +92,19 @@ std::tuple<string,int32_t> split_tensorname(string namestr){
 int32_t tensorflow_service_driver::run_predict_session( const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response)
 {
     LOG_DEBUG("enter");
+	TF_Status * s=this->TfOp.TF_NewStatus();
+    std::vector<TF_Tensor*> input_values;
+    std::vector<TF_Tensor*> output_values;
+    auto relasefun = [&](){
+        this->TfOp.TF_DeleteStatus(s);
+        for(auto it =input_values.begin();it != input_values.end();it++){
+            this->TfOp.TF_DeleteTensor(*it);
+        }
+        for(auto it =output_values.begin();it != output_values.end();it++){
+            this->TfOp.TF_DeleteTensor(*it);
+        }
+    };
+
 
     auto &modelname = request->model_spec().name();
     auto &signaturename = request->model_spec().signature_name();
@@ -111,46 +112,48 @@ int32_t tensorflow_service_driver::run_predict_session( const ::tensorflow::serv
     auto it = this->modelsourceMap.find(modelname);
     if(it == this->modelsourceMap.end()){
         LOG_ERROR("no find such model,name="<<modelname);
+        relasefun();
         return -1;
     }
     TF_Session * sess = it->second.t_sess;
     TF_Graph * graph = it->second.t_graph;
     auto & metagraph_def = it->second.metagraph_def;
     const auto &signature_def_map = metagraph_def.signature_def();
-    const auto &signature_def = signature_def_map.at(signaturename);
+    auto signaturemapIt = signature_def_map.find(signaturename);
+    if(signaturemapIt == signature_def_map.end()){
+        LOG_ERROR("no find such signaturename="<<signaturename);
+        relasefun();
+        return -1;
+    }
+    const auto &signature_def = signaturemapIt->second;
     const auto & outputsinfo = signature_def.outputs();
     const auto & inputsinfo = signature_def.inputs();
-    
-	TF_Status * s=this->TfOp.TF_NewStatus();
 
-    int32_t request_index =0;
+
+
+
     std::vector<TF_Output> input_names;
-	std::vector<TF_Tensor*> input_values;
+	
     for(auto it = request->inputs().begin();it != request->inputs().end();it++){
         auto tensorp = TensorProto_To_TF_Tensor(it->second);
         if(nullptr == tensorp){
             LOG_ERROR("tensorp is null");
+            relasefun();
             return -1;
         }
         auto infoIt =inputsinfo.find(it->first);
         if(infoIt == inputsinfo.end()){
             LOG_ERROR("no find such input name="<<it->first);
+            relasefun();
             return -1;
         }
         
-        // char s_str[100]="";
-        // string cpp_str;
-        // int32_t s_index =0; 
-        // // sscanf(infoIt->second.name().c_str(), "%s:%d", s_str,&s_index);
-        // auto tmpstr = infoIt->second.name();
-        // tmpstr.replace(tmpstr.rfind(":"),1," ");
-        // std::stringstream s(tmpstr);
-        // s>>cpp_str>>s_index;
         auto inputsplit = split_tensorname(infoIt->second.name());
         LOG_DEBUG("get inputname,first="<<infoIt->first<<" second="<<infoIt->second.name()<<" split0="<<get<0>(inputsplit)<<" split1="<<get<1>(inputsplit));
         TF_Operation* input_name=this->TfOp.TF_GraphOperationByName(graph,get<0>(inputsplit).c_str());
         if(nullptr == input_name){
             LOG_ERROR("input_name is null");
+            relasefun();
             return -1;
         }
         input_names.push_back({input_name, get<1>(inputsplit)});
@@ -158,7 +161,6 @@ int32_t tensorflow_service_driver::run_predict_session( const ::tensorflow::serv
     }
 
     
-
 
     vector<string> outputSignatureNameVec;
     std::vector<TF_Output> output_names;
@@ -168,15 +170,20 @@ int32_t tensorflow_service_driver::run_predict_session( const ::tensorflow::serv
         TF_Operation* output_name =this->TfOp.TF_GraphOperationByName(graph,get<0>(outputsplit).c_str());
         if(nullptr == output_name){
             LOG_ERROR("output_name is null");
+            relasefun();
             return -1;
         }
-    
         outputSignatureNameVec.push_back(outputIt->first);
         output_names.push_back({output_name,get<1>(outputsplit)});
     }
-    std::vector<TF_Tensor*> output_values(output_names.size(), nullptr);
+    // std::vector<TF_Tensor*> output_values(output_names.size(), nullptr);
+    output_values.resize(output_names.size(),nullptr);
     this->TfOp.TF_SessionRun(sess,nullptr,input_names.data(),input_values.data(),input_names.size(),output_names.data(),output_values.data(),output_names.size(),nullptr,0,nullptr,s);
-    assert(this->TfOp.TF_GetCode(s) == TF_OK);
+    if(this->TfOp.TF_GetCode(s) != TF_OK){
+        LOG_ERROR("status err,code="<<this->TfOp.TF_GetCode(s));
+        relasefun();
+        return -1;
+    }
     auto &outputmap =  *response->mutable_outputs();
     for(auto i = 0;i < output_values.size();i++){
         tensorflow::TensorProto outputproto;
@@ -196,16 +203,7 @@ int32_t tensorflow_service_driver::run_predict_session( const ::tensorflow::serv
         LOG_DEBUG("one output,sname="<<outputSignatureNameVec[i]<<" allsize="<<allsize);
     }
 
-	this->TfOp.TF_DeleteStatus(s);
-    for(auto it =input_values.begin();it != input_values.end();it++){
-        this->TfOp.TF_DeleteTensor(*it);
-    }
-    for(auto it =output_values.begin();it != output_values.end();it++){
-        this->TfOp.TF_DeleteTensor(*it);
-    }
-	// TF_DeleteTensor(output_values[0]);
-	// TF_DeleteTensor(output_values[1]);
-	// TF_DeleteTensor(input_tensor);
+    relasefun();
     return 0;
 
 }
