@@ -27,10 +27,19 @@ struct modelSource{
 };
 
 
+struct protoinfoS{
+    TF_DataType dtype;
+    int32_t dtypesize;
+    int64_t allbytesSize;
+    vector<int64_t> dimarr;
+    void * pdata;
+};
+
 template<typename T>
 void mydlsym(void * handle,T & a, string funname) {
      a = (T)(dlsym(handle, funname.c_str()));
 }
+
 
 
 
@@ -67,6 +76,7 @@ public:
         mydlsym(this->handle,TF_NumDims,"TF_NumDims");
         mydlsym(this->handle,TF_Dim,"TF_Dim");
         mydlsym(this->handle,TF_DeleteStatus,"TF_DeleteStatus");
+        mydlsym(this->handle,TF_TensorType,"TF_TensorType");
         
     };
     virtual ~tensorflowOp(){
@@ -92,6 +102,7 @@ public:
     int (*TF_NumDims)(const TF_Tensor*);
     int64_t (*TF_Dim)(const TF_Tensor* tensor, int dim_index);
     void (*TF_DeleteStatus)(TF_Status*);
+    TF_DataType (*TF_TensorType)(const TF_Tensor*);
 private:
     void * handle;
 };
@@ -116,7 +127,8 @@ private:
     // std::map<string,map<string,signatureRelation>> signatureRelationMap;
     // shared_ptr<TF_Tensor> TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from);
     TF_Tensor * TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from);
-    int32_t run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
+    int32_t Tensor_To_TensorProto(const TF_Tensor * tensorp,tensorflow::TensorProto & to);
+    string run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
     int32_t loadModel(string modelname,string modeldir);
     tensorflowOp TfOp;
     std::map<string,modelSource> modelsourceMap;
