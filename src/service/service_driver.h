@@ -7,6 +7,7 @@
 #include <grpc++/server.h>
 #include <grpc++/server_builder.h>
 #include <tensorflow/c/c_api.h>
+#include "server_configure.pb.h"
 
 using namespace std;
 
@@ -111,7 +112,7 @@ private:
 
 class tensorflow_service_driver:public tensorflow::serving::PredictionService::Service{
 public:
-    tensorflow_service_driver();
+    tensorflow_service_driver(serving_configure::model_config_list configurelist);
     virtual ~tensorflow_service_driver(){};
     // Classify.
     virtual ::grpc::Status Classify(::grpc::ServerContext* context, const ::tensorflow::serving::ClassificationRequest* request, ::tensorflow::serving::ClassificationResponse* response);
@@ -123,13 +124,14 @@ public:
     virtual ::grpc::Status MultiInference(::grpc::ServerContext* context, const ::tensorflow::serving::MultiInferenceRequest* request, ::tensorflow::serving::MultiInferenceResponse* response);
     // GetModelMetadata - provides access to metadata for loaded models.
     virtual ::grpc::Status GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response);
+public:
+    int32_t loadModel(string modelname,int64_t version,string modeldir);
 private:
     // std::map<string,map<string,signatureRelation>> signatureRelationMap;
     // shared_ptr<TF_Tensor> TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from);
     TF_Tensor * TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from);
     int32_t Tensor_To_TensorProto(const TF_Tensor * tensorp,tensorflow::TensorProto & to);
     string run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
-    int32_t loadModel(string modelname,string modeldir);
     tensorflowOp TfOp;
     std::map<string,modelSource> modelsourceMap;
 };

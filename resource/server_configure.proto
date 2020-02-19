@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package serving_configure;
+
+message model_config {
+    string name = 1;
+    string base_path = 2;
+    string model_platform = 3;
+    int64  version = 4;
+}
+
+message model_config_list{
+    repeated model_config config;
+}

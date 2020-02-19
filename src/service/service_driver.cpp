@@ -24,22 +24,29 @@ static void free_deallocator(void* data, size_t len, void* arg)
     }
 }
 
+string composeModelNameKey(const string & modelname,const int64_t & version){
+    return modelname +"@" + to_string(version);
+}
 
 
-tensorflow_service_driver::tensorflow_service_driver(){
+tensorflow_service_driver::tensorflow_service_driver(serving_configure::model_config_list configurelist){
         LOG_DEBUG("enter");
-    // string model_fname= "test.pb";
-    // this->t_sess=load_graph(model_fname.c_str(),&this->t_graph);
         tensorflowOp  tmop("libtensorflow.so.1");
         this->TfOp = tmop;
         LOG_INFO("tensorflwo version="<<TfOp.TF_Version());
-        string saved_model_dir ="mtcnnmodel";
-        this->loadModel("mtcnnmodel",saved_model_dir);
-
+        auto configs = configurelist.config();
+        for(auto it = configs.begin();it != configs.end();it++){
+            if(it->model_platform() != "tensorflow"){
+                continue;
+            }
+            LOG_INFO("tensorflow service load, modelname="<<it->name()<<" version="<<it->version()<<" path="<<it->base_path());
+            this->loadModel(it->name(),it->version(),it->base_path());
+        }
 }
 
-int32_t tensorflow_service_driver::loadModel(string modelname,string modeldir){
+int32_t tensorflow_service_driver::loadModel(string modelname,int64_t version,string modeldir){
         LOG_DEBUG("load,enter");
+        auto &&modelnamekey = composeModelNameKey(modelname,version);
         TF_SessionOptions* opt = TfOp.TF_NewSessionOptions();
         TF_Buffer* run_options = TfOp.TF_NewBufferFromString("", 0);
         TF_Buffer* metagraph = TfOp.TF_NewBuffer();
@@ -47,6 +54,10 @@ int32_t tensorflow_service_driver::loadModel(string modelname,string modeldir){
         const char* tags[] = {"serve"};
         TF_Graph* graph = TfOp.TF_NewGraph();
         TF_Session* session = TfOp.TF_LoadSessionFromSavedModel(opt, run_options, modeldir.c_str(), tags, 1, graph, metagraph, s);
+        if(this->TfOp.TF_GetCode(s) != TF_OK){
+            LOG_ERROR("status err,code="<<this->TfOp.TF_GetCode(s));
+            std::quick_exit(-1);
+        }
 
         tensorflow::MetaGraphDef metagraph_def;
         metagraph_def.ParseFromArray(metagraph->data, metagraph->length);
@@ -54,8 +65,8 @@ int32_t tensorflow_service_driver::loadModel(string modelname,string modeldir){
         onemodel.t_sess = session;
         onemodel.t_graph = graph;
         onemodel.metagraph_def = metagraph_def;
-
-        this->modelsourceMap[modelname] = onemodel;
+        LOG_INFO("register model="<<modelnamekey);
+        this->modelsourceMap[modelnamekey] = onemodel;
 
         TfOp.TF_DeleteBuffer(run_options);
         TfOp.TF_DeleteSessionOptions(opt);
@@ -208,7 +219,9 @@ string tensorflow_service_driver::run_predict_session( const ::tensorflow::servi
     };
 
 
-    auto &modelname = request->model_spec().name();
+    auto &base_modelname = request->model_spec().name();
+    auto &&modelversion = request->model_spec().version().value();
+    auto modelname = composeModelNameKey(base_modelname,modelversion);
     auto &signaturename = request->model_spec().signature_name();
     LOG_DEBUG("modelname="<<modelname<<" signaturename="<<signaturename);
     auto it = this->modelsourceMap.find(modelname);
