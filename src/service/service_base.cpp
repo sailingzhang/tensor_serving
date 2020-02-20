@@ -11,6 +11,45 @@ shared_ptr<grpc::Service> ServiceFactory::CreateTensorFlowService(serving_config
     return  make_shared<tensorflow_service_driver>(configurelist);
 }
 
+class local_tensor_sering_grpclient:public tensorflow::serving::PredictionService::StubInterface{
+public:
+    local_tensor_sering_grpclient(shared_ptr<tensorflow::serving::PredictionService::Service> servicePtr){
+        this->_servicePtr =servicePtr; 
+    };
+    virtual ~local_tensor_sering_grpclient(){};
+     ::grpc::Status Classify(::grpc::ClientContext* context, const ::tensorflow::serving::ClassificationRequest& request, ::tensorflow::serving::ClassificationResponse* response) override;
+    ::grpc::Status Regress(::grpc::ClientContext* context, const ::tensorflow::serving::RegressionRequest& request, ::tensorflow::serving::RegressionResponse* response) override;
+    ::grpc::Status Predict(::grpc::ClientContext* context, const ::tensorflow::serving::PredictRequest& request, ::tensorflow::serving::PredictResponse* response) override;
+    ::grpc::Status MultiInference(::grpc::ClientContext* context, const ::tensorflow::serving::MultiInferenceRequest& request, ::tensorflow::serving::MultiInferenceResponse* response) override;
+    ::grpc::Status GetModelMetadata(::grpc::ClientContext* context, const ::tensorflow::serving::GetModelMetadataRequest& request, ::tensorflow::serving::GetModelMetadataResponse* response) override;
+   
+private:
+    shared_ptr<tensorflow::serving::PredictionService::Service> _servicePtr;
+};
+
+::grpc::Status local_tensor_sering_grpclient::Classify(::grpc::ClientContext* context, const ::tensorflow::serving::ClassificationRequest& request, ::tensorflow::serving::ClassificationResponse* response){
+    return this->_servicePtr->Classify(nullptr,&request,response);
+    // return Status::OK;
+}
+::grpc::Status local_tensor_sering_grpclient::Regress(::grpc::ClientContext* context, const ::tensorflow::serving::RegressionRequest& request, ::tensorflow::serving::RegressionResponse* response) {
+    return this->_servicePtr->Regress(nullptr,&request,response);
+}
+::grpc::Status local_tensor_sering_grpclient::Predict(::grpc::ClientContext* context, const ::tensorflow::serving::PredictRequest& request, ::tensorflow::serving::PredictResponse* response) {
+     return this->_servicePtr->Predict(nullptr,&request,response);
+}
+::grpc::Status local_tensor_sering_grpclient::MultiInference(::grpc::ClientContext* context, const ::tensorflow::serving::MultiInferenceRequest& request, ::tensorflow::serving::MultiInferenceResponse* response){
+    return Status::OK;
+}
+::grpc::Status local_tensor_sering_grpclient::GetModelMetadata(::grpc::ClientContext* context, const ::tensorflow::serving::GetModelMetadataRequest& request, ::tensorflow::serving::GetModelMetadataResponse* response) {
+    return Status::OK;
+}
+
+shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetClientservice(shared_ptr<tensorflow::serving::PredictionService::Service> serviceptr){
+    // return  make_shared<local_tensor_sering_grpclient>(serviceptr);
+    return nullptr;
+}
+
+
 int tensor_serving_local_server(serving_configure::model_config_list congifureList) {
 	std::string server_address("0.0.0.0:9001");
     auto tensorflowServicePtr = ServiceFactory::CreateTensorFlowService(congifureList);
