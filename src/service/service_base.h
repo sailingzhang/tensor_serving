@@ -8,6 +8,8 @@
 
 using namespace std;
 
+void loadconfigure(string configurefile,serving_configure::model_config_list & congifureList);
+int tensor_serving_local_server(serving_configure::model_config_list congifureList);
 
 class ServiceFactory{
 public:

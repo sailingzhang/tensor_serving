@@ -8,6 +8,7 @@
 #include <grpc++/server_builder.h>
 #include <tensorflow/c/c_api.h>
 #include "server_configure.pb.h"
+#include <log.h>
 
 using namespace std;
 
@@ -55,9 +56,9 @@ public:
         this->handle = nullptr;
         this->handle = dlopen(filename.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
         if (! this->handle) {
-            dlerror();
-            // LOG_ERROR("dlopen error="<<dlerror());
-            return;
+            auto perr=  dlerror();
+            LOG_ERROR("dlerror="<<perr);
+            std::quick_exit(-1);
         }
         this->TF_DeleteBuffer = decltype(this->TF_DeleteBuffer)(dlsym(handle, "TF_DeleteBuffer"));
         mydlsym(this->handle,this->TF_DeleteSessionOptions,"TF_DeleteSessionOptions");

@@ -31,7 +31,7 @@ string composeModelNameKey(const string & modelname,const int64_t & version){
 
 tensorflow_service_driver::tensorflow_service_driver(serving_configure::model_config_list configurelist){
         LOG_DEBUG("enter");
-        tensorflowOp  tmop("libtensorflow.so.1");
+        tensorflowOp  tmop("./libtensorflow.so.1");
         this->TfOp = tmop;
         LOG_INFO("tensorflwo version="<<TfOp.TF_Version());
         auto configs = configurelist.config();
