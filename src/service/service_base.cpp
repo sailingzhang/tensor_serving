@@ -24,6 +24,16 @@ public:
     ::grpc::Status GetModelMetadata(::grpc::ClientContext* context, const ::tensorflow::serving::GetModelMetadataRequest& request, ::tensorflow::serving::GetModelMetadataResponse* response) override;
    
 private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::ClassificationResponse>* AsyncClassifyRaw(::grpc::ClientContext* context, const ::tensorflow::serving::ClassificationRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::ClassificationResponse>* PrepareAsyncClassifyRaw(::grpc::ClientContext* context, const ::tensorflow::serving::ClassificationRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::RegressionResponse>* AsyncRegressRaw(::grpc::ClientContext* context, const ::tensorflow::serving::RegressionRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::RegressionResponse>* PrepareAsyncRegressRaw(::grpc::ClientContext* context, const ::tensorflow::serving::RegressionRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::PredictResponse>* AsyncPredictRaw(::grpc::ClientContext* context, const ::tensorflow::serving::PredictRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::PredictResponse>* PrepareAsyncPredictRaw(::grpc::ClientContext* context, const ::tensorflow::serving::PredictRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::MultiInferenceResponse>* AsyncMultiInferenceRaw(::grpc::ClientContext* context, const ::tensorflow::serving::MultiInferenceRequest& request, ::grpc::CompletionQueue* cq) {return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::MultiInferenceResponse>* PrepareAsyncMultiInferenceRaw(::grpc::ClientContext* context, const ::tensorflow::serving::MultiInferenceRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::GetModelMetadataResponse>* AsyncGetModelMetadataRaw(::grpc::ClientContext* context, const ::tensorflow::serving::GetModelMetadataRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::tensorflow::serving::GetModelMetadataResponse>* PrepareAsyncGetModelMetadataRaw(::grpc::ClientContext* context, const ::tensorflow::serving::GetModelMetadataRequest& request, ::grpc::CompletionQueue* cq){return nullptr;};
     shared_ptr<tensorflow::serving::PredictionService::Service> _servicePtr;
 };
 
@@ -45,8 +55,8 @@ private:
 }
 
 shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetClientservice(shared_ptr<tensorflow::serving::PredictionService::Service> serviceptr){
-    // return  make_shared<local_tensor_sering_grpclient>(serviceptr);
-    return nullptr;
+    return  make_shared<local_tensor_sering_grpclient>(serviceptr);
+    //return nullptr;
 }
 
 
