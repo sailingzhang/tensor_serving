@@ -56,9 +56,11 @@ private:
 
 shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetClientservice(shared_ptr<tensorflow::serving::PredictionService::Service> serviceptr){
     return  make_shared<local_tensor_sering_grpclient>(serviceptr);
-    //return nullptr;
 }
-
+shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetTensorflowClientservice(serving_configure::model_config_list configurelist){
+    auto serverinterface = make_shared<tensorflow_service_driver>(configurelist);
+    return createNoNetClientservice(serverinterface);
+}
 
 int tensor_serving_local_server(serving_configure::model_config_list congifureList) {
 	std::string server_address("0.0.0.0:9001");
