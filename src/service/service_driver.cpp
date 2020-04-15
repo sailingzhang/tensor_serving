@@ -4,10 +4,14 @@
 #include <log.h>
 #include <sstream>
 
+
+
+
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
+
 
 
 
@@ -348,3 +352,99 @@ return Status::OK;
 ::grpc::Status tensorflow_service_driver::GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response){
 return Status::OK;
 }
+
+
+
+
+
+
+
+openvino_service_driver::openvino_service_driver(serving_configure::model_config_list configurelist){
+    auto configs = configurelist.config();
+    for(auto it = configs.begin();it != configs.end();it++){
+        if(it->model_platform() != "openvino"){
+            continue;
+        }
+        LOG_INFO("tensorflow service load, modelname="<<it->name()<<" version="<<it->version()<<" path="<<it->base_path());
+        this->loadModel(it->name(),it->version(),it->base_path());
+    }
+    return ;
+}
+
+int32_t openvino_service_driver::loadModel(string modelname,int64_t version,string modeldir){
+     auto &&modelnamekey = composeModelNameKey(modelname,version);
+    Core ie;
+    CNNNetwork network = ie.ReadNetwork(modeldir+"/model.xml", modeldir+"/model.bin");
+    this->modelsourceMap[modelnamekey]= {ie,network};
+    // network.setBatchSize(1);
+    return -1;
+}
+
+string openvino_service_driver::run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
+    string ret;
+    auto &base_modelname = request->model_spec().name();
+    auto &&modelversion = request->model_spec().version().value();
+    auto modelname = composeModelNameKey(base_modelname,modelversion);
+    auto &signaturename = request->model_spec().signature_name();
+    LOG_DEBUG("modelname="<<modelname<<" signaturename="<<signaturename);
+    auto modelTt = this->modelsourceMap.find(modelname);
+    if(modelTt == this->modelsourceMap.end()){
+        LOG_ERROR("no find such model,name="<<modelname);
+        ret ="no find such model,name=" + modelname;
+        return ret;
+    }
+    auto & ie = std::get<Core>(modelTt->second);
+    auto & network =std::get<CNNNetwork>(modelTt->second);
+    ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
+    InferRequest infer_request = executable_network.CreateInferRequest();
+    for(auto it = network.getInputsInfo().begin();it != network.getInputsInfo().end();it++){
+        InputInfo::Ptr input_info = it->second;
+        std::string input_name = it->first;
+        input_info->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+        input_info->setLayout(Layout::NHWC);
+        input_info->setPrecision(Precision::U8);
+
+        InferenceEngine::TensorDesc tDesc(InferenceEngine::Precision::U8,{1, 2,3,4,5,6},InferenceEngine::Layout::NHWC);
+        auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc, nullptr);
+        infer_request.SetBlob(input_name, blobptr);
+
+    }
+
+    
+    infer_request.Infer();
+
+    for(auto it = network.getOutputsInfo().begin(); it != network.getOutputsInfo().end();it++){
+        DataPtr output_info = it->second;
+        std::string output_name = it->first;
+        output_info->setPrecision(Precision::FP32);
+        Blob::Ptr output = infer_request.GetBlob(output_name);
+    }
+
+   
+
+    return "test";
+}
+
+
+    // Classify.
+::grpc::Status openvino_service_driver::Classify(::grpc::ServerContext* context, const ::tensorflow::serving::ClassificationRequest* request, ::tensorflow::serving::ClassificationResponse* response){
+    return Status::OK;
+}
+    // Regress.
+::grpc::Status openvino_service_driver::Regress(::grpc::ServerContext* context, const ::tensorflow::serving::RegressionRequest* request, ::tensorflow::serving::RegressionResponse* response){
+    return Status::OK;
+}
+    // Predict -- provides access to loaded TensorFlow model.
+::grpc::Status openvino_service_driver::Predict(::grpc::ServerContext* context, const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
+    return Status::OK;    
+}
+    // MultiInference API for multi-headed models.
+::grpc::Status openvino_service_driver::MultiInference(::grpc::ServerContext* context, const ::tensorflow::serving::MultiInferenceRequest* request, ::tensorflow::serving::MultiInferenceResponse* response){
+return Status::OK;
+}
+    // GetModelMetadata - provides access to metadata for loaded models.
+::grpc::Status openvino_service_driver::GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response){
+return Status::OK;
+}
+
+

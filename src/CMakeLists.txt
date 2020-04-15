@@ -5,10 +5,14 @@ cmake_policy(PUSH)
 
 
 
+
+
+
 SET(SOURCE_ROOT ${PROJECT_SOURCE_DIR}/..)
 SET(THIRD_PART ${SOURCE_ROOT}/../thirdpart)
+set(InferenceEngine_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/share/)
 
-
+find_package(InferenceEngine 2.1 REQUIRED)
 
 
 SET(INCLUDE_LIST 
@@ -24,6 +28,10 @@ SET(INCLUDE_LIST
 	# ${PROJECT_SOURCE_DIR}/identify_face
 #	${SOURCE_ROOT}/3rdparty/breakpad/include
 	# ${SOURCE_ROOT}/modules/commonlib/include
+	# ${InferenceEngine_INCLUDE}
+	${THIRD_PART}/openvino_2020.1.023/inference_engine
+    ${THIRD_PART}/openvino_2020.1.023/inference_engine/include
+    ${THIRD_PART}/openvino_2020.1.023/inference_engine/samples/cpp/common
 )
 INCLUDE_DIRECTORIES(${INCLUDE_LIST})
 
@@ -36,10 +44,16 @@ SET(LIB_DIRECTORY_LIST
 	# ${THIRD_PART}/opencv4.2.0/lib/opencv4/3rdparty
 #	${SOURCE_ROOT}/3rdparty/breakpad/lib
 	# ${SOURCE_ROOT}/3rdparty/grpc/lib/linux64_4.8.5gcc
+	# ${THIRD_PART}/openvino_2020.1.023/inference_engine/lib/intel64/
+
+	${THIRD_PART}/openvino_2020.1.023/inference_engine/external/gna/lib
+	${THIRD_PART}/openvino_2020.1.023/inference_engine/external/mkltiny_lnx/lib
+	${THIRD_PART}/openvino_2020.1.023/inference_engine/external/tbb/lib
 )
 # set(CMAKE_C_VISIBILITY_PRESET hidden)
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 MESSAGE(STATUS "lib direcotry=: " ${LIB_DIRECTORY_LIST})
+MESSAGE(STATUS "openvino lib =: " ${InferenceEngine_LIBRARIES})
 SET(LIB_LIST
 
 
@@ -61,6 +75,8 @@ SET(LIB_LIST
 	# libtensorflow.so
 	# libtensorflow_framework.so
 	
+	
+
 	libgrpc++.a	
 	libprotoc.a
 	libgrpc++_error_details.a
@@ -85,6 +101,9 @@ SET(LIB_LIST
 	# libabsl_base.a
 	libabsl_throw_delegate.a
 
+	${InferenceEngine_LIBRARIES}
+	${IE_SAMPLE_DEPENDENCIES}
+
 	m
 	dl
 	libstdc++.a
@@ -93,7 +112,10 @@ SET(LIB_LIST
 	# libm.a
 	# libdl.a
 	pthread
+
+	
 )
+
 
 link_directories(${LIB_DIRECTORY_LIST})
 
