@@ -39,9 +39,11 @@ struct modelSource{
 
 struct protoinfoS{
     TF_DataType dtype;
+    Precision opevino_dtype;
     int32_t dtypesize;
     int64_t allbytesSize;
     vector<int64_t> dimarr;
+    vector<size_t> size_t_dimarr;
     void * pdata;
 };
 
@@ -164,6 +166,8 @@ public:
     virtual ::grpc::Status GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response);
 public:
     int32_t loadModel(string modelname,int64_t version,string modeldir);
+    int32_t TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from,InferRequest &infer_request, InputInfo & inputInfo);
+    int32_t OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr  outputInfoPtr,tensorflow::TensorProto & outputproto);
 private:
     string run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
     std::map<string,std::tuple<Core,CNNNetwork>>modelsourceMap;

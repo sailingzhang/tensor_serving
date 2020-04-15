@@ -87,7 +87,7 @@ TF_Tensor * tensorflow_service_driver::TensorProto_To_TF_Tensor(const tensorflow
     switch (from.dtype())
     {
         case tensorflow::DataType::DT_FLOAT:
-            ret.dtype = TF_FLOAT;
+            // ret.dtype = TF_FLOAT;
             ret.dtypesize = sizeof(float);
             ret.pdata=(void *)from.float_val().begin();
             break;
@@ -380,6 +380,131 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
     return -1;
 }
 
+int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from,InferRequest &infer_request, InputInfo & inputInfo){
+    LOG_DEBUG("enter");
+    protoinfoS ret;
+    ret.allbytesSize = 1;
+    switch (from.dtype())
+    {
+        case tensorflow::DataType::DT_FLOAT:
+            // ret.dtype = TF_FLOAT;
+            ret.opevino_dtype = Precision::FP32;
+            ret.dtypesize = sizeof(float);
+            ret.pdata=(void *)from.float_val().begin();
+            break;
+        case tensorflow::DataType::DT_DOUBLE:
+            ret.dtype = TF_DOUBLE;
+            ret.opevino_dtype = Precision::FP32;
+            ret.dtypesize = sizeof(double);
+            ret.pdata =(void *) from.double_val().begin();
+            break;
+        case tensorflow::DataType::DT_BOOL:
+            ret.dtype = TF_BOOL;
+            ret.opevino_dtype = Precision::BOOL;
+            ret.dtypesize = sizeof(bool);
+            ret.pdata = (void *)from.bool_val().begin();
+            break;
+        case tensorflow::DataType::DT_INT32:
+            ret.dtype = TF_INT32;
+            ret.opevino_dtype = Precision::I32;
+            ret.dtypesize = sizeof(int32_t);
+            ret.pdata = (void *)from.int_val().begin();
+            break;
+        case tensorflow::DataType::DT_INT64:
+            ret.dtype = TF_INT64;
+            ret.opevino_dtype = Precision::I64;
+            ret.dtypesize = sizeof(int64_t);
+            ret.pdata =(void *) from.int64_val().begin();
+            break;
+        default:
+            LOG_ERROR("not support such type="<<from.dtype());
+            return -1;
+            break;
+    }
+    
+    auto allsize = 1;
+    auto &dim = from.tensor_shape().dim();
+    ret.size_t_dimarr.resize(dim.size(),0);
+    for(auto i =0;i < dim.size();i++){
+        ret.size_t_dimarr[i] = dim[i].size();
+        allsize= allsize* dim[i].size();
+    }
+    ret.allbytesSize = ret.dtypesize * allsize;
+
+    // InputInfo::Ptr input_info = it->second;
+    // std::string input_name = it->first;
+    inputInfo.getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+    inputInfo.setLayout(Layout::NHWC);
+    inputInfo.setPrecision(ret.opevino_dtype);
+
+
+    InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,ret.size_t_dimarr,InferenceEngine::Layout::NHWC);
+    auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc,static_cast<uint8_t *>(ret.pdata));
+    infer_request.SetBlob(inputInfo.name(), blobptr);
+    return 0;
+
+}
+
+int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr &outputInfoPtr,tensorflow::TensorProto & outputproto){
+    auto type = outputInfoPtr->getPrecision();
+    auto allsize = 1;
+    auto  numdims = outputInfoPtr->getDims().size();
+    for(auto j = 0; j < numdims; j++){
+        auto dimsize = outputInfoPtr->getDims()[j];
+        outputproto.mutable_tensor_shape()->add_dim()->set_size(dimsize);
+        allsize *= dimsize;
+    }
+    Blob::Ptr outputBlob = infer_request.GetBlob(outputInfoPtr->getName());
+    outputBlob->
+    switch (type)
+    {
+        case Precision::FP32:
+            {
+                outputproto.set_dtype(tensorflow::DataType::DT_FLOAT);
+                // auto datap = (const float *)this->TfOp.TF_TensorData(tensorp);
+                auto datap = outputInfo->
+                for(auto dataindex = 0; dataindex < allsize;dataindex++){
+                    outputproto.add_float_val(datap[dataindex]);
+                }  
+            }
+            break;
+        case Precision::BOOL:
+            {
+                outputproto.set_dtype(tensorflow::DataType::DT_BOOL);
+                auto datap = (const bool *)this->TfOp.TF_TensorData(tensorp);
+                for(auto dataindex = 0; dataindex < allsize;dataindex++){
+                    outputproto.add_bool_val(datap[dataindex]);
+                } 
+            }
+
+            break;
+        case TF_INT32:
+            {
+                outputproto.set_dtype(tensorflow::DataType::DT_INT32);
+                auto datap = (const int32_t *)this->TfOp.TF_TensorData(tensorp);
+                for(auto dataindex = 0; dataindex < allsize;dataindex++){
+                    outputproto.add_int_val(datap[dataindex]);
+                }
+            }    
+            break;
+        case TF_INT64:
+            {
+                outputproto.set_dtype(tensorflow::DataType::DT_INT64);
+                auto datap = (const int64_t *)this->TfOp.TF_TensorData(tensorp);
+                for(auto dataindex = 0; dataindex < allsize;dataindex++){
+                    outputproto.add_int64_val(datap[dataindex]);
+                } 
+            }
+            break;
+        default:
+            LOG_ERROR("not support such type="<<type);
+            return -1;
+            break;
+    }
+    return 0;
+    return 0;
+}
+
 string openvino_service_driver::run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
     string ret;
     auto &base_modelname = request->model_spec().name();
@@ -397,18 +522,31 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
     auto & network =std::get<CNNNetwork>(modelTt->second);
     ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
     InferRequest infer_request = executable_network.CreateInferRequest();
-    for(auto it = network.getInputsInfo().begin();it != network.getInputsInfo().end();it++){
-        InputInfo::Ptr input_info = it->second;
-        std::string input_name = it->first;
-        input_info->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
-        input_info->setLayout(Layout::NHWC);
-        input_info->setPrecision(Precision::U8);
 
-        InferenceEngine::TensorDesc tDesc(InferenceEngine::Precision::U8,{1, 2,3,4,5,6},InferenceEngine::Layout::NHWC);
-        auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc, nullptr);
-        infer_request.SetBlob(input_name, blobptr);
+    for(auto it = request->inputs().begin();it != request->inputs().end();it++){
+        auto infoIt = network.getInputsInfo().find(it->first);
+        if(infoIt ==  network.getInputsInfo().end()){
+            ret = "no find such input,name="+it->first;
+            return ret;
+        }
+        auto & tensorproto = it->second;
+        auto & inputinfo  = infoIt->second;
+        this->TensorProto_To_OpenvinoInput(tensorproto,infer_request,*inputinfo);
 
     }
+
+    // for(auto it = network.getInputsInfo().begin();it != network.getInputsInfo().end();it++){
+    //     InputInfo::Ptr input_info = it->second;
+    //     std::string input_name = it->first;
+    //     input_info->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+    //     input_info->setLayout(Layout::NHWC);
+    //     input_info->setPrecision(Precision::U8);
+
+    //     InferenceEngine::TensorDesc tDesc(InferenceEngine::Precision::U8,{1, 2,3,4,5,6},InferenceEngine::Layout::NHWC);
+    //     auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc, nullptr);
+    //     infer_request.SetBlob(input_name, blobptr);
+
+    // }
 
     
     infer_request.Infer();
