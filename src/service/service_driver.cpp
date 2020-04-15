@@ -445,7 +445,7 @@ int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::
 
 }
 
-int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr &outputInfoPtr,tensorflow::TensorProto & outputproto){
+int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr outputInfoPtr,tensorflow::TensorProto & outputproto){
     auto type = outputInfoPtr->getPrecision();
     auto allsize = 1;
     auto  numdims = outputInfoPtr->getDims().size();
@@ -455,14 +455,14 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
         allsize *= dimsize;
     }
     Blob::Ptr outputBlob = infer_request.GetBlob(outputInfoPtr->getName());
-    outputBlob->
+    
     switch (type)
     {
         case Precision::FP32:
             {
                 outputproto.set_dtype(tensorflow::DataType::DT_FLOAT);
                 // auto datap = (const float *)this->TfOp.TF_TensorData(tensorp);
-                auto datap = outputInfo->
+                auto datap = outputBlob->buffer().as<float*>();
                 for(auto dataindex = 0; dataindex < allsize;dataindex++){
                     outputproto.add_float_val(datap[dataindex]);
                 }  
@@ -471,26 +471,26 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
         case Precision::BOOL:
             {
                 outputproto.set_dtype(tensorflow::DataType::DT_BOOL);
-                auto datap = (const bool *)this->TfOp.TF_TensorData(tensorp);
+                auto datap = outputBlob->buffer().as<bool*>();
                 for(auto dataindex = 0; dataindex < allsize;dataindex++){
                     outputproto.add_bool_val(datap[dataindex]);
                 } 
             }
 
             break;
-        case TF_INT32:
+        case Precision::I32:
             {
                 outputproto.set_dtype(tensorflow::DataType::DT_INT32);
-                auto datap = (const int32_t *)this->TfOp.TF_TensorData(tensorp);
+                auto datap = outputBlob->buffer().as<int32_t*>();
                 for(auto dataindex = 0; dataindex < allsize;dataindex++){
                     outputproto.add_int_val(datap[dataindex]);
                 }
             }    
             break;
-        case TF_INT64:
+        case Precision::I64:
             {
                 outputproto.set_dtype(tensorflow::DataType::DT_INT64);
-                auto datap = (const int64_t *)this->TfOp.TF_TensorData(tensorp);
+                auto datap = outputBlob->buffer().as<int64_t*>();
                 for(auto dataindex = 0; dataindex < allsize;dataindex++){
                     outputproto.add_int64_val(datap[dataindex]);
                 } 
@@ -501,7 +501,6 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
             return -1;
             break;
     }
-    return 0;
     return 0;
 }
 
@@ -535,30 +534,26 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
 
     }
 
-    // for(auto it = network.getInputsInfo().begin();it != network.getInputsInfo().end();it++){
-    //     InputInfo::Ptr input_info = it->second;
-    //     std::string input_name = it->first;
-    //     input_info->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
-    //     input_info->setLayout(Layout::NHWC);
-    //     input_info->setPrecision(Precision::U8);
 
-    //     InferenceEngine::TensorDesc tDesc(InferenceEngine::Precision::U8,{1, 2,3,4,5,6},InferenceEngine::Layout::NHWC);
-    //     auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc, nullptr);
-    //     infer_request.SetBlob(input_name, blobptr);
-
-    // }
-
-    
     infer_request.Infer();
+
+    auto &outputmap =  *response->mutable_outputs();
+    // for(auto i = 0;i < output_values.size();i++){
+    //     tensorflow::TensorProto outputproto;
+    //     Tensor_To_TensorProto(output_values[i],outputproto);    
+    //     outputmap[outputSignatureNameVec[i]] = std::move(outputproto);
+    //     LOG_DEBUG("one output,sname="<<outputSignatureNameVec[i]);
+    // }
 
     for(auto it = network.getOutputsInfo().begin(); it != network.getOutputsInfo().end();it++){
         DataPtr output_info = it->second;
         std::string output_name = it->first;
         output_info->setPrecision(Precision::FP32);
-        Blob::Ptr output = infer_request.GetBlob(output_name);
+        // Blob::Ptr output = infer_request.GetBlob(output_name);
+        tensorflow::TensorProto tensorproto;
+        this->OpenvinoOutput_To_TensorProto(infer_request,output_info,tensorproto);
+        outputmap[output_name] = std::move(tensorproto);
     }
-
-   
 
     return "test";
 }
@@ -574,6 +569,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
 }
     // Predict -- provides access to loaded TensorFlow model.
 ::grpc::Status openvino_service_driver::Predict(::grpc::ServerContext* context, const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
+    this->run_predict_session(request,response);
     return Status::OK;    
 }
     // MultiInference API for multi-headed models.
