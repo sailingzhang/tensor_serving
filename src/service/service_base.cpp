@@ -10,6 +10,9 @@ using grpc::Status;
 shared_ptr<grpc::Service> ServiceFactory::CreateTensorFlowService(serving_configure::model_config_list configurelist){
     return  make_shared<tensorflow_service_driver>(configurelist);
 }
+std::shared_ptr<grpc::Service> ServiceFactory::CreateOpenVinoService(serving_configure::model_config_list configurelist){
+    return make_shared<openvino_service_driver>(configurelist);
+}
 
 class local_tensor_sering_grpclient:public tensorflow::serving::PredictionService::StubInterface{
 public:
@@ -61,22 +64,43 @@ shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetTen
     auto serverinterface = make_shared<tensorflow_service_driver>(configurelist);
     return createNoNetClientservice(serverinterface);
 }
-
-int tensor_serving_local_server(serving_configure::model_config_list congifureList) {
-	std::string server_address("0.0.0.0:9001");
-    auto tensorflowServicePtr = ServiceFactory::CreateTensorFlowService(congifureList);
+shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetOpenvinoClientservice(serving_configure::model_config_list configurelist){
+    auto serverinterface = make_shared<openvino_service_driver>(configurelist);
+    return createNoNetClientservice(serverinterface);
+}
+// int tensor_serving_local_server(shared_ptr<grpc::Service> service_ptr,string addr,serving_configure::model_config_list congifureList) {
+// 	std::string tensorflow_server_address("0.0.0.0:9001");
+//     std::string  openvino_server_address("0.0.0.0:90002");
+//     auto tensorflowServicePtr = ServiceFactory::CreateTensorFlowService(congifureList);
+//     auto openvinoServicePtr = ServiceFactory::CreateOpenVinoService(congifureList);
 	
+// 	ServerBuilder tensorflow_builder;
+//     ServerBuilder Openvino_builder;
+// 	// Listen on the given address without any authentication mechanism.
+// 	tensorflow_builder.AddListeningPort(tensorflow_server_address, grpc::InsecureServerCredentials());
+//     Openvino_builder.AddListeningPort(tensorflow_server_address, grpc::InsecureServerCredentials());
+// 	// Register "service" as the instance through which we'll communicate with
+// 	// clients. In this case it corresponds to an *synchronous* service.
+// 	tensorflow_builder.RegisterService(tensorflowServicePtr.get());
+//     Openvino_builder.RegisterService(openvinoServicePtr.get());
+// 	// Finally assemble the server.
+// 	//std::unique_ptr<Server> server(builder.BuildAndStart());
+//     std::unique_ptr<Server> TensorflowLocalServer;
+// 	TensorflowLocalServer.reset(tensorflow_builder.BuildAndStart().release());
+//     LocalServer.
+// 	std::cout << "grpc server listening on: " << tensorflow_server_address.c_str() << std::endl;
+// 	LocalServer->Wait();
+// 	return 0;
+// }
+
+
+int tensor_serving_local_server(shared_ptr<grpc::Service> service_ptr,string addr,serving_configure::model_config_list congifureList) {
 	ServerBuilder builder;
-	// Listen on the given address without any authentication mechanism.
-	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-	// Register "service" as the instance through which we'll communicate with
-	// clients. In this case it corresponds to an *synchronous* service.
-	builder.RegisterService(tensorflowServicePtr.get());
-	// Finally assemble the server.
-	//std::unique_ptr<Server> server(builder.BuildAndStart());
+	builder.AddListeningPort(addr, grpc::InsecureServerCredentials());
+	builder.RegisterService(service_ptr.get());
     std::unique_ptr<Server> LocalServer;
 	LocalServer.reset(builder.BuildAndStart().release());
-	std::cout << "grpc server listening on: " << server_address.c_str() << std::endl;
+	std::cout << "grpc server listening on: " << addr.c_str() << std::endl;
 	LocalServer->Wait();
 	return 0;
 }

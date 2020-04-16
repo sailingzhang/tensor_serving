@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include <log.h>
 #include <grpc++/grpc++.h>
 #include "service/service_base.h"
@@ -20,6 +21,12 @@ int main(int argc,char *argv[]){
     LOG_INFO("hello world");
 	serving_configure::model_config_list congifureList;
 	loadconfigure(argv[1],congifureList);
-    tensor_serving_local_server(congifureList);
+    auto tensorflow_serviceptr = ServiceFactory::CreateTensorFlowService(congifureList);
+    auto openvino_serviceptr = ServiceFactory::CreateOpenVinoService(congifureList);
+    std::thread  tf_thread(tensor_serving_local_server,tensorflow_serviceptr,"0.0.0.0:9001",congifureList);
+    std::thread  openvino_thread(tensor_serving_local_server,openvino_serviceptr,"0.0.0.0:9002",congifureList);
+    tf_thread.join();
+    openvino_thread.join();
+    
     return 0;
 }

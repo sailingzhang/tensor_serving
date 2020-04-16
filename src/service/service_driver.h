@@ -63,6 +63,7 @@ public:
         this->handle= nullptr;
     };
     tensorflowOp(string filename){
+        LOG_INFO("enter")
         this->handle = nullptr;
         this->handle = dlopen(filename.c_str(), RTLD_NOW | RTLD_LOCAL | RTLD_DEEPBIND);
         if (! this->handle) {
@@ -70,6 +71,7 @@ public:
             LOG_ERROR("dlerror="<<perr);
             std::quick_exit(-1);
         }
+        LOG_INFO("dl tensorflow ok");
         this->TF_DeleteBuffer = decltype(this->TF_DeleteBuffer)(dlsym(handle, "TF_DeleteBuffer"));
         mydlsym(this->handle,this->TF_DeleteSessionOptions,"TF_DeleteSessionOptions");
         mydlsym(this->handle,this->TF_LoadSessionFromSavedModel,"TF_LoadSessionFromSavedModel");

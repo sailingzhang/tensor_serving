@@ -311,7 +311,7 @@ string tensorflow_service_driver::run_predict_session( const ::tensorflow::servi
         return ret;
     }
     auto &outputmap =  *response->mutable_outputs();
-    for(auto i = 0;i < output_values.size();i++){
+    for(size_t i = 0;i < output_values.size();i++){
         tensorflow::TensorProto outputproto;
         Tensor_To_TensorProto(output_values[i],outputproto);    
         outputmap[outputSignatureNameVec[i]] = std::move(outputproto);
@@ -392,12 +392,6 @@ int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::
             ret.dtypesize = sizeof(float);
             ret.pdata=(void *)from.float_val().begin();
             break;
-        case tensorflow::DataType::DT_DOUBLE:
-            ret.dtype = TF_DOUBLE;
-            ret.opevino_dtype = Precision::FP32;
-            ret.dtypesize = sizeof(double);
-            ret.pdata =(void *) from.double_val().begin();
-            break;
         case tensorflow::DataType::DT_BOOL:
             ret.dtype = TF_BOOL;
             ret.opevino_dtype = Precision::BOOL;
@@ -449,7 +443,7 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
     auto type = outputInfoPtr->getPrecision();
     auto allsize = 1;
     auto  numdims = outputInfoPtr->getDims().size();
-    for(auto j = 0; j < numdims; j++){
+    for(size_t j = 0; j < numdims; j++){
         auto dimsize = outputInfoPtr->getDims()[j];
         outputproto.mutable_tensor_shape()->add_dim()->set_size(dimsize);
         allsize *= dimsize;
@@ -548,14 +542,14 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
     for(auto it = network.getOutputsInfo().begin(); it != network.getOutputsInfo().end();it++){
         DataPtr output_info = it->second;
         std::string output_name = it->first;
-        output_info->setPrecision(Precision::FP32);
+        // output_info->setPrecision(Precision::FP32);
         // Blob::Ptr output = infer_request.GetBlob(output_name);
         tensorflow::TensorProto tensorproto;
         this->OpenvinoOutput_To_TensorProto(infer_request,output_info,tensorproto);
         outputmap[output_name] = std::move(tensorproto);
     }
 
-    return "test";
+    return ret;
 }
 
 
