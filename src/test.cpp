@@ -14,6 +14,6 @@ int main_test(int argc,char *argv[]){
     cout<<"hello world"<<endl;
     serving_configure::model_config_list congifureList;
 	loadconfigure(argv[1],congifureList);
-    auto client = createNoNetOpenvinoClientservice(congifureList);
+    // auto client = createNoNetOpenvinoClientservice(congifureList);
     return 0;
 }

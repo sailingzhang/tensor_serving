@@ -21,12 +21,19 @@ int main(int argc,char *argv[]){
     LOG_INFO("hello world");
 	serving_configure::model_config_list congifureList;
 	loadconfigure(argv[1],congifureList);
-    auto tensorflow_serviceptr = ServiceFactory::CreateTensorFlowService(congifureList);
-    auto openvino_serviceptr = ServiceFactory::CreateOpenVinoService(congifureList);
-    std::thread  tf_thread(tensor_serving_local_server,tensorflow_serviceptr,"0.0.0.0:9001",congifureList);
-    std::thread  openvino_thread(tensor_serving_local_server,openvino_serviceptr,"0.0.0.0:9002",congifureList);
-    tf_thread.join();
-    openvino_thread.join();
+
+    #ifdef TENSERFLOW_SERVICE
+    auto serviceptr = ServiceFactory::CreateTensorFlowService(congifureList);
+    LOG_INFO("tensorflow type")
+    #endif
+
+    #ifdef OPENVINO_SERVICE
+    auto serviceptr = ServiceFactory::CreateOpenVinoService(congifureList);
+    LOG_INFO("openvino type");
+    #endif
+
+    std::thread  s_thread(tensor_serving_local_server,serviceptr,"0.0.0.0:9001",congifureList);
+    s_thread.join();
     
     return 0;
 }

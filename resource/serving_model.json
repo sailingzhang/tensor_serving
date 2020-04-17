@@ -1,15 +1,21 @@
 {
     "config":{
       "name":"mtcnnmodel",
-      "version":0,
-      "base_path":"/mnt/c/mydata/develop/mygit/train_model/servingmodel/mtcnnmodel/202001011615",
+      "version":202001011615,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/mtcnnmodel/202001011615",
       "model_platform":"tensorflow"
     },
     "config":{
       "name":"facenetmodel",
-      "version":0,
-      "base_path":"/mnt/c/mydata/develop/mygit/train_model/servingmodel/facenetmodel/202001141108",
+      "version":202001141108,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/facenetmodel/202001141108",
       "model_platform":"tensorflow"
+    },
+    "config":{
+      "name":"facenetmodel",
+      "version":202001141108,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_facenetmodel/202001141108",
+      "model_platform":"openvino"
     }
 
 }

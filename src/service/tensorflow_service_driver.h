@@ -1,5 +1,8 @@
-#ifndef SERVICE_DRIVER_H
-#define SERVICE_DRIVER_H
+#ifndef TENSORFLOW_SERVICE_DRIVER_H
+#define TENSORFLOW_SERVICE_DRIVER_H
+
+
+
 #include <iostream>
 #include "tensorflow/core/framework/tensor.pb.h"
 #include <google/protobuf/util/json_util.h>
@@ -8,9 +11,9 @@
 #include <grpc++/server_builder.h>
 #include <tensorflow/c/c_api.h>
 #include "server_configure.pb.h"
+#include "service_base.h"
 
-#include <inference_engine.hpp>
-#include <details/os/os_filesystem.hpp>
+
 // #include <samples/common.hpp>
 // #include <samples/ocv_common.hpp>
 // #include <samples/classification_results.h>
@@ -18,10 +21,12 @@
 #include <log.h>
 
 using namespace std;
-using namespace InferenceEngine;
+
 
 #include <dlfcn.h>
 
+
+#ifdef TENSERFLOW_SERVICE
 
 struct signatureRelation{
     string modelname;
@@ -37,13 +42,22 @@ struct modelSource{
 };
 
 
-struct protoinfoS{
+// struct protoinfoS{
+//     TF_DataType dtype;
+//     Precision opevino_dtype;
+//     int32_t dtypesize;
+//     int64_t allbytesSize;
+//     vector<int64_t> dimarr;
+//     vector<size_t> size_t_dimarr;
+//     void * pdata;
+// };
+
+
+struct TensorFlowProtoinfoS{
     TF_DataType dtype;
-    Precision opevino_dtype;
     int32_t dtypesize;
     int64_t allbytesSize;
     vector<int64_t> dimarr;
-    vector<size_t> size_t_dimarr;
     void * pdata;
 };
 
@@ -151,30 +165,8 @@ private:
 
 
 
+#endif
 
-class openvino_service_driver:public tensorflow::serving::PredictionService::Service{
-public:
-    openvino_service_driver(serving_configure::model_config_list configurelist);
-    virtual ~openvino_service_driver(){};
-    // Classify.
-    virtual ::grpc::Status Classify(::grpc::ServerContext* context, const ::tensorflow::serving::ClassificationRequest* request, ::tensorflow::serving::ClassificationResponse* response);
-    // Regress.
-    virtual ::grpc::Status Regress(::grpc::ServerContext* context, const ::tensorflow::serving::RegressionRequest* request, ::tensorflow::serving::RegressionResponse* response);
-    // Predict -- provides access to loaded TensorFlow model.
-    virtual ::grpc::Status Predict(::grpc::ServerContext* context, const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
-    // MultiInference API for multi-headed models.
-    virtual ::grpc::Status MultiInference(::grpc::ServerContext* context, const ::tensorflow::serving::MultiInferenceRequest* request, ::tensorflow::serving::MultiInferenceResponse* response);
-    // GetModelMetadata - provides access to metadata for loaded models.
-    virtual ::grpc::Status GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response);
-public:
-    int32_t loadModel(string modelname,int64_t version,string modeldir);
-    int32_t TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from,InferRequest &infer_request, InputInfo & inputInfo);
-    int32_t OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr  outputInfoPtr,tensorflow::TensorProto & outputproto);
-private:
-    string run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
-    std::map<string,std::tuple<Core,CNNNetwork>>modelsourceMap;
-
-};
 
 
 #endif
