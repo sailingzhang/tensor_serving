@@ -19,7 +19,7 @@ openvino_service_driver::openvino_service_driver(serving_configure::model_config
 }
 
 int32_t openvino_service_driver::loadModel(string modelname,int64_t version,string modeldir){
-    LOG_INFO("begin load,modelname="<<modelname<<" version="<<version<<" dir="<<modeldir);
+    LOG_INFO("begin openvino load ,modelname="<<modelname<<" version="<<version<<" dir="<<modeldir);
     auto &&modelnamekey = composeModelNameKey(modelname,version);
     Core ie;
     CNNNetwork network = ie.ReadNetwork(modeldir+"/model.xml", modeldir+"/model.bin");
@@ -46,13 +46,13 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         LOG_INFO(" inputname="<<inputptr->name()<<" dims="<<dimstr);
     }
     this->modelsourceMap[modelnamekey]= {ie,network};
-    LOG_INFO("load over,modelname="<<modelname);
+    LOG_INFO("openvino load over,modelname="<<modelname);
     // network.setBatchSize(1);
     return 0;
 }
 
 int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from,InferRequest &infer_request, InputInfo & inputInfo){
-    LOG_DEBUG("enter");
+    LOG_DEBUG("enter,datatype="<<from.dtype());
     OpenvinoProtoinfoS ret;
     ret.allbytesSize = 1;
     switch (from.dtype())
@@ -101,7 +101,9 @@ int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::
 
     InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,ret.size_t_dimarr,InferenceEngine::Layout::NHWC);
     auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc,static_cast<uint8_t *>(ret.pdata));
+
     infer_request.SetBlob(inputInfo.name(), blobptr);
+    LOG_DEBUG("exit");
     return 0;
 
 }
@@ -183,17 +185,38 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
     ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
     InferRequest infer_request = executable_network.CreateInferRequest();
 
-    for(auto it = request->inputs().begin();it != request->inputs().end();it++){
-        auto infoIt = network.getInputsInfo().find(it->first);
-        if(infoIt ==  network.getInputsInfo().end()){
-            ret = "no find such input,name="+it->first;
+    auto getInputInfo =  network.getInputsInfo();
+    auto req_inputs = request->inputs();
+    for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
+        auto it = req_inputs.find(infoIt->first);
+        if(it == req_inputs.end()){
+            ret = "no find such input,name="+infoIt->first;
+            LOG_ERROR(ret);
             return ret;
         }
+        LOG_DEBUG("find input name="<<it->first);
         auto & tensorproto = it->second;
         auto & inputinfo  = infoIt->second;
         this->TensorProto_To_OpenvinoInput(tensorproto,infer_request,*inputinfo);
-
     }
+
+
+    // for(auto it = request->inputs().begin();it != request->inputs().end();it++){
+    //     auto infoIt = getInputInfo.find(it->first);
+    //     if(infoIt ==  getInputInfo.end()){
+    //         ret = "no find such input,name="+it->first;
+    //         LOG_ERROR(ret);
+    //         for(auto debugIt = getInputInfo.begin();debugIt != getInputInfo.end();debugIt++){
+    //             LOG_INFO("real input name="<<debugIt->first);
+    //         }
+    //         return ret;
+    //     }
+    //     LOG_DEBUG("find input name="<<it->first);
+    //     auto & tensorproto = it->second;
+    //     auto & inputinfo  = infoIt->second;
+    //     this->TensorProto_To_OpenvinoInput(tensorproto,infer_request,*inputinfo);
+
+    // }
 
 
     infer_request.Infer();
@@ -230,8 +253,14 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
 }
     // Predict -- provides access to loaded TensorFlow model.
 ::grpc::Status openvino_service_driver::Predict(::grpc::ServerContext* context, const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
-    this->run_predict_session(request,response);
-    return Status::OK;    
+    auto ret =this->run_predict_session(request,response);
+    if(ret.empty()){
+        return Status::OK;
+    }else{
+        LOG_ERROR("Predict error="<<ret);
+        return grpc::Status(grpc::StatusCode::FAILED_PRECONDITION,ret);
+    }
+   
 }
     // MultiInference API for multi-headed models.
 ::grpc::Status openvino_service_driver::MultiInference(::grpc::ServerContext* context, const ::tensorflow::serving::MultiInferenceRequest* request, ::tensorflow::serving::MultiInferenceResponse* response){

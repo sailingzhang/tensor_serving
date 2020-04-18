@@ -8,8 +8,8 @@
 
 using namespace std;
 
-#define TENSERFLOW_SERVICE
-// #define OPENVINO_SERVICE 
+// #define TENSERFLOW_SERVICE
+#define OPENVINO_SERVICE 
 
 void loadconfigure(string configurefile,serving_configure::model_config_list & congifureList);
 int tensor_serving_local_server(shared_ptr<grpc::Service> service_ptr,string addr,serving_configure::model_config_list congifureList);
