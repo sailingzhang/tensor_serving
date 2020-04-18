@@ -86,7 +86,7 @@ TF_Tensor * tensorflow_service_driver::TensorProto_To_TF_Tensor(const tensorflow
     switch (from.dtype())
     {
         case tensorflow::DataType::DT_FLOAT:
-            // ret.dtype = TF_FLOAT;
+            ret.dtype = TF_FLOAT;
             ret.dtypesize = sizeof(float);
             ret.pdata=(void *)from.float_val().begin();
             break;
