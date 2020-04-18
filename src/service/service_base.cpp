@@ -21,6 +21,10 @@ shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetTen
     auto serverinterface = make_shared<tensorflow_service_driver>(configurelist);
     return createNoNetClientservice(serverinterface);
 }
+
+shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetClientservice(serving_configure::model_config_list configurelist){
+    return createNoNetTensorflowClientservice(configurelist);
+}
 #endif
 
 
@@ -34,7 +38,16 @@ shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetOpe
     auto serverinterface = make_shared<openvino_service_driver>(configurelist);
     return createNoNetClientservice(serverinterface);
 }
+shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetClientservice(serving_configure::model_config_list configurelist){
+    return createNoNetOpenvinoClientservice(configurelist);
+}
+
 #endif
+
+
+
+
+
 
 
 
@@ -84,13 +97,11 @@ private:
     return Status::OK;
 }
 
+
+
 shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetClientservice(shared_ptr<tensorflow::serving::PredictionService::Service> serviceptr){
     return  make_shared<local_tensor_sering_grpclient>(serviceptr);
 }
-
-
-
-
 
 
 int tensor_serving_local_server(shared_ptr<grpc::Service> service_ptr,string addr,serving_configure::model_config_list congifureList) {
