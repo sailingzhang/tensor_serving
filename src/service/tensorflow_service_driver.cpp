@@ -82,6 +82,7 @@ int32_t tensorflow_service_driver::loadModel(string modelname,int64_t version,st
 TF_Tensor * tensorflow_service_driver::TensorProto_To_TF_Tensor(const tensorflow::TensorProto & from){
     LOG_DEBUG("enter");
     TensorFlowProtoinfoS ret;
+
     ret.allbytesSize = 1;
     switch (from.dtype())
     {
@@ -256,6 +257,7 @@ string tensorflow_service_driver::run_predict_session( const ::tensorflow::servi
         // auto tensorp = TensorProto_To_TF_Tensor(it->second);
         //auto proinfo = protoinfo(it->second);
         //auto tensorp = this->TfOp.TF_NewTensor(proinfo.dtype,proinfo.dimarr.data(),proinfo.dimarr.size(),proinfo.pdata,proinfo.allbytesSize,dummy_deallocator,nullptr);
+       LOG_DEBUG("input name="<<it->first<<" data="<<it->second.DebugString());
         auto tensorp = this->TensorProto_To_TF_Tensor(it->second);
         if(nullptr == tensorp){
             LOG_ERROR("tensorp is null");
