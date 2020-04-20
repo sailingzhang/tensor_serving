@@ -51,7 +51,7 @@ public:
     int32_t OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr  outputInfoPtr,tensorflow::TensorProto & outputproto);
 private:
     string run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
-    std::map<string,std::tuple<Core,CNNNetwork>>modelsourceMap;
+    std::map<string,std::tuple<InferenceEngine::InputsDataMap,InferenceEngine::InferRequest,InferenceEngine::OutputsDataMap> >modelsourceMap;
 
 };
 

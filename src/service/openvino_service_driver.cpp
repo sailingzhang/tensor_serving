@@ -24,30 +24,22 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
     Core ie;
     CNNNetwork network = ie.ReadNetwork(modeldir+"/model.xml", modeldir+"/model.bin");
     LOG_INFO("network  batchsize"<<network.getBatchSize());
-    // for(auto it = network.getInputShapes().begin();it != network.getInputShapes().end();it++){
-    //     for(auto shapeIt= it->second.begin();shapeIt != it->second.end();shapeIt++){
-    //         LOG_INFO(" shape,first="<<shapeIt<<" second="<<it->second);
-    //     }
-        
-    // }
-    
-    // auto inputinfo = network.getInputsInfo();
-    // for(auto it = inputinfo.begin(); it != inputinfo.end();it++){
-    //     string dimstr ="";
-    //     auto inputptr= it->second;
-    //     if(nullptr == inputptr){
-    //         LOG_ERROR("inputptr is null,name="<<it->first);
-    //         continue;
-    //     }
-    //     auto tensorDesc = inputptr->getTensorDesc();
-    //     for(auto dimIt = tensorDesc.getDims().begin();dimIt != tensorDesc.getDims().end();dimIt++){
-    //         dimstr += (to_string(*dimIt)+",");
-    //     }
-    //     LOG_INFO(" inputname="<<inputptr->name()<<" dims="<<dimstr);
-    // }
-    this->modelsourceMap[modelnamekey]= {ie,network};
+    network.setBatchSize(1);
+
+    auto getInputInfo =  network.getInputsInfo();
+    auto getOutputInfo = network.getOutputsInfo();
+    for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
+        auto  inputInfoptr  = infoIt->second;
+        //set input info here.
+        // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+        inputInfoptr->setLayout(Layout::NHWC);
+        // inputInfoptr->setPrecision(InferenceEngine::Precision::FP32);
+    }
+    ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
+    InferRequest infer_request = executable_network.CreateInferRequest();
+
+    this->modelsourceMap[modelnamekey]={getInputInfo,infer_request,getOutputInfo};
     LOG_INFO("openvino load over,modelname="<<modelname);
-    // network.setBatchSize(1);
     return 0;
 }
 
@@ -98,9 +90,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
 
     // InputInfo::Ptr input_info = it->second;
     // std::string input_name = it->first;
-    inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
-    inputInfoptr->setLayout(Layout::NHWC);
-    inputInfoptr->setPrecision(ret.opevino_dtype);
+    // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+    // inputInfoptr->setLayout(Layout::NHWC);
+    // inputInfoptr->setPrecision(ret.opevino_dtype);
 
     
 
@@ -203,10 +195,10 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         ret ="no find such model,name=" + modelname;
         return ret;
     }
-    auto & ie = std::get<Core>(modelTt->second);
-    auto & network =std::get<CNNNetwork>(modelTt->second);
-    network.setBatchSize(1);
-    auto getInputInfo =  network.getInputsInfo();
+    auto & getInputInfo = std::get<InferenceEngine::InputsDataMap>(modelTt->second);
+    auto & infer_request =std::get<InferenceEngine::InferRequest>(modelTt->second);
+    auto & OutputsInfo  = std::get<InferenceEngine::OutputsDataMap>(modelTt->second);
+
     auto req_inputs = request->inputs();
     for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
         auto it = req_inputs.find(infoIt->first);
@@ -221,10 +213,6 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         Datamap[it->first]= this->TensorProto_To_OpenvinoInput(tensorproto,inputinfoptr);
     }
 
-
-    ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
-    InferRequest infer_request = executable_network.CreateInferRequest();
-
     for(auto it= Datamap.begin();it != Datamap.end();it++){
         infer_request.SetBlob(it->first,it->second);
     }
@@ -232,18 +220,10 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
     infer_request.Infer();
 
     auto &outputmap =  *response->mutable_outputs();
-    // for(auto i = 0;i < output_values.size();i++){
-    //     tensorflow::TensorProto outputproto;
-    //     Tensor_To_TensorProto(output_values[i],outputproto);    
-    //     outputmap[outputSignatureNameVec[i]] = std::move(outputproto);
-    //     LOG_DEBUG("one output,sname="<<outputSignatureNameVec[i]);
-    // }
-    auto  OutputsInfo = network.getOutputsInfo();
+
     for(auto it = OutputsInfo.begin(); it != OutputsInfo.end();it++){
         DataPtr output_info = it->second;
         std::string output_name = it->first;
-        // output_info->setPrecision(Precision::FP32);
-        // Blob::Ptr output = infer_request.GetBlob(output_name);
         tensorflow::TensorProto tensorproto;
         this->OpenvinoOutput_To_TensorProto(infer_request,output_info,tensorproto);
         LOG_DEBUG("output name="<<output_name<<" data="<<tensorproto.DebugString());
