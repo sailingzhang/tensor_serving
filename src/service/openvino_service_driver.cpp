@@ -31,28 +31,28 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         
     // }
     
-    auto inputinfo = network.getInputsInfo();
-    for(auto it = inputinfo.begin(); it != inputinfo.end();it++){
-        string dimstr ="";
-        auto inputptr= it->second;
-        if(nullptr == inputptr){
-            LOG_ERROR("inputptr is null,name="<<it->first);
-            continue;
-        }
-        auto tensorDesc = inputptr->getTensorDesc();
-        for(auto dimIt = tensorDesc.getDims().begin();dimIt != tensorDesc.getDims().end();dimIt++){
-            dimstr += (to_string(*dimIt)+",");
-        }
-        LOG_INFO(" inputname="<<inputptr->name()<<" dims="<<dimstr);
-    }
+    // auto inputinfo = network.getInputsInfo();
+    // for(auto it = inputinfo.begin(); it != inputinfo.end();it++){
+    //     string dimstr ="";
+    //     auto inputptr= it->second;
+    //     if(nullptr == inputptr){
+    //         LOG_ERROR("inputptr is null,name="<<it->first);
+    //         continue;
+    //     }
+    //     auto tensorDesc = inputptr->getTensorDesc();
+    //     for(auto dimIt = tensorDesc.getDims().begin();dimIt != tensorDesc.getDims().end();dimIt++){
+    //         dimstr += (to_string(*dimIt)+",");
+    //     }
+    //     LOG_INFO(" inputname="<<inputptr->name()<<" dims="<<dimstr);
+    // }
     this->modelsourceMap[modelnamekey]= {ie,network};
     LOG_INFO("openvino load over,modelname="<<modelname);
     // network.setBatchSize(1);
     return 0;
 }
 
-int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from,InferRequest &infer_request, InputInfo & inputInfo){
-    LOG_DEBUG("enter,inputname="<<inputInfo.name()<<" datatype="<<from.dtype());
+InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from, InputInfo::Ptr  inputInfoptr){
+    LOG_DEBUG("enter,inputname="<<inputInfoptr->name()<<" datatype="<<from.dtype());
     OpenvinoProtoinfoS ret;
     ret.allbytesSize = 1;
     switch (from.dtype())
@@ -79,7 +79,7 @@ int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::
             break;
         default:
             LOG_ERROR("not support such type="<<from.dtype());
-            return -1;
+            return nullptr;
             break;
     }
     
@@ -93,35 +93,40 @@ int32_t openvino_service_driver::TensorProto_To_OpenvinoInput(const tensorflow::
     ret.allbytesSize = ret.dtypesize * allsize;
 
     
-    LOG_DEBUG("inputinfo precision="<<inputInfo.getPrecision()<<" layout="<<inputInfo.getLayout());
+    LOG_DEBUG("inputinfo precision="<<inputInfoptr->getPrecision()<<" layout="<<inputInfoptr->getLayout());
 
 
     // InputInfo::Ptr input_info = it->second;
     // std::string input_name = it->first;
-    inputInfo.getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
-    // inputInfo.setLayout(Layout::NHWC);
-    // inputInfo.setPrecision(ret.opevino_dtype);
+    inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+    inputInfoptr->setLayout(Layout::NHWC);
+    inputInfoptr->setPrecision(ret.opevino_dtype);
 
     
-    
 
     
-    auto getdims = inputInfo.getTensorDesc().getDims();
+    auto getdims = inputInfoptr->getTensorDesc().getDims();
     for(auto & v:getdims){
-        LOG_DEBUG("get dim="<<v);
+        LOG_DEBUG("real input dim="<<v);
+    }
+    for( auto & v:ret.size_t_dimarr){
+        LOG_DEBUG("client dim="<<v);
     }
 
-    auto layout =  inputInfo.getTensorDesc().getLayoutByDims(getdims);
+    auto layout =  inputInfoptr->getTensorDesc().getLayoutByDims(ret.size_t_dimarr);
     LOG_DEBUG("layout ="<<layout);
-    InferenceEngine::TensorDesc tDesc(inputInfo.getPrecision(),inputInfo.getTensorDesc().getDims(),InferenceEngine::Layout::NHWC);
+    // InferenceEngine::TensorDesc tDesc(inputInfo.getPrecision(),inputInfo.getTensorDesc().getDims(),InferenceEngine::Layout::NHWC);
+    InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
     auto blobptr = InferenceEngine::make_shared_blob<float>(tDesc,static_cast<float *>(ret.pdata));
     // auto blobptr = InferenceEngine::make_shared_blob<float>(tDesc);
     for(auto it = blobptr->begin();it != blobptr->end();it++){
         LOG_DEBUG("blot data="<<*it);
     }
-    infer_request.SetBlob(inputInfo.name(), blobptr);
+    
+    // infer_request.SetBlob(inputInfo.name(), blobptr);
     LOG_DEBUG("exit");
-    return 0;
+    return  blobptr;
+
 
 }
 
@@ -186,6 +191,7 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
 
 string openvino_service_driver::run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
     string ret;
+    std::map<string,InferenceEngine::Blob::Ptr> Datamap;
     auto &base_modelname = request->model_spec().name();
     auto &&modelversion = request->model_spec().version().value();
     auto modelname = composeModelNameKey(base_modelname,modelversion);
@@ -200,9 +206,6 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
     auto & ie = std::get<Core>(modelTt->second);
     auto & network =std::get<CNNNetwork>(modelTt->second);
     network.setBatchSize(1);
-    ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
-    InferRequest infer_request = executable_network.CreateInferRequest();
-
     auto getInputInfo =  network.getInputsInfo();
     auto req_inputs = request->inputs();
     for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
@@ -214,28 +217,17 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         }
         LOG_DEBUG("find input name="<<it->first);
         auto & tensorproto = it->second;
-        auto & inputinfo  = infoIt->second;
-        this->TensorProto_To_OpenvinoInput(tensorproto,infer_request,*inputinfo);
+        auto  inputinfoptr  = infoIt->second;
+        Datamap[it->first]= this->TensorProto_To_OpenvinoInput(tensorproto,inputinfoptr);
     }
 
 
-    // for(auto it = request->inputs().begin();it != request->inputs().end();it++){
-    //     auto infoIt = getInputInfo.find(it->first);
-    //     if(infoIt ==  getInputInfo.end()){
-    //         ret = "no find such input,name="+it->first;
-    //         LOG_ERROR(ret);
-    //         for(auto debugIt = getInputInfo.begin();debugIt != getInputInfo.end();debugIt++){
-    //             LOG_INFO("real input name="<<debugIt->first);
-    //         }
-    //         return ret;
-    //     }
-    //     LOG_DEBUG("find input name="<<it->first);
-    //     auto & tensorproto = it->second;
-    //     auto & inputinfo  = infoIt->second;
-    //     this->TensorProto_To_OpenvinoInput(tensorproto,infer_request,*inputinfo);
+    ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
+    InferRequest infer_request = executable_network.CreateInferRequest();
 
-    // }
-
+    for(auto it= Datamap.begin();it != Datamap.end();it++){
+        infer_request.SetBlob(it->first,it->second);
+    }
 
     infer_request.Infer();
 
