@@ -16,6 +16,24 @@
       "version":202001141108,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_facenetmodel/202001141108",
       "model_platform":"openvino"
+    },
+    "config":{
+      "name":"openvino_mtcnn-o",
+      "version":202004202120,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_mtcnn-o/202004202120",
+      "model_platform":"openvino"
+    },
+    "config":{
+      "name":"openvino_mtcnn-p",
+      "version":202004202120,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_mtcnn-p/202004202120",
+      "model_platform":"openvino"
+    },
+    "config":{
+      "name":"openvino_mtcnn-r",
+      "version":202004202120,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_mtcnn-r/202004202120",
+      "model_platform":"openvino"
     }
 
 }

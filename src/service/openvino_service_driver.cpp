@@ -34,6 +34,10 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
         inputInfoptr->setLayout(Layout::NHWC);
         // inputInfoptr->setPrecision(InferenceEngine::Precision::FP32);
+        LOG_INFO("openvino input name="<<infoIt->first);
+    }
+    for(auto outinfoIt = getOutputInfo.begin();outinfoIt != getOutputInfo.end();outinfoIt++){
+        LOG_INFO("openvino output name="<<outinfoIt->first);
     }
     ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
     InferRequest infer_request = executable_network.CreateInferRequest();
