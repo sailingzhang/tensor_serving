@@ -7,8 +7,9 @@ message model_config {
     string base_path = 2;
     string model_platform = 3;
     int64  version = 4;
+    bool  isload = 5;
 }
 
 message model_config_list{
-    repeated model_config config;
+    repeated model_config config = 1;
 }

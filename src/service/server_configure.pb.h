@@ -180,6 +180,7 @@ class model_config :
     kBasePathFieldNumber = 2,
     kModelPlatformFieldNumber = 3,
     kVersionFieldNumber = 4,
+    kIsloadFieldNumber = 5,
   };
   // string name = 1;
   void clear_name();
@@ -238,6 +239,15 @@ class model_config :
   void _internal_set_version(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
+  // bool isload = 5;
+  void clear_isload();
+  bool isload() const;
+  void set_isload(bool value);
+  private:
+  bool _internal_isload() const;
+  void _internal_set_isload(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:serving_configure.model_config)
  private:
   class _Internal;
@@ -247,6 +257,7 @@ class model_config :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr base_path_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_platform_;
   ::PROTOBUF_NAMESPACE_ID::int64 version_;
+  bool isload_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fconfigure_2eproto;
 };
@@ -596,6 +607,26 @@ inline void model_config::_internal_set_version(::PROTOBUF_NAMESPACE_ID::int64 v
 inline void model_config::set_version(::PROTOBUF_NAMESPACE_ID::int64 value) {
   _internal_set_version(value);
   // @@protoc_insertion_point(field_set:serving_configure.model_config.version)
+}
+
+// bool isload = 5;
+inline void model_config::clear_isload() {
+  isload_ = false;
+}
+inline bool model_config::_internal_isload() const {
+  return isload_;
+}
+inline bool model_config::isload() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config.isload)
+  return _internal_isload();
+}
+inline void model_config::_internal_set_isload(bool value) {
+  
+  isload_ = value;
+}
+inline void model_config::set_isload(bool value) {
+  _internal_set_isload(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config.isload)
 }
 
 // -------------------------------------------------------------------

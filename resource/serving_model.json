@@ -3,37 +3,50 @@
       "name":"mtcnnmodel",
       "version":202001011615,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/mtcnnmodel/202001011615",
-      "model_platform":"tensorflow"
+      "model_platform":"tensorflow",
+      "isload":false
     },
     "config":{
       "name":"facenetmodel",
       "version":202001141108,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/facenetmodel/202001141108",
-      "model_platform":"tensorflow"
+      "model_platform":"tensorflow",
+      "isload":false
     },
     "config":{
-      "name":"facenetmodel",
+      "name":"openvino_facenetmodel",
       "version":202001141108,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_facenetmodel/202001141108",
-      "model_platform":"openvino"
+      "model_platform":"openvino",
+      "isload":true
     },
     "config":{
       "name":"openvino_mtcnn-o",
       "version":202004202120,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_mtcnn-o/202004202120",
-      "model_platform":"openvino"
+      "model_platform":"openvino",
+      "isload":false
     },
     "config":{
       "name":"openvino_mtcnn-p",
       "version":202004202120,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_mtcnn-p/202004202120",
-      "model_platform":"openvino"
+      "model_platform":"openvino",
+      "isload":false
     },
     "config":{
       "name":"openvino_mtcnn-r",
       "version":202004202120,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_mtcnn-r/202004202120",
-      "model_platform":"openvino"
+      "model_platform":"openvino",
+      "isload":false
+    },
+    "config":{
+      "name":" openvino_SqueezeNetlight",
+      "version":202004202120,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_SqueezeNetlight/202004232120",
+      "model_platform":"openvino",
+      "isload":true
     }
 
 }

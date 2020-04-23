@@ -12,8 +12,14 @@ openvino_service_driver::openvino_service_driver(serving_configure::model_config
         if(it->model_platform() != "openvino"){
             continue;
         }
+        if(!it->isload()){
+            LOG_INFO("modelname="<<it->name()<<" isable load");
+            continue;
+        }
+        LOG_INFO("...................................begin...................................................................");
         LOG_INFO("openvino service load, modelname="<<it->name()<<" version="<<it->version()<<" path="<<it->base_path());
         this->loadModel(it->name(),it->version(),it->base_path());
+        LOG_INFO("....................................end..................................................................");
     }
     return ;
 }
@@ -29,15 +35,26 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
     auto getInputInfo =  network.getInputsInfo();
     auto getOutputInfo = network.getOutputsInfo();
     for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
+        string shape="";
         auto  inputInfoptr  = infoIt->second;
         //set input info here.
         // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
         inputInfoptr->setLayout(Layout::NHWC);
+        auto dims = inputInfoptr->getTensorDesc().getDims();
+        for(auto& dim:dims){
+            shape = shape +","+to_string(dim);
+        }
         // inputInfoptr->setPrecision(InferenceEngine::Precision::FP32);
-        LOG_INFO("openvino input name="<<infoIt->first);
+        LOG_INFO("openvino input name="<<infoIt->first<<" shape="<<shape);
     }
     for(auto outinfoIt = getOutputInfo.begin();outinfoIt != getOutputInfo.end();outinfoIt++){
-        LOG_INFO("openvino output name="<<outinfoIt->first);
+        string shape="";
+        auto outputinfoptr = outinfoIt->second;
+        auto dims = outputinfoptr->getTensorDesc().getDims();
+        for(auto& dim:dims){
+            shape = shape +","+to_string(dim);
+        }
+        LOG_INFO("openvino output name="<<outinfoIt->first<<" shape="<<shape);
     }
     ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
     InferRequest infer_request = executable_network.CreateInferRequest();

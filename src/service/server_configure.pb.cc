@@ -68,6 +68,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, base_path_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, model_platform_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, version_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, isload_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -77,7 +78,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::serving_configure::model_config)},
-  { 9, -1, sizeof(::serving_configure::model_config_list)},
+  { 10, -1, sizeof(::serving_configure::model_config_list)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -87,11 +88,11 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_server_5fconfigure_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\026server_configure.proto\022\021serving_config"
-  "ure\"X\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tbas"
+  "ure\"h\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tbas"
   "e_path\030\002 \001(\t\022\026\n\016model_platform\030\003 \001(\t\022\017\n\007"
-  "version\030\004 \001(\003\"D\n\021model_config_list\022/\n\006co"
-  "nfig\030\001 \003(\0132\037.serving_configure.model_con"
-  "figb\006proto3"
+  "version\030\004 \001(\003\022\016\n\006isload\030\005 \001(\010\"D\n\021model_c"
+  "onfig_list\022/\n\006config\030\001 \003(\0132\037.serving_con"
+  "figure.model_configb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_server_5fconfigure_2eproto_deps[1] = {
 };
@@ -102,7 +103,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_server_5fconfigure_2eproto_once;
 static bool descriptor_table_server_5fconfigure_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_server_5fconfigure_2eproto = {
-  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 211,
+  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 227,
   &descriptor_table_server_5fconfigure_2eproto_once, descriptor_table_server_5fconfigure_2eproto_sccs, descriptor_table_server_5fconfigure_2eproto_deps, 2, 0,
   schemas, file_default_instances, TableStruct_server_5fconfigure_2eproto::offsets,
   file_level_metadata_server_5fconfigure_2eproto, 2, file_level_enum_descriptors_server_5fconfigure_2eproto, file_level_service_descriptors_server_5fconfigure_2eproto,
@@ -141,7 +142,9 @@ model_config::model_config(const model_config& from)
   if (!from._internal_model_platform().empty()) {
     model_platform_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.model_platform_);
   }
-  version_ = from.version_;
+  ::memcpy(&version_, &from.version_,
+    static_cast<size_t>(reinterpret_cast<char*>(&isload_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(isload_));
   // @@protoc_insertion_point(copy_constructor:serving_configure.model_config)
 }
 
@@ -150,7 +153,9 @@ void model_config::SharedCtor() {
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   base_path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  version_ = PROTOBUF_LONGLONG(0);
+  ::memset(&version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&isload_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(isload_));
 }
 
 model_config::~model_config() {
@@ -182,7 +187,9 @@ void model_config::Clear() {
   name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   base_path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  version_ = PROTOBUF_LONGLONG(0);
+  ::memset(&version_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&isload_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(isload_));
   _internal_metadata_.Clear();
 }
 
@@ -224,6 +231,13 @@ const char* model_config::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 32)) {
           version_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // bool isload = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 40)) {
+          isload_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -289,6 +303,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(4, this->_internal_version(), target);
   }
 
+  // bool isload = 5;
+  if (this->isload() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(5, this->_internal_isload(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -331,6 +351,11 @@ size_t model_config::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64Size(
         this->_internal_version());
+  }
+
+  // bool isload = 5;
+  if (this->isload() != 0) {
+    total_size += 1 + 1;
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -379,6 +404,9 @@ void model_config::MergeFrom(const model_config& from) {
   if (from.version() != 0) {
     _internal_set_version(from._internal_version());
   }
+  if (from.isload() != 0) {
+    _internal_set_isload(from._internal_isload());
+  }
 }
 
 void model_config::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -409,6 +437,7 @@ void model_config::InternalSwap(model_config* other) {
   model_platform_.Swap(&other->model_platform_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(version_, other->version_);
+  swap(isload_, other->isload_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata model_config::GetMetadata() const {
