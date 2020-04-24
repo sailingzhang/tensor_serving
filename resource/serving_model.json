@@ -48,7 +48,8 @@
       "model_platform":"openvino",
       "infer_request_num":1,
       "layout":1,
-      "isload":true
+      "isload":true,
+      "device":0
     }
 
 }

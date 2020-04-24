@@ -108,6 +108,31 @@ inline bool layout_enum_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<layout_enum>(
     layout_enum_descriptor(), name, value);
 }
+enum device_type : int {
+  CPU = 0,
+  GPU = 1,
+  device_type_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  device_type_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool device_type_IsValid(int value);
+constexpr device_type device_type_MIN = CPU;
+constexpr device_type device_type_MAX = GPU;
+constexpr int device_type_ARRAYSIZE = device_type_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* device_type_descriptor();
+template<typename T>
+inline const std::string& device_type_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, device_type>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function device_type_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    device_type_descriptor(), enum_t_value);
+}
+inline bool device_type_Parse(
+    const std::string& name, device_type* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<device_type>(
+    device_type_descriptor(), name, value);
+}
 // ===================================================================
 
 class model_config :
@@ -223,6 +248,7 @@ class model_config :
     kInferRequestNumFieldNumber = 5,
     kIsloadFieldNumber = 6,
     kLayoutFieldNumber = 7,
+    kDeviceFieldNumber = 8,
   };
   // string name = 1;
   void clear_name();
@@ -308,6 +334,15 @@ class model_config :
   void _internal_set_layout(::serving_configure::layout_enum value);
   public:
 
+  // .serving_configure.device_type device = 8;
+  void clear_device();
+  ::serving_configure::device_type device() const;
+  void set_device(::serving_configure::device_type value);
+  private:
+  ::serving_configure::device_type _internal_device() const;
+  void _internal_set_device(::serving_configure::device_type value);
+  public:
+
   // @@protoc_insertion_point(class_scope:serving_configure.model_config)
  private:
   class _Internal;
@@ -320,6 +355,7 @@ class model_config :
   ::PROTOBUF_NAMESPACE_ID::int32 infer_request_num_;
   bool isload_;
   int layout_;
+  int device_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fconfigure_2eproto;
 };
@@ -731,6 +767,26 @@ inline void model_config::set_layout(::serving_configure::layout_enum value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.layout)
 }
 
+// .serving_configure.device_type device = 8;
+inline void model_config::clear_device() {
+  device_ = 0;
+}
+inline ::serving_configure::device_type model_config::_internal_device() const {
+  return static_cast< ::serving_configure::device_type >(device_);
+}
+inline ::serving_configure::device_type model_config::device() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config.device)
+  return _internal_device();
+}
+inline void model_config::_internal_set_device(::serving_configure::device_type value) {
+  
+  device_ = value;
+}
+inline void model_config::set_device(::serving_configure::device_type value) {
+  _internal_set_device(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config.device)
+}
+
 // -------------------------------------------------------------------
 
 // model_config_list
@@ -790,6 +846,11 @@ template <> struct is_proto_enum< ::serving_configure::layout_enum> : ::std::tru
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::serving_configure::layout_enum>() {
   return ::serving_configure::layout_enum_descriptor();
+}
+template <> struct is_proto_enum< ::serving_configure::device_type> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::serving_configure::device_type>() {
+  return ::serving_configure::device_type_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

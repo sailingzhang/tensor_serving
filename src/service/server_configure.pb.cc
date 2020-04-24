@@ -55,7 +55,7 @@ static void InitDefaultsscc_info_model_config_list_server_5fconfigure_2eproto() 
       &scc_info_model_config_server_5fconfigure_2eproto.base,}};
 
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_server_5fconfigure_2eproto[2];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_server_5fconfigure_2eproto[1];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_server_5fconfigure_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_server_5fconfigure_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -71,6 +71,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, infer_request_num_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, isload_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, layout_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, device_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -80,7 +81,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::serving_configure::model_config)},
-  { 12, -1, sizeof(::serving_configure::model_config_list)},
+  { 13, -1, sizeof(::serving_configure::model_config_list)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -90,18 +91,20 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_server_5fconfigure_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\026server_configure.proto\022\021serving_config"
-  "ure\"\263\001\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tba"
+  "ure\"\343\001\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tba"
   "se_path\030\002 \001(\t\022\026\n\016model_platform\030\003 \001(\t\022\017\n"
   "\007version\030\004 \001(\003\022\031\n\021infer_request_num\030\005 \001("
   "\005\022\016\n\006isload\030\006 \001(\010\022.\n\006layout\030\007 \001(\0162\036.serv"
-  "ing_configure.layout_enum\"D\n\021model_confi"
-  "g_list\022/\n\006config\030\001 \003(\0132\037.serving_configu"
-  "re.model_config*\262\001\n\013layout_enum\022\007\n\003ANY\020\000"
-  "\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCDHW\020\003\022\t\n\005NDHWC"
-  "\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005OIDHW\020B\022\n\n\006GO"
-  "IDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010\n\003CHW\020\200\001\022\007\n\002H"
-  "W\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007BLOCKED\020\310\001b\006pr"
-  "oto3"
+  "ing_configure.layout_enum\022.\n\006device\030\010 \001("
+  "\0162\036.serving_configure.device_type\"D\n\021mod"
+  "el_config_list\022/\n\006config\030\001 \003(\0132\037.serving"
+  "_configure.model_config*\262\001\n\013layout_enum\022"
+  "\007\n\003ANY\020\000\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCDHW\020\003\022"
+  "\t\n\005NDHWC\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005OIDHW"
+  "\020B\022\n\n\006GOIDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010\n\003CHW"
+  "\020\200\001\022\007\n\002HW\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007BLOCKE"
+  "D\020\310\001*\037\n\013device_type\022\007\n\003CPU\020\000\022\007\n\003GPU\020\001b\006p"
+  "roto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_server_5fconfigure_2eproto_deps[1] = {
 };
@@ -112,7 +115,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_server_5fconfigure_2eproto_once;
 static bool descriptor_table_server_5fconfigure_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_server_5fconfigure_2eproto = {
-  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 484,
+  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 565,
   &descriptor_table_server_5fconfigure_2eproto_once, descriptor_table_server_5fconfigure_2eproto_sccs, descriptor_table_server_5fconfigure_2eproto_deps, 2, 0,
   schemas, file_default_instances, TableStruct_server_5fconfigure_2eproto::offsets,
   file_level_metadata_server_5fconfigure_2eproto, 2, file_level_enum_descriptors_server_5fconfigure_2eproto, file_level_service_descriptors_server_5fconfigure_2eproto,
@@ -143,6 +146,20 @@ bool layout_enum_IsValid(int value) {
     case 193:
     case 194:
     case 200:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* device_type_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_server_5fconfigure_2eproto);
+  return file_level_enum_descriptors_server_5fconfigure_2eproto[1];
+}
+bool device_type_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
       return true;
     default:
       return false;
@@ -180,8 +197,8 @@ model_config::model_config(const model_config& from)
     model_platform_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.model_platform_);
   }
   ::memcpy(&version_, &from.version_,
-    static_cast<size_t>(reinterpret_cast<char*>(&layout_) -
-    reinterpret_cast<char*>(&version_)) + sizeof(layout_));
+    static_cast<size_t>(reinterpret_cast<char*>(&device_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(device_));
   // @@protoc_insertion_point(copy_constructor:serving_configure.model_config)
 }
 
@@ -191,8 +208,8 @@ void model_config::SharedCtor() {
   base_path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&layout_) -
-      reinterpret_cast<char*>(&version_)) + sizeof(layout_));
+      reinterpret_cast<char*>(&device_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(device_));
 }
 
 model_config::~model_config() {
@@ -225,8 +242,8 @@ void model_config::Clear() {
   base_path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&layout_) -
-      reinterpret_cast<char*>(&version_)) + sizeof(layout_));
+      reinterpret_cast<char*>(&device_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(device_));
   _internal_metadata_.Clear();
 }
 
@@ -291,6 +308,14 @@ const char* model_config::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
           ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
           _internal_set_layout(static_cast<::serving_configure::layout_enum>(val));
+        } else goto handle_unusual;
+        continue;
+      // .serving_configure.device_type device = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 64)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+          _internal_set_device(static_cast<::serving_configure::device_type>(val));
         } else goto handle_unusual;
         continue;
       default: {
@@ -374,6 +399,13 @@ failure:
       7, this->_internal_layout(), target);
   }
 
+  // .serving_configure.device_type device = 8;
+  if (this->device() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      8, this->_internal_device(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -436,6 +468,12 @@ size_t model_config::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_layout());
   }
 
+  // .serving_configure.device_type device = 8;
+  if (this->device() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_device());
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -491,6 +529,9 @@ void model_config::MergeFrom(const model_config& from) {
   if (from.layout() != 0) {
     _internal_set_layout(from._internal_layout());
   }
+  if (from.device() != 0) {
+    _internal_set_device(from._internal_device());
+  }
 }
 
 void model_config::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -524,6 +565,7 @@ void model_config::InternalSwap(model_config* other) {
   swap(infer_request_num_, other->infer_request_num_);
   swap(isload_, other->isload_);
   swap(layout_, other->layout_);
+  swap(device_, other->device_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata model_config::GetMetadata() const {

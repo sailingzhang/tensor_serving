@@ -33,6 +33,11 @@ enum layout_enum{
     BLOCKED = 200;    
 }
 
+enum device_type{
+    CPU = 0;
+    GPU = 1;
+}
+
 message model_config {
     string name = 1;
     string base_path = 2;
@@ -41,6 +46,8 @@ message model_config {
     int32  infer_request_num = 5;
     bool  isload = 6;
     layout_enum layout =7;
+    device_type device =8;
+    
 }
 
 message model_config_list{

@@ -68,7 +68,21 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         }
         LOG_INFO("openvino output name="<<outinfoIt->first<<" shape="<<shape<<" precision="<<outputinfoptr->getPrecision());
     }
-    ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
+     
+    string device_type="CPU";
+    switch (configure.device())
+    {
+    case serving_configure::CPU:
+        device_type ="CPU";
+        break;
+    case serving_configure::GPU:
+        device_type ="GPU";
+        break;
+    default:
+        break;
+    }
+    LOG_INFO("device type="<<device_type);
+    ExecutableNetwork executable_network =  ie.LoadNetwork(network, device_type);
     InferRequest infer_request = executable_network.CreateInferRequest();
 
     this->modelsourceMap[modelnamekey]={getInputInfo,infer_request,getOutputInfo};
