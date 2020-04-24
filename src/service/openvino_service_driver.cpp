@@ -18,13 +18,13 @@ openvino_service_driver::openvino_service_driver(serving_configure::model_config
         }
         LOG_INFO("...................................begin...................................................................");
         LOG_INFO("openvino service load, modelname="<<it->name()<<" version="<<it->version()<<" path="<<it->base_path());
-        this->loadModel(it->name(),it->version(),it->base_path());
+        this->loadModel(it->name(),it->version(),it->base_path(),*it);
         LOG_INFO("....................................end..................................................................");
     }
     return ;
 }
 
-int32_t openvino_service_driver::loadModel(string modelname,int64_t version,string modeldir){
+int32_t openvino_service_driver::loadModel(string modelname,int64_t version,string modeldir,serving_configure::model_config & configure){
     LOG_INFO("begin openvino load ,modelname="<<modelname<<" version="<<version<<" dir="<<modeldir);
     auto &&modelnamekey = composeModelNameKey(modelname,version);
     Core ie;
@@ -39,13 +39,25 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         auto  inputInfoptr  = infoIt->second;
         //set input info here.
         // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
-        inputInfoptr->setLayout(Layout::NHWC);
+        LOG_INFO("set layout="<<configure.layout());
+        switch (configure.layout())
+        {
+        case serving_configure::NHWC:
+            inputInfoptr->setLayout(Layout::NHWC);
+            break;
+        case serving_configure::NCHW:
+            inputInfoptr->setLayout(Layout::NCHW);
+            break;
+        default:
+            break;
+        }
+        
         auto dims = inputInfoptr->getTensorDesc().getDims();
         for(auto& dim:dims){
             shape = shape +","+to_string(dim);
         }
         // inputInfoptr->setPrecision(InferenceEngine::Precision::FP32);
-        LOG_INFO("openvino input name="<<infoIt->first<<" shape="<<shape);
+        LOG_INFO("openvino input name="<<infoIt->first<<" shape="<<shape<<" precision="<<inputInfoptr->getPrecision());
     }
     for(auto outinfoIt = getOutputInfo.begin();outinfoIt != getOutputInfo.end();outinfoIt++){
         string shape="";
@@ -54,7 +66,7 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         for(auto& dim:dims){
             shape = shape +","+to_string(dim);
         }
-        LOG_INFO("openvino output name="<<outinfoIt->first<<" shape="<<shape);
+        LOG_INFO("openvino output name="<<outinfoIt->first<<" shape="<<shape<<" precision="<<outputinfoptr->getPrecision());
     }
     ExecutableNetwork executable_network = ie.LoadNetwork(network, "CPU");
     InferRequest infer_request = executable_network.CreateInferRequest();

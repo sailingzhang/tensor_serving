@@ -46,7 +46,7 @@ public:
     // GetModelMetadata - provides access to metadata for loaded models.
     virtual ::grpc::Status GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response);
 public:
-    int32_t loadModel(string modelname,int64_t version,string modeldir);
+    int32_t loadModel(string modelname,int64_t version,string modeldir,serving_configure::model_config & configure);
     InferenceEngine::Blob::Ptr TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from, InputInfo::Ptr  inputInfoptr);
     int32_t OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr  outputInfoPtr,tensorflow::TensorProto & outputproto);
 private:

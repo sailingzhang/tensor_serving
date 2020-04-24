@@ -42,10 +42,12 @@
       "isload":false
     },
     "config":{
-      "name":" openvino_SqueezeNetlight",
-      "version":202004202120,
+      "name":"openvino_SqueezeNetlight",
+      "version":202004232120,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_SqueezeNetlight/202004232120",
       "model_platform":"openvino",
+      "infer_request_num":1,
+      "layout":1,
       "isload":true
     }
 

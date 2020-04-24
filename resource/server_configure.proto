@@ -1,13 +1,46 @@
 syntax = "proto3";
 
 package serving_configure;
+enum layout_enum{
+    ANY = 0;  // "any" layout
+
+    // I/O data layouts
+    NCHW = 1;
+    NHWC = 2;
+    NCDHW = 3;
+    NDHWC = 4;
+
+    // weight layouts
+    OIHW = 64;
+    GOIHW = 65;
+    OIDHW = 66;
+    GOIDHW = 67;
+
+    // Scalar
+    SCALAR = 95;
+
+    // bias layouts
+    C = 96;
+
+    // Single image layout (for mean image)
+    CHW = 128;
+
+    // 2D
+    HW = 192;
+    NC = 193;
+    CN = 194;
+
+    BLOCKED = 200;    
+}
 
 message model_config {
     string name = 1;
     string base_path = 2;
     string model_platform = 3;
     int64  version = 4;
-    bool  isload = 5;
+    int32  infer_request_num = 5;
+    bool  isload = 6;
+    layout_enum layout =7;
 }
 
 message model_config_list{

@@ -31,6 +31,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -68,6 +69,45 @@ template<> ::serving_configure::model_config_list* Arena::CreateMaybeMessage<::s
 PROTOBUF_NAMESPACE_CLOSE
 namespace serving_configure {
 
+enum layout_enum : int {
+  ANY = 0,
+  NCHW = 1,
+  NHWC = 2,
+  NCDHW = 3,
+  NDHWC = 4,
+  OIHW = 64,
+  GOIHW = 65,
+  OIDHW = 66,
+  GOIDHW = 67,
+  SCALAR = 95,
+  C = 96,
+  CHW = 128,
+  HW = 192,
+  NC = 193,
+  CN = 194,
+  BLOCKED = 200,
+  layout_enum_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  layout_enum_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool layout_enum_IsValid(int value);
+constexpr layout_enum layout_enum_MIN = ANY;
+constexpr layout_enum layout_enum_MAX = BLOCKED;
+constexpr int layout_enum_ARRAYSIZE = layout_enum_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* layout_enum_descriptor();
+template<typename T>
+inline const std::string& layout_enum_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, layout_enum>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function layout_enum_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    layout_enum_descriptor(), enum_t_value);
+}
+inline bool layout_enum_Parse(
+    const std::string& name, layout_enum* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<layout_enum>(
+    layout_enum_descriptor(), name, value);
+}
 // ===================================================================
 
 class model_config :
@@ -180,7 +220,9 @@ class model_config :
     kBasePathFieldNumber = 2,
     kModelPlatformFieldNumber = 3,
     kVersionFieldNumber = 4,
-    kIsloadFieldNumber = 5,
+    kInferRequestNumFieldNumber = 5,
+    kIsloadFieldNumber = 6,
+    kLayoutFieldNumber = 7,
   };
   // string name = 1;
   void clear_name();
@@ -239,13 +281,31 @@ class model_config :
   void _internal_set_version(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
-  // bool isload = 5;
+  // int32 infer_request_num = 5;
+  void clear_infer_request_num();
+  ::PROTOBUF_NAMESPACE_ID::int32 infer_request_num() const;
+  void set_infer_request_num(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_infer_request_num() const;
+  void _internal_set_infer_request_num(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // bool isload = 6;
   void clear_isload();
   bool isload() const;
   void set_isload(bool value);
   private:
   bool _internal_isload() const;
   void _internal_set_isload(bool value);
+  public:
+
+  // .serving_configure.layout_enum layout = 7;
+  void clear_layout();
+  ::serving_configure::layout_enum layout() const;
+  void set_layout(::serving_configure::layout_enum value);
+  private:
+  ::serving_configure::layout_enum _internal_layout() const;
+  void _internal_set_layout(::serving_configure::layout_enum value);
   public:
 
   // @@protoc_insertion_point(class_scope:serving_configure.model_config)
@@ -257,7 +317,9 @@ class model_config :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr base_path_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_platform_;
   ::PROTOBUF_NAMESPACE_ID::int64 version_;
+  ::PROTOBUF_NAMESPACE_ID::int32 infer_request_num_;
   bool isload_;
+  int layout_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fconfigure_2eproto;
 };
@@ -609,7 +671,27 @@ inline void model_config::set_version(::PROTOBUF_NAMESPACE_ID::int64 value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.version)
 }
 
-// bool isload = 5;
+// int32 infer_request_num = 5;
+inline void model_config::clear_infer_request_num() {
+  infer_request_num_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 model_config::_internal_infer_request_num() const {
+  return infer_request_num_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 model_config::infer_request_num() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config.infer_request_num)
+  return _internal_infer_request_num();
+}
+inline void model_config::_internal_set_infer_request_num(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  infer_request_num_ = value;
+}
+inline void model_config::set_infer_request_num(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_infer_request_num(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config.infer_request_num)
+}
+
+// bool isload = 6;
 inline void model_config::clear_isload() {
   isload_ = false;
 }
@@ -627,6 +709,26 @@ inline void model_config::_internal_set_isload(bool value) {
 inline void model_config::set_isload(bool value) {
   _internal_set_isload(value);
   // @@protoc_insertion_point(field_set:serving_configure.model_config.isload)
+}
+
+// .serving_configure.layout_enum layout = 7;
+inline void model_config::clear_layout() {
+  layout_ = 0;
+}
+inline ::serving_configure::layout_enum model_config::_internal_layout() const {
+  return static_cast< ::serving_configure::layout_enum >(layout_);
+}
+inline ::serving_configure::layout_enum model_config::layout() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config.layout)
+  return _internal_layout();
+}
+inline void model_config::_internal_set_layout(::serving_configure::layout_enum value) {
+  
+  layout_ = value;
+}
+inline void model_config::set_layout(::serving_configure::layout_enum value) {
+  _internal_set_layout(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config.layout)
 }
 
 // -------------------------------------------------------------------
@@ -681,6 +783,16 @@ model_config_list::config() const {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace serving_configure
+
+PROTOBUF_NAMESPACE_OPEN
+
+template <> struct is_proto_enum< ::serving_configure::layout_enum> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::serving_configure::layout_enum>() {
+  return ::serving_configure::layout_enum_descriptor();
+}
+
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 
