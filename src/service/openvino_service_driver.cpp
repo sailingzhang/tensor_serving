@@ -82,7 +82,10 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         break;
     }
     LOG_INFO("device type="<<device_type);
+    // std::cout << ie.GetVersions(device_type) << std::endl;
+    
     ExecutableNetwork executable_network =  ie.LoadNetwork(network, device_type);
+    LOG_INFO("load ok")
     InferRequest infer_request = executable_network.CreateInferRequest();
 
     this->modelsourceMap[modelnamekey]={getInputInfo,infer_request,getOutputInfo};
@@ -182,11 +185,23 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
     
     switch (type)
     {
+        case Precision::FP16:
+            {
+                outputproto.set_dtype(tensorflow::DataType::DT_FLOAT);
+                // auto datap = (const float *)this->TfOp.TF_TensorData(tensorp);
+                
+                auto datap = outputBlob->buffer().as<PrecisionTrait<Precision::FP16>::value_type *>();
+                for(auto dataindex = 0; dataindex < allsize;dataindex++){
+                    outputproto.add_float_val(datap[dataindex]);
+                }  
+            }
+            break;
         case Precision::FP32:
             {
                 outputproto.set_dtype(tensorflow::DataType::DT_FLOAT);
                 // auto datap = (const float *)this->TfOp.TF_TensorData(tensorp);
-                auto datap = outputBlob->buffer().as<float*>();
+                auto datap = outputBlob->buffer().as<PrecisionTrait<Precision::FP32>::value_type *>();
+                // auto datap = outputBlob->buffer().as<PrecisionTrait<Precision::FP16>::value_type *>();
                 for(auto dataindex = 0; dataindex < allsize;dataindex++){
                     outputproto.add_float_val(datap[dataindex]);
                 }  

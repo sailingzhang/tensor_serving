@@ -38,7 +38,7 @@ INCLUDE_DIRECTORIES(${INCLUDE_LIST})
 SET(LIB_DIRECTORY_LIST
 	${PROJECT_SOURCE_DIR}
 	# ${SOURCE_ROOT}/modules/authenticationcheck
-	${THIRD_PART}/grpc1.27.1/linuxlib
+	${THIRD_PART}/grpc1.28.1/centos_lib
 	${THIRD_PART}/libtensorflow1.15/lib/linux_cpu
 	# ${THIRD_PART}/opencv4.2.0/lib
 	# ${THIRD_PART}/opencv4.2.0/lib/opencv4/3rdparty
@@ -95,20 +95,29 @@ SET(LIB_LIST
 	libprotobuf.a
 	libz.a
 
+	libabsl_bad_optional_access.a
+	libabsl_base.a
+	libabsl_dynamic_annotations.a
+	libabsl_log_severity.a
+	libabsl_spinlock_wait.a
+	libabsl_str_format_internal.a
 	libabsl_strings.a
+	libabsl_strings_internal.a
+	libabsl_throw_delegate.a
+	libabsl_int128.a
+	libabsl_raw_logging_internal.a
 	# libabsl_str_format_internal.a
 	# libabsl_strings_internal.a
 	# libabsl_base.a
-	libabsl_throw_delegate.a
 
 	${InferenceEngine_LIBRARIES}
 	${IE_SAMPLE_DEPENDENCIES}
 
 	m
 	dl
-	libstdc++.a
+	# libstdc++.a
 	libstdc++fs.a
-	libc.a
+	# libc.a
 	# libm.a
 	# libdl.a
 	pthread
