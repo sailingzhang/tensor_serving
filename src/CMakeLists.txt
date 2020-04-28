@@ -14,10 +14,12 @@ set(InferenceEngine_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/share
 
 find_package(InferenceEngine 2.1 REQUIRED)
 
+SET(GRPC_DIR ${THIRD_PART}/grpc1.28.1)
+SET(GRPC_LIB_DIR ${GRPC_DIR}/ubuntu_lib)
 
 SET(INCLUDE_LIST 
 	${PROJECT_SOURCE_DIR}/include/  	
-	${THIRD_PART}/grpc1.27.1/include/
+	${GRPC_DIR}/include/
 	${THIRD_PART}/log/
 	${THIRD_PART}/libtensorflow1.15/include
 	# ${THIRD_PART}/opencv4.2.0/include/opencv4/
@@ -29,16 +31,16 @@ SET(INCLUDE_LIST
 #	${SOURCE_ROOT}/3rdparty/breakpad/include
 	# ${SOURCE_ROOT}/modules/commonlib/include
 	# ${InferenceEngine_INCLUDE}
-	${THIRD_PART}/openvino_2020.1.023/inference_engine
-    ${THIRD_PART}/openvino_2020.1.023/inference_engine/include
-    ${THIRD_PART}/openvino_2020.1.023/inference_engine/samples/cpp/common
+	${THIRD_PART}/openvino/inference_engine
+    ${THIRD_PART}/openvino/inference_engine/include
+    ${THIRD_PART}/openvino/inference_engine/samples/cpp/common
 )
 INCLUDE_DIRECTORIES(${INCLUDE_LIST})
 
 SET(LIB_DIRECTORY_LIST
 	${PROJECT_SOURCE_DIR}
 	# ${SOURCE_ROOT}/modules/authenticationcheck
-	${THIRD_PART}/grpc1.28.1/centos_lib
+	${GRPC_LIB_DIR}
 	${THIRD_PART}/libtensorflow1.15/lib/linux_cpu
 	# ${THIRD_PART}/opencv4.2.0/lib
 	# ${THIRD_PART}/opencv4.2.0/lib/opencv4/3rdparty
@@ -46,9 +48,9 @@ SET(LIB_DIRECTORY_LIST
 	# ${SOURCE_ROOT}/3rdparty/grpc/lib/linux64_4.8.5gcc
 	# ${THIRD_PART}/openvino_2020.1.023/inference_engine/lib/intel64/
 
-	${THIRD_PART}/openvino_2020.1.023/inference_engine/external/gna/lib
-	${THIRD_PART}/openvino_2020.1.023/inference_engine/external/mkltiny_lnx/lib
-	${THIRD_PART}/openvino_2020.1.023/inference_engine/external/tbb/lib
+	${THIRD_PART}/openvino/inference_engine/external/gna/lib
+	${THIRD_PART}/openvino/inference_engine/external/mkltiny_lnx/lib
+	${THIRD_PART}/openvino/inference_engine/external/tbb/lib
 )
 # set(CMAKE_C_VISIBILITY_PRESET hidden)
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -106,6 +108,7 @@ SET(LIB_LIST
 	libabsl_throw_delegate.a
 	libabsl_int128.a
 	libabsl_raw_logging_internal.a
+
 	# libabsl_str_format_internal.a
 	# libabsl_strings_internal.a
 	# libabsl_base.a
