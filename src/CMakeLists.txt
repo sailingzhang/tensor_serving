@@ -10,9 +10,9 @@ cmake_policy(PUSH)
 
 SET(SOURCE_ROOT ${PROJECT_SOURCE_DIR}/..)
 SET(THIRD_PART ${SOURCE_ROOT}/../thirdpart)
-set(InferenceEngine_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/share/)
+# set(InferenceEngine_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/share/)
 
-find_package(InferenceEngine 2.1 REQUIRED)
+# find_package(InferenceEngine 2.1 REQUIRED)
 
 SET(GRPC_DIR ${THIRD_PART}/grpc1.28.1)
 
@@ -22,10 +22,11 @@ string(REGEX MATCH "Debian|Ubuntu" DIST ${ETC_ISSUE})
 if(DIST STREQUAL "Debian")
     message(STATUS ">>>> Found Debian <<<<")
 elseif(DIST STREQUAL "Ubuntu")
-	SET(GRPC_LIB ${THIRD_PART}/grpc1.28.1/ubuntu_lib)
-	message(STATUS ">>>> Found Ubuntu,grpclib_dir=${GRPC_LIB} <<<<")
+	SET(GRPC_LIB_DIR ${THIRD_PART}/grpc1.28.1/ubuntu_lib)
+	SET(OPENVINO_LIB_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/ubuntu_lib)
+	message(STATUS ">>>> Found Ubuntu,grpclib_dir=${GRPC_LIB_DIR}, openvino_lib_dir =${OPENVINO_LIB_DIR}<<<<")
 else()
-	SET(GRPC_LIB ${THIRD_PART}/grpc1.28.1/centos_lib)
+	SET(GRPC_LIB_DIR ${THIRD_PART}/grpc1.28.1/centos_lib)
 	message(STATUS ">>>> Found unknown distribution,grpclib_dir=${GRPC_LIB} <<<<")
 endif()
 
@@ -53,13 +54,15 @@ INCLUDE_DIRECTORIES(${INCLUDE_LIST})
 SET(LIB_DIRECTORY_LIST
 	${PROJECT_SOURCE_DIR}
 	# ${SOURCE_ROOT}/modules/authenticationcheck
-	${GRPC_LIB}
+	${GRPC_LIB_DIR}
+	${OPENVINO_LIB_DIR}
 	${THIRD_PART}/libtensorflow1.15/lib/linux_cpu
 	# ${THIRD_PART}/opencv4.2.0/lib
 	# ${THIRD_PART}/opencv4.2.0/lib/opencv4/3rdparty
 #	${SOURCE_ROOT}/3rdparty/breakpad/lib
 	# ${SOURCE_ROOT}/3rdparty/grpc/lib/linux64_4.8.5gcc
 	# ${THIRD_PART}/openvino_2020.1.023/inference_engine/lib/intel64/
+
 
 	${THIRD_PART}/openvino/inference_engine/external/gna/lib
 	${THIRD_PART}/openvino/inference_engine/external/mkltiny_lnx/lib
@@ -68,7 +71,7 @@ SET(LIB_DIRECTORY_LIST
 # set(CMAKE_C_VISIBILITY_PRESET hidden)
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 MESSAGE(STATUS "lib direcotry=: " ${LIB_DIRECTORY_LIST})
-MESSAGE(STATUS "openvino lib =: " ${InferenceEngine_LIBRARIES})
+# MESSAGE(STATUS "openvino lib =: " ${InferenceEngine_LIBRARIES})
 SET(LIB_LIST
 
 
@@ -122,12 +125,18 @@ SET(LIB_LIST
 	libabsl_int128.a
 	libabsl_raw_logging_internal.a
 
+
+	libinference_engine.so
+	libtbb.so.2
+	libngraph.so
+
+
 	# libabsl_str_format_internal.a
 	# libabsl_strings_internal.a
 	# libabsl_base.a
 
-	${InferenceEngine_LIBRARIES}
-	${IE_SAMPLE_DEPENDENCIES}
+	# ${InferenceEngine_LIBRARIES}
+	# ${IE_SAMPLE_DEPENDENCIES}
 
 	m
 	dl
