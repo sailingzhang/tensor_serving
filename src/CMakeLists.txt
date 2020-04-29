@@ -15,7 +15,20 @@ set(InferenceEngine_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/share
 find_package(InferenceEngine 2.1 REQUIRED)
 
 SET(GRPC_DIR ${THIRD_PART}/grpc1.28.1)
-SET(GRPC_LIB_DIR ${GRPC_DIR}/ubuntu_lib)
+
+
+file(READ "/etc/issue" ETC_ISSUE)
+string(REGEX MATCH "Debian|Ubuntu" DIST ${ETC_ISSUE})
+if(DIST STREQUAL "Debian")
+    message(STATUS ">>>> Found Debian <<<<")
+elseif(DIST STREQUAL "Ubuntu")
+	SET(GRPC_LIB ${THIRD_PART}/grpc1.28.1/ubuntu_lib)
+	message(STATUS ">>>> Found Ubuntu,grpclib_dir=${GRPC_LIB} <<<<")
+else()
+	SET(GRPC_LIB ${THIRD_PART}/grpc1.28.1/centos_lib)
+	message(STATUS ">>>> Found unknown distribution,grpclib_dir=${GRPC_LIB} <<<<")
+endif()
+
 
 SET(INCLUDE_LIST 
 	${PROJECT_SOURCE_DIR}/include/  	
@@ -40,7 +53,7 @@ INCLUDE_DIRECTORIES(${INCLUDE_LIST})
 SET(LIB_DIRECTORY_LIST
 	${PROJECT_SOURCE_DIR}
 	# ${SOURCE_ROOT}/modules/authenticationcheck
-	${GRPC_LIB_DIR}
+	${GRPC_LIB}
 	${THIRD_PART}/libtensorflow1.15/lib/linux_cpu
 	# ${THIRD_PART}/opencv4.2.0/lib
 	# ${THIRD_PART}/opencv4.2.0/lib/opencv4/3rdparty
