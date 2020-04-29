@@ -38,6 +38,16 @@ enum device_type{
     GPU = 1;
 }
 
+enum precision{
+    U8 = 0;
+    I8 = 1;
+    I32 = 2;
+    I64 = 3;
+    F16 = 4;
+    F32 = 5;
+    F64 = 6;
+}
+
 message model_config {
     string name = 1;
     string base_path = 2;
@@ -47,7 +57,7 @@ message model_config {
     bool  isload = 6;
     layout_enum layout =7;
     device_type device =8;
-    
+    map<string,precision> precision_map =9;
 }
 
 message model_config_list{

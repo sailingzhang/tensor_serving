@@ -34,6 +34,7 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
 
     auto getInputInfo =  network.getInputsInfo();
     auto getOutputInfo = network.getOutputsInfo();
+    auto & precisionmap = configure.precision_map();
     for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
         string shape="";
         auto  inputInfoptr  = infoIt->second;
@@ -56,7 +57,38 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         for(auto& dim:dims){
             shape = shape +","+to_string(dim);
         }
-        inputInfoptr->setPrecision(InferenceEngine::Precision::U8);
+
+        // auto  precisionV = inputInfoptr->getPrecision();
+        auto preIt = precisionmap.find(infoIt->first);
+        if(preIt != precisionmap.end()){
+                LOG_INFO("set precision,inputname="<<preIt->first<<" precision="<<preIt->second);
+                switch (preIt->second)
+                {
+                case serving_configure::U8:
+                    inputInfoptr->setPrecision(InferenceEngine::Precision::U8);
+                    break;
+                case serving_configure::I8:
+                    inputInfoptr->setPrecision(InferenceEngine::Precision::I8);
+                    break;
+                case serving_configure::I32:
+                    inputInfoptr->setPrecision(InferenceEngine::Precision::I32);
+                    break;
+                case serving_configure::I64:
+                    inputInfoptr->setPrecision(InferenceEngine::Precision::I64);
+                    break;
+                case serving_configure::F16:
+                    inputInfoptr->setPrecision(InferenceEngine::Precision::FP16);
+                    break;
+                case serving_configure::F32:
+                    inputInfoptr->setPrecision(InferenceEngine::Precision::FP32);
+                    break;
+                default:
+                    break;
+                }
+                
+        }
+
+        
         LOG_INFO("openvino input name="<<infoIt->first<<" shape="<<shape<<" precision="<<inputInfoptr->getPrecision());
     }
     for(auto outinfoIt = getOutputInfo.begin();outinfoIt != getOutputInfo.end();outinfoIt++){

@@ -31,6 +31,9 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/map.h>  // IWYU pragma: export
+#include <google/protobuf/map_entry.h>
+#include <google/protobuf/map_field_inl.h>
 #include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
@@ -48,7 +51,7 @@ struct TableStruct_server_5fconfigure_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -59,12 +62,16 @@ namespace serving_configure {
 class model_config;
 class model_configDefaultTypeInternal;
 extern model_configDefaultTypeInternal _model_config_default_instance_;
+class model_config_PrecisionMapEntry_DoNotUse;
+class model_config_PrecisionMapEntry_DoNotUseDefaultTypeInternal;
+extern model_config_PrecisionMapEntry_DoNotUseDefaultTypeInternal _model_config_PrecisionMapEntry_DoNotUse_default_instance_;
 class model_config_list;
 class model_config_listDefaultTypeInternal;
 extern model_config_listDefaultTypeInternal _model_config_list_default_instance_;
 }  // namespace serving_configure
 PROTOBUF_NAMESPACE_OPEN
 template<> ::serving_configure::model_config* Arena::CreateMaybeMessage<::serving_configure::model_config>(Arena*);
+template<> ::serving_configure::model_config_PrecisionMapEntry_DoNotUse* Arena::CreateMaybeMessage<::serving_configure::model_config_PrecisionMapEntry_DoNotUse>(Arena*);
 template<> ::serving_configure::model_config_list* Arena::CreateMaybeMessage<::serving_configure::model_config_list>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace serving_configure {
@@ -133,7 +140,70 @@ inline bool device_type_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<device_type>(
     device_type_descriptor(), name, value);
 }
+enum precision : int {
+  U8 = 0,
+  I8 = 1,
+  U32 = 2,
+  I32 = 3,
+  I64 = 4,
+  F16 = 5,
+  F32 = 6,
+  F64 = 7,
+  precision_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  precision_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool precision_IsValid(int value);
+constexpr precision precision_MIN = U8;
+constexpr precision precision_MAX = F64;
+constexpr int precision_ARRAYSIZE = precision_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* precision_descriptor();
+template<typename T>
+inline const std::string& precision_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, precision>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function precision_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    precision_descriptor(), enum_t_value);
+}
+inline bool precision_Parse(
+    const std::string& name, precision* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<precision>(
+    precision_descriptor(), name, value);
+}
 // ===================================================================
+
+class model_config_PrecisionMapEntry_DoNotUse : public ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<model_config_PrecisionMapEntry_DoNotUse, 
+    std::string, ::serving_configure::precision,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
+    0 > {
+public:
+  typedef ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<model_config_PrecisionMapEntry_DoNotUse, 
+    std::string, ::serving_configure::precision,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
+    0 > SuperType;
+  model_config_PrecisionMapEntry_DoNotUse();
+  model_config_PrecisionMapEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void MergeFrom(const model_config_PrecisionMapEntry_DoNotUse& other);
+  static const model_config_PrecisionMapEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const model_config_PrecisionMapEntry_DoNotUse*>(&_model_config_PrecisionMapEntry_DoNotUse_default_instance_); }
+  static bool ValidateKey(std::string* s) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(s->data(), static_cast<int>(s->size()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE, "serving_configure.model_config.PrecisionMapEntry.key");
+ }
+  static bool ValidateValue(void*) { return true; }
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& other) final;
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_server_5fconfigure_2eproto);
+    return ::descriptor_table_server_5fconfigure_2eproto.file_level_metadata[0];
+  }
+
+  public:
+};
+
+// -------------------------------------------------------------------
 
 class model_config :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:serving_configure.model_config) */ {
@@ -177,7 +247,7 @@ class model_config :
                &_model_config_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    1;
 
   friend void swap(model_config& a, model_config& b) {
     a.Swap(&b);
@@ -238,9 +308,11 @@ class model_config :
 
   // nested types ----------------------------------------------------
 
+
   // accessors -------------------------------------------------------
 
   enum : int {
+    kPrecisionMapFieldNumber = 9,
     kNameFieldNumber = 1,
     kBasePathFieldNumber = 2,
     kModelPlatformFieldNumber = 3,
@@ -250,6 +322,23 @@ class model_config :
     kLayoutFieldNumber = 7,
     kDeviceFieldNumber = 8,
   };
+  // map<string, .serving_configure.precision> precision_map = 9;
+  int precision_map_size() const;
+  private:
+  int _internal_precision_map_size() const;
+  public:
+  void clear_precision_map();
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >&
+      _internal_precision_map() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >*
+      _internal_mutable_precision_map();
+  public:
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >&
+      precision_map() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >*
+      mutable_precision_map();
+
   // string name = 1;
   void clear_name();
   const std::string& name() const;
@@ -348,6 +437,12 @@ class model_config :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::MapField<
+      model_config_PrecisionMapEntry_DoNotUse,
+      std::string, ::serving_configure::precision,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
+      0 > precision_map_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr base_path_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_platform_;
@@ -403,7 +498,7 @@ class model_config_list :
                &_model_config_list_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(model_config_list& a, model_config_list& b) {
     a.Swap(&b);
@@ -505,6 +600,8 @@ class model_config_list :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // model_config
 
 // string name = 1;
@@ -787,6 +884,35 @@ inline void model_config::set_device(::serving_configure::device_type value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.device)
 }
 
+// map<string, .serving_configure.precision> precision_map = 9;
+inline int model_config::_internal_precision_map_size() const {
+  return precision_map_.size();
+}
+inline int model_config::precision_map_size() const {
+  return _internal_precision_map_size();
+}
+inline void model_config::clear_precision_map() {
+  precision_map_.Clear();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >&
+model_config::_internal_precision_map() const {
+  return precision_map_.GetMap();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >&
+model_config::precision_map() const {
+  // @@protoc_insertion_point(field_map:serving_configure.model_config.precision_map)
+  return _internal_precision_map();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >*
+model_config::_internal_mutable_precision_map() {
+  return precision_map_.MutableMap();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >*
+model_config::mutable_precision_map() {
+  // @@protoc_insertion_point(field_mutable_map:serving_configure.model_config.precision_map)
+  return _internal_mutable_precision_map();
+}
+
 // -------------------------------------------------------------------
 
 // model_config_list
@@ -835,6 +961,8 @@ model_config_list::config() const {
 #endif  // __GNUC__
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -851,6 +979,11 @@ template <> struct is_proto_enum< ::serving_configure::device_type> : ::std::tru
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::serving_configure::device_type>() {
   return ::serving_configure::device_type_descriptor();
+}
+template <> struct is_proto_enum< ::serving_configure::precision> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::serving_configure::precision>() {
+  return ::serving_configure::precision_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

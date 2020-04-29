@@ -14,8 +14,13 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_server_5fconfigure_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_model_config_server_5fconfigure_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_server_5fconfigure_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_model_config_server_5fconfigure_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_server_5fconfigure_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_model_config_PrecisionMapEntry_DoNotUse_server_5fconfigure_2eproto;
 namespace serving_configure {
+class model_config_PrecisionMapEntry_DoNotUseDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<model_config_PrecisionMapEntry_DoNotUse> _instance;
+} _model_config_PrecisionMapEntry_DoNotUse_default_instance_;
 class model_configDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<model_config> _instance;
@@ -36,8 +41,22 @@ static void InitDefaultsscc_info_model_config_server_5fconfigure_2eproto() {
   ::serving_configure::model_config::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_model_config_server_5fconfigure_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_model_config_server_5fconfigure_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_model_config_server_5fconfigure_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_model_config_server_5fconfigure_2eproto}, {
+      &scc_info_model_config_PrecisionMapEntry_DoNotUse_server_5fconfigure_2eproto.base,}};
+
+static void InitDefaultsscc_info_model_config_PrecisionMapEntry_DoNotUse_server_5fconfigure_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::serving_configure::_model_config_PrecisionMapEntry_DoNotUse_default_instance_;
+    new (ptr) ::serving_configure::model_config_PrecisionMapEntry_DoNotUse();
+  }
+  ::serving_configure::model_config_PrecisionMapEntry_DoNotUse::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_model_config_PrecisionMapEntry_DoNotUse_server_5fconfigure_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_model_config_PrecisionMapEntry_DoNotUse_server_5fconfigure_2eproto}, {}};
 
 static void InitDefaultsscc_info_model_config_list_server_5fconfigure_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -54,11 +73,20 @@ static void InitDefaultsscc_info_model_config_list_server_5fconfigure_2eproto() 
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_model_config_list_server_5fconfigure_2eproto}, {
       &scc_info_model_config_server_5fconfigure_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_server_5fconfigure_2eproto[2];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_server_5fconfigure_2eproto[2];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_server_5fconfigure_2eproto[3];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_server_5fconfigure_2eproto[3];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_server_5fconfigure_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_PrecisionMapEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_PrecisionMapEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_PrecisionMapEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_PrecisionMapEntry_DoNotUse, value_),
+  0,
+  1,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -72,6 +100,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, isload_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, layout_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, device_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, precision_map_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -80,45 +109,54 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, config_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::serving_configure::model_config)},
-  { 13, -1, sizeof(::serving_configure::model_config_list)},
+  { 0, 7, sizeof(::serving_configure::model_config_PrecisionMapEntry_DoNotUse)},
+  { 9, -1, sizeof(::serving_configure::model_config)},
+  { 23, -1, sizeof(::serving_configure::model_config_list)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serving_configure::_model_config_PrecisionMapEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serving_configure::_model_config_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::serving_configure::_model_config_list_default_instance_),
 };
 
 const char descriptor_table_protodef_server_5fconfigure_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\026server_configure.proto\022\021serving_config"
-  "ure\"\343\001\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tba"
+  "ure\"\200\003\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tba"
   "se_path\030\002 \001(\t\022\026\n\016model_platform\030\003 \001(\t\022\017\n"
   "\007version\030\004 \001(\003\022\031\n\021infer_request_num\030\005 \001("
   "\005\022\016\n\006isload\030\006 \001(\010\022.\n\006layout\030\007 \001(\0162\036.serv"
   "ing_configure.layout_enum\022.\n\006device\030\010 \001("
-  "\0162\036.serving_configure.device_type\"D\n\021mod"
-  "el_config_list\022/\n\006config\030\001 \003(\0132\037.serving"
-  "_configure.model_config*\262\001\n\013layout_enum\022"
-  "\007\n\003ANY\020\000\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCDHW\020\003\022"
-  "\t\n\005NDHWC\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005OIDHW"
-  "\020B\022\n\n\006GOIDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010\n\003CHW"
-  "\020\200\001\022\007\n\002HW\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007BLOCKE"
-  "D\020\310\001*\037\n\013device_type\022\007\n\003CPU\020\000\022\007\n\003GPU\020\001b\006p"
+  "\0162\036.serving_configure.device_type\022H\n\rpre"
+  "cision_map\030\t \003(\01321.serving_configure.mod"
+  "el_config.PrecisionMapEntry\032Q\n\021Precision"
+  "MapEntry\022\013\n\003key\030\001 \001(\t\022+\n\005value\030\002 \001(\0162\034.s"
+  "erving_configure.precision:\0028\001\"D\n\021model_"
+  "config_list\022/\n\006config\030\001 \003(\0132\037.serving_co"
+  "nfigure.model_config*\262\001\n\013layout_enum\022\007\n\003"
+  "ANY\020\000\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCDHW\020\003\022\t\n\005"
+  "NDHWC\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005OIDHW\020B\022"
+  "\n\n\006GOIDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010\n\003CHW\020\200\001"
+  "\022\007\n\002HW\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007BLOCKED\020\310"
+  "\001*\037\n\013device_type\022\007\n\003CPU\020\000\022\007\n\003GPU\020\001*Q\n\tpr"
+  "ecision\022\006\n\002U8\020\000\022\006\n\002I8\020\001\022\007\n\003U32\020\002\022\007\n\003I32\020"
+  "\003\022\007\n\003I64\020\004\022\007\n\003F16\020\005\022\007\n\003F32\020\006\022\007\n\003F64\020\007b\006p"
   "roto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_server_5fconfigure_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_server_5fconfigure_2eproto_sccs[2] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_server_5fconfigure_2eproto_sccs[3] = {
   &scc_info_model_config_server_5fconfigure_2eproto.base,
+  &scc_info_model_config_PrecisionMapEntry_DoNotUse_server_5fconfigure_2eproto.base,
   &scc_info_model_config_list_server_5fconfigure_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_server_5fconfigure_2eproto_once;
 static bool descriptor_table_server_5fconfigure_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_server_5fconfigure_2eproto = {
-  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 565,
-  &descriptor_table_server_5fconfigure_2eproto_once, descriptor_table_server_5fconfigure_2eproto_sccs, descriptor_table_server_5fconfigure_2eproto_deps, 2, 0,
+  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 805,
+  &descriptor_table_server_5fconfigure_2eproto_once, descriptor_table_server_5fconfigure_2eproto_sccs, descriptor_table_server_5fconfigure_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_server_5fconfigure_2eproto::offsets,
-  file_level_metadata_server_5fconfigure_2eproto, 2, file_level_enum_descriptors_server_5fconfigure_2eproto, file_level_service_descriptors_server_5fconfigure_2eproto,
+  file_level_metadata_server_5fconfigure_2eproto, 3, file_level_enum_descriptors_server_5fconfigure_2eproto, file_level_service_descriptors_server_5fconfigure_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -166,6 +204,43 @@ bool device_type_IsValid(int value) {
   }
 }
 
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* precision_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_server_5fconfigure_2eproto);
+  return file_level_enum_descriptors_server_5fconfigure_2eproto[2];
+}
+bool precision_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return true;
+    default:
+      return false;
+  }
+}
+
+
+// ===================================================================
+
+model_config_PrecisionMapEntry_DoNotUse::model_config_PrecisionMapEntry_DoNotUse() {}
+model_config_PrecisionMapEntry_DoNotUse::model_config_PrecisionMapEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+    : SuperType(arena) {}
+void model_config_PrecisionMapEntry_DoNotUse::MergeFrom(const model_config_PrecisionMapEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::PROTOBUF_NAMESPACE_ID::Metadata model_config_PrecisionMapEntry_DoNotUse::GetMetadata() const {
+  return GetMetadataStatic();
+}
+void model_config_PrecisionMapEntry_DoNotUse::MergeFrom(
+    const ::PROTOBUF_NAMESPACE_ID::Message& other) {
+  ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom(other);
+}
+
 
 // ===================================================================
 
@@ -184,6 +259,7 @@ model_config::model_config(const model_config& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  precision_map_.MergeFrom(from.precision_map_);
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_name().empty()) {
     name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -238,6 +314,7 @@ void model_config::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  precision_map_.Clear();
   name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   base_path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -316,6 +393,18 @@ const char* model_config::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
           ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
           _internal_set_device(static_cast<::serving_configure::device_type>(val));
+        } else goto handle_unusual;
+        continue;
+      // map<string, .serving_configure.precision> precision_map = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 74)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(&precision_map_, ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<74>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -406,6 +495,47 @@ failure:
       8, this->_internal_device(), target);
   }
 
+  // map<string, .serving_configure.precision> precision_map = 9;
+  if (!this->_internal_precision_map().empty()) {
+    typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+          "serving_configure.model_config.PrecisionMapEntry.key");
+      }
+    };
+
+    if (stream->IsSerializationDeterministic() &&
+        this->_internal_precision_map().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->_internal_precision_map().size()]);
+      typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::size_type size_type;
+      size_type n = 0;
+      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_iterator
+          it = this->_internal_precision_map().begin();
+          it != this->_internal_precision_map().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      for (size_type i = 0; i < n; i++) {
+        target = model_config_PrecisionMapEntry_DoNotUse::Funcs::InternalSerialize(9, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_iterator
+          it = this->_internal_precision_map().begin();
+          it != this->_internal_precision_map().end(); ++it) {
+        target = model_config_PrecisionMapEntry_DoNotUse::Funcs::InternalSerialize(9, it->first, it->second, target, stream);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -421,6 +551,15 @@ size_t model_config::ByteSizeLong() const {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // map<string, .serving_configure.precision> precision_map = 9;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_precision_map_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_iterator
+      it = this->_internal_precision_map().begin();
+      it != this->_internal_precision_map().end(); ++it) {
+    total_size += model_config_PrecisionMapEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  }
 
   // string name = 1;
   if (this->name().size() > 0) {
@@ -505,6 +644,7 @@ void model_config::MergeFrom(const model_config& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  precision_map_.MergeFrom(from.precision_map_);
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -555,6 +695,7 @@ bool model_config::IsInitialized() const {
 void model_config::InternalSwap(model_config* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
+  precision_map_.Swap(&other->precision_map_);
   name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   base_path_.Swap(&other->base_path_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
@@ -767,6 +908,9 @@ void model_config_list::InternalSwap(model_config_list* other) {
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace serving_configure
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::serving_configure::model_config_PrecisionMapEntry_DoNotUse* Arena::CreateMaybeMessage< ::serving_configure::model_config_PrecisionMapEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateInternal< ::serving_configure::model_config_PrecisionMapEntry_DoNotUse >(arena);
+}
 template<> PROTOBUF_NOINLINE ::serving_configure::model_config* Arena::CreateMaybeMessage< ::serving_configure::model_config >(Arena* arena) {
   return Arena::CreateInternal< ::serving_configure::model_config >(arena);
 }
