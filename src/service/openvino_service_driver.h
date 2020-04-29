@@ -28,6 +28,12 @@ struct OpenvinoProtoinfoS{
     int64_t allbytesSize;
     vector<size_t> size_t_dimarr;
     void * pdata;
+    // shared_ptr<int8_t> int8Ptr;
+    // shared_ptr<uint8_t> uint8Ptr;
+    shared_ptr<PrecisionTrait<Precision::I8>::value_type> int8Ptr;
+    shared_ptr<PrecisionTrait<Precision::U8>::value_type> uint8Ptr;
+    // shared_ptr<uint8_t> uint8Ptr;
+    shared_ptr<PrecisionTrait<Precision::FP16>::value_type> f16Ptr;
 };
 
 
@@ -47,7 +53,7 @@ public:
     virtual ::grpc::Status GetModelMetadata(::grpc::ServerContext* context, const ::tensorflow::serving::GetModelMetadataRequest* request, ::tensorflow::serving::GetModelMetadataResponse* response);
 public:
     int32_t loadModel(string modelname,int64_t version,string modeldir,serving_configure::model_config & configure);
-    InferenceEngine::Blob::Ptr TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from, InputInfo::Ptr  inputInfoptr);
+    InferenceEngine::Blob::Ptr TensorProto_To_OpenvinoInput(const tensorflow::TensorProto & from, InputInfo::Ptr  inputInfoptr,shared_ptr<OpenvinoProtoinfoS> openvinoprotoinfoPtr);
     int32_t OpenvinoOutput_To_TensorProto(InferRequest &infer_request, DataPtr  outputInfoPtr,tensorflow::TensorProto & outputproto);
 private:
     string run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response);
