@@ -145,9 +145,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<uint8_t>(tDesc,static_cast<uint8_t *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
         break;
         case tensorflow::DataType::DT_INT8:
@@ -162,9 +162,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<int8_t>(tDesc,static_cast<int8_t *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
         break;
         case tensorflow::DataType::DT_BFLOAT16:
@@ -179,9 +179,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<PrecisionTrait<Precision::FP16>::value_type>(tDesc,static_cast<PrecisionTrait<Precision::FP16>::value_type *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
             break;
         case tensorflow::DataType::DT_FLOAT:
@@ -192,9 +192,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<PrecisionTrait<Precision::FP32>::value_type>(tDesc,static_cast<PrecisionTrait<Precision::FP32>::value_type *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
         break;
         case tensorflow::DataType::DT_BOOL:
@@ -205,9 +205,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<PrecisionTrait<Precision::BOOL>::value_type>(tDesc,static_cast<PrecisionTrait<Precision::BOOL>::value_type *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
         break;
         case tensorflow::DataType::DT_INT32:
@@ -218,9 +218,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<PrecisionTrait<Precision::I32>::value_type>(tDesc,static_cast<PrecisionTrait<Precision::I32>::value_type *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
         break;
         case tensorflow::DataType::DT_INT64:
@@ -231,9 +231,9 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             InferenceEngine::TensorDesc tDesc(ret.opevino_dtype,getdims,InferenceEngine::Layout::NHWC);
             auto blobptr = InferenceEngine::make_shared_blob<PrecisionTrait<Precision::I64>::value_type>(tDesc,static_cast<PrecisionTrait<Precision::I64>::value_type *>(ret.pdata));
             blobptr_ret = blobptr;
-            for(auto it = blobptr->begin();it != blobptr->end();it++){
-                LOG_DEBUG("blot data="<<*it);
-            }
+            // for(auto it = blobptr->begin();it != blobptr->end();it++){
+            //     LOG_DEBUG("blot data="<<*it);
+            // }
         }
         break;
         default:
@@ -408,7 +408,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         std::string output_name = it->first;
         tensorflow::TensorProto tensorproto;
         this->OpenvinoOutput_To_TensorProto(infer_request,output_info,tensorproto);
-        LOG_DEBUG("output name="<<output_name<<" data="<<tensorproto.DebugString());
+        // LOG_DEBUG("output name="<<output_name<<" data="<<tensorproto.DebugString());
         outputmap[output_name] = std::move(tensorproto);
     }
 

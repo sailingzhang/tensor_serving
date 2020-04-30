@@ -15,6 +15,7 @@ SET(THIRD_PART ${SOURCE_ROOT}/../thirdpart)
 # find_package(InferenceEngine 2.1 REQUIRED)
 
 SET(GRPC_DIR ${THIRD_PART}/grpc1.28.1)
+SET(OPEVINO_DIR ${THIRD_PART}/openvino_2020.1.023)
 
 
 file(READ "/etc/issue" ETC_ISSUE)
@@ -22,11 +23,11 @@ string(REGEX MATCH "Debian|Ubuntu" DIST ${ETC_ISSUE})
 if(DIST STREQUAL "Debian")
     message(STATUS ">>>> Found Debian <<<<")
 elseif(DIST STREQUAL "Ubuntu")
-	SET(GRPC_LIB_DIR ${THIRD_PART}/grpc1.28.1/ubuntu_lib)
-	SET(OPENVINO_LIB_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/ubuntu_lib)
-	message(STATUS ">>>> Found Ubuntu,grpclib_dir=${GRPC_LIB_DIR}, openvino_lib_dir =${OPENVINO_LIB_DIR}<<<<")
+	SET(GRPC_LIB_DIR ${GRPC_DIR}/ubuntu_lib)
+	SET(OPENVINO_LIB_DIR ${OPEVINO_DIR}/inference_engine/ubuntu_lib)
+	message(STATUS ">>>> Found Ubuntu,grpclib_dir=${GRPC_LIB_DIR}, openvino_lib_dir=${OPENVINO_LIB_DIR}<<<<")
 else()
-	SET(GRPC_LIB_DIR ${THIRD_PART}/grpc1.28.1/centos_lib)
+	SET(GRPC_LIB_DIR ${GRPC_DIR}/centos_lib)
 	message(STATUS ">>>> Found unknown distribution,grpclib_dir=${GRPC_LIB} <<<<")
 endif()
 
@@ -45,9 +46,9 @@ SET(INCLUDE_LIST
 #	${SOURCE_ROOT}/3rdparty/breakpad/include
 	# ${SOURCE_ROOT}/modules/commonlib/include
 	# ${InferenceEngine_INCLUDE}
-	${THIRD_PART}/openvino/inference_engine
-    ${THIRD_PART}/openvino/inference_engine/include
-    ${THIRD_PART}/openvino/inference_engine/samples/cpp/common
+	${OPEVINO_DIR}/inference_engine
+    ${OPEVINO_DIR}/inference_engine/include
+    ${OPEVINO_DIR}/inference_engine/samples/cpp/common
 )
 INCLUDE_DIRECTORIES(${INCLUDE_LIST})
 
@@ -64,9 +65,9 @@ SET(LIB_DIRECTORY_LIST
 	# ${THIRD_PART}/openvino_2020.1.023/inference_engine/lib/intel64/
 
 
-	${THIRD_PART}/openvino/inference_engine/external/gna/lib
-	${THIRD_PART}/openvino/inference_engine/external/mkltiny_lnx/lib
-	${THIRD_PART}/openvino/inference_engine/external/tbb/lib
+	# ${OPEVINO_DIR}/inference_engine/external/gna/lib
+	# ${OPEVINO_DIR}/inference_engine/external/mkltiny_lnx/lib
+	# ${OPEVINO_DIR}/inference_engine/external/tbb/lib
 )
 # set(CMAKE_C_VISIBILITY_PRESET hidden)
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -127,8 +128,8 @@ SET(LIB_LIST
 
 
 	libinference_engine.so
-	libtbb.so.2
 	libngraph.so
+	# libtbb.so.2
 
 
 	# libabsl_str_format_internal.a
