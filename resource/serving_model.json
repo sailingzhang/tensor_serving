@@ -18,7 +18,8 @@
       "version":202001141108,
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_facenetmodel/202001141108",
       "model_platform":"openvino",
-      "isload":false
+      "isload":true,
+      "layout":2,
     },
     "config":{
       "name":"openvino_mtcnn-o",
