@@ -10,8 +10,8 @@ cmake_policy(PUSH)
 
 SET(SOURCE_ROOT ${PROJECT_SOURCE_DIR}/..)
 SET(THIRD_PART ${SOURCE_ROOT}/../thirdpart)
-# set(InferenceEngine_DIR ${THIRD_PART}/openvino_2020.1.023/inference_engine/share/)
 
+# set(InferenceEngine_DIR /opt/intel/openvino/inference_engine/share/)
 # find_package(InferenceEngine 2.1 REQUIRED)
 
 SET(GRPC_DIR ${THIRD_PART}/grpc1.28.1)
@@ -25,10 +25,27 @@ if(DIST STREQUAL "Debian")
 elseif(DIST STREQUAL "Ubuntu")
 	SET(GRPC_LIB_DIR ${GRPC_DIR}/ubuntu_lib)
 	SET(OPENVINO_LIB_DIR ${OPEVINO_DIR}/inference_engine/ubuntu_lib)
+	SET(OPENVINO_LIB_NAME 
+		libinference_engine.so
+		libngraph.so
+		# libtbb.so.2
+	)
 	message(STATUS ">>>> Found Ubuntu,grpclib_dir=${GRPC_LIB_DIR}, openvino_lib_dir=${OPENVINO_LIB_DIR}<<<<")
 else()
 	SET(GRPC_LIB_DIR ${GRPC_DIR}/centos_lib)
-	message(STATUS ">>>> Found unknown distribution,grpclib_dir=${GRPC_LIB} <<<<")
+	SET(OPENVINO_LIB_DIR ${OPEVINO_DIR}/inference_engine/centos_lib)
+	SET(OPENVINO_LIB_NAME 
+		libinference_engine_c_api.so
+		libinference_engine_legacy.so
+		libinference_engine_nn_builder.so
+		libinference_engine.so
+		libinference_engine_transformations.so
+		libMKLDNNPlugin.so
+		libngraph.so
+		libtbbmalloc.so.2
+		libtbb.so.2
+	)
+	message(STATUS ">>>> Found Other system, grpclib_dir=${GRPC_LIB_DIR}, openvino_lib_dir=${OPENVINO_LIB_DIR}<<<<")
 endif()
 
 
@@ -62,39 +79,17 @@ SET(LIB_DIRECTORY_LIST
 	# ${THIRD_PART}/opencv4.2.0/lib/opencv4/3rdparty
 #	${SOURCE_ROOT}/3rdparty/breakpad/lib
 	# ${SOURCE_ROOT}/3rdparty/grpc/lib/linux64_4.8.5gcc
-	# ${THIRD_PART}/openvino_2020.1.023/inference_engine/lib/intel64/
 
-
-	# ${OPEVINO_DIR}/inference_engine/external/gna/lib
-	# ${OPEVINO_DIR}/inference_engine/external/mkltiny_lnx/lib
-	# ${OPEVINO_DIR}/inference_engine/external/tbb/lib
+	/opt/intel/openvino/inference_engine/lib/intel64/
+	/opt/intel/openvino/inference_engine/external/gna/lib
+	/opt/intel/openvino/inference_engine/external/mkltiny_lnx/lib
+	/opt/intel/openvino/inference_engine/external/tbb/lib
 )
 # set(CMAKE_C_VISIBILITY_PRESET hidden)
 # set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 MESSAGE(STATUS "lib direcotry=: " ${LIB_DIRECTORY_LIST})
 # MESSAGE(STATUS "openvino lib =: " ${InferenceEngine_LIBRARIES})
 SET(LIB_LIST
-
-
-	# libgpr.a 
-	# libgrpc++.a 
-	# libprotobuf.a
-	# libprotoc.a	
-	
-	# # libboringssl.a 
-	# # libgrpc++_core_stats.a
-	# # libgrpc_cronet.a 
-	# libgrpc++_error_details.a 
-	# libgrpc++_reflection.a 
-	# libcares.a 
-	# libgrpc_unsecure.a 
-	# libgrpc++_unsecure.a 
-	# libz.a
-
-	# libtensorflow.so
-	# libtensorflow_framework.so
-	
-	
 
 	libgrpc++.a	
 	libprotoc.a
@@ -127,8 +122,10 @@ SET(LIB_LIST
 	libabsl_raw_logging_internal.a
 
 
-	libinference_engine.so
-	libngraph.so
+	${OPENVINO_LIB_NAME}
+
+	# libinference_engine.so
+	# libngraph.so
 	# libtbb.so.2
 
 
