@@ -100,6 +100,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, isload_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, layout_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, device_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, is_auto_batch_size_),
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, batch_size_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config, precision_map_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, _internal_metadata_),
@@ -111,7 +113,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 7, sizeof(::serving_configure::model_config_PrecisionMapEntry_DoNotUse)},
   { 9, -1, sizeof(::serving_configure::model_config)},
-  { 23, -1, sizeof(::serving_configure::model_config_list)},
+  { 25, -1, sizeof(::serving_configure::model_config_list)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -122,26 +124,27 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_server_5fconfigure_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\026server_configure.proto\022\021serving_config"
-  "ure\"\200\003\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tba"
+  "ure\"\260\003\n\014model_config\022\014\n\004name\030\001 \001(\t\022\021\n\tba"
   "se_path\030\002 \001(\t\022\026\n\016model_platform\030\003 \001(\t\022\017\n"
   "\007version\030\004 \001(\003\022\031\n\021infer_request_num\030\005 \001("
   "\005\022\016\n\006isload\030\006 \001(\010\022.\n\006layout\030\007 \001(\0162\036.serv"
   "ing_configure.layout_enum\022.\n\006device\030\010 \001("
-  "\0162\036.serving_configure.device_type\022H\n\rpre"
-  "cision_map\030\t \003(\01321.serving_configure.mod"
-  "el_config.PrecisionMapEntry\032Q\n\021Precision"
-  "MapEntry\022\013\n\003key\030\001 \001(\t\022+\n\005value\030\002 \001(\0162\034.s"
-  "erving_configure.precision:\0028\001\"D\n\021model_"
-  "config_list\022/\n\006config\030\001 \003(\0132\037.serving_co"
-  "nfigure.model_config*\262\001\n\013layout_enum\022\007\n\003"
-  "ANY\020\000\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCDHW\020\003\022\t\n\005"
-  "NDHWC\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005OIDHW\020B\022"
-  "\n\n\006GOIDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010\n\003CHW\020\200\001"
-  "\022\007\n\002HW\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007BLOCKED\020\310"
-  "\001*\037\n\013device_type\022\007\n\003CPU\020\000\022\007\n\003GPU\020\001*Q\n\tpr"
-  "ecision\022\006\n\002U8\020\000\022\006\n\002I8\020\001\022\007\n\003U32\020\002\022\007\n\003I32\020"
-  "\003\022\007\n\003I64\020\004\022\007\n\003F16\020\005\022\007\n\003F32\020\006\022\007\n\003F64\020\007b\006p"
-  "roto3"
+  "\0162\036.serving_configure.device_type\022\032\n\022is_"
+  "auto_batch_size\030\t \001(\010\022\022\n\nbatch_size\030\n \001("
+  "\005\022H\n\rprecision_map\030\013 \003(\01321.serving_confi"
+  "gure.model_config.PrecisionMapEntry\032Q\n\021P"
+  "recisionMapEntry\022\013\n\003key\030\001 \001(\t\022+\n\005value\030\002"
+  " \001(\0162\034.serving_configure.precision:\0028\001\"D"
+  "\n\021model_config_list\022/\n\006config\030\001 \003(\0132\037.se"
+  "rving_configure.model_config*\262\001\n\013layout_"
+  "enum\022\007\n\003ANY\020\000\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCD"
+  "HW\020\003\022\t\n\005NDHWC\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005"
+  "OIDHW\020B\022\n\n\006GOIDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010"
+  "\n\003CHW\020\200\001\022\007\n\002HW\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007B"
+  "LOCKED\020\310\001*\037\n\013device_type\022\007\n\003CPU\020\000\022\007\n\003GPU"
+  "\020\001*H\n\tprecision\022\006\n\002U8\020\000\022\006\n\002I8\020\001\022\007\n\003I32\020\002"
+  "\022\007\n\003I64\020\003\022\007\n\003F16\020\004\022\007\n\003F32\020\005\022\007\n\003F64\020\006b\006pr"
+  "oto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_server_5fconfigure_2eproto_deps[1] = {
 };
@@ -153,7 +156,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_server_5fconfigure_2eproto_once;
 static bool descriptor_table_server_5fconfigure_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_server_5fconfigure_2eproto = {
-  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 805,
+  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 844,
   &descriptor_table_server_5fconfigure_2eproto_once, descriptor_table_server_5fconfigure_2eproto_sccs, descriptor_table_server_5fconfigure_2eproto_deps, 3, 0,
   schemas, file_default_instances, TableStruct_server_5fconfigure_2eproto::offsets,
   file_level_metadata_server_5fconfigure_2eproto, 3, file_level_enum_descriptors_server_5fconfigure_2eproto, file_level_service_descriptors_server_5fconfigure_2eproto,
@@ -217,7 +220,6 @@ bool precision_IsValid(int value) {
     case 4:
     case 5:
     case 6:
-    case 7:
       return true;
     default:
       return false;
@@ -273,8 +275,8 @@ model_config::model_config(const model_config& from)
     model_platform_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.model_platform_);
   }
   ::memcpy(&version_, &from.version_,
-    static_cast<size_t>(reinterpret_cast<char*>(&device_) -
-    reinterpret_cast<char*>(&version_)) + sizeof(device_));
+    static_cast<size_t>(reinterpret_cast<char*>(&batch_size_) -
+    reinterpret_cast<char*>(&version_)) + sizeof(batch_size_));
   // @@protoc_insertion_point(copy_constructor:serving_configure.model_config)
 }
 
@@ -284,8 +286,8 @@ void model_config::SharedCtor() {
   base_path_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&device_) -
-      reinterpret_cast<char*>(&version_)) + sizeof(device_));
+      reinterpret_cast<char*>(&batch_size_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(batch_size_));
 }
 
 model_config::~model_config() {
@@ -319,8 +321,8 @@ void model_config::Clear() {
   base_path_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   model_platform_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&version_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&device_) -
-      reinterpret_cast<char*>(&version_)) + sizeof(device_));
+      reinterpret_cast<char*>(&batch_size_) -
+      reinterpret_cast<char*>(&version_)) + sizeof(batch_size_));
   _internal_metadata_.Clear();
 }
 
@@ -395,16 +397,30 @@ const char* model_config::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
           _internal_set_device(static_cast<::serving_configure::device_type>(val));
         } else goto handle_unusual;
         continue;
-      // map<string, .serving_configure.precision> precision_map = 9;
+      // bool is_auto_batch_size = 9;
       case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 74)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 72)) {
+          is_auto_batch_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // int32 batch_size = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 80)) {
+          batch_size_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // map<string, .serving_configure.precision> precision_map = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(&precision_map_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<74>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<90>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -495,7 +511,19 @@ failure:
       8, this->_internal_device(), target);
   }
 
-  // map<string, .serving_configure.precision> precision_map = 9;
+  // bool is_auto_batch_size = 9;
+  if (this->is_auto_batch_size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(9, this->_internal_is_auto_batch_size(), target);
+  }
+
+  // int32 batch_size = 10;
+  if (this->batch_size() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(10, this->_internal_batch_size(), target);
+  }
+
+  // map<string, .serving_configure.precision> precision_map = 11;
   if (!this->_internal_precision_map().empty()) {
     typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_pointer
         ConstPtr;
@@ -523,14 +551,14 @@ failure:
       }
       ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
       for (size_type i = 0; i < n; i++) {
-        target = model_config_PrecisionMapEntry_DoNotUse::Funcs::InternalSerialize(9, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
+        target = model_config_PrecisionMapEntry_DoNotUse::Funcs::InternalSerialize(11, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
         Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
       }
     } else {
       for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_iterator
           it = this->_internal_precision_map().begin();
           it != this->_internal_precision_map().end(); ++it) {
-        target = model_config_PrecisionMapEntry_DoNotUse::Funcs::InternalSerialize(9, it->first, it->second, target, stream);
+        target = model_config_PrecisionMapEntry_DoNotUse::Funcs::InternalSerialize(11, it->first, it->second, target, stream);
         Utf8Check::Check(&(*it));
       }
     }
@@ -552,7 +580,7 @@ size_t model_config::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // map<string, .serving_configure.precision> precision_map = 9;
+  // map<string, .serving_configure.precision> precision_map = 11;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_precision_map_size());
   for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >::const_iterator
@@ -596,21 +624,33 @@ size_t model_config::ByteSizeLong() const {
         this->_internal_infer_request_num());
   }
 
-  // bool isload = 6;
-  if (this->isload() != 0) {
-    total_size += 1 + 1;
-  }
-
   // .serving_configure.layout_enum layout = 7;
   if (this->layout() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_layout());
   }
 
+  // bool isload = 6;
+  if (this->isload() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool is_auto_batch_size = 9;
+  if (this->is_auto_batch_size() != 0) {
+    total_size += 1 + 1;
+  }
+
   // .serving_configure.device_type device = 8;
   if (this->device() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_device());
+  }
+
+  // int32 batch_size = 10;
+  if (this->batch_size() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_batch_size());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -663,14 +703,20 @@ void model_config::MergeFrom(const model_config& from) {
   if (from.infer_request_num() != 0) {
     _internal_set_infer_request_num(from._internal_infer_request_num());
   }
-  if (from.isload() != 0) {
-    _internal_set_isload(from._internal_isload());
-  }
   if (from.layout() != 0) {
     _internal_set_layout(from._internal_layout());
   }
+  if (from.isload() != 0) {
+    _internal_set_isload(from._internal_isload());
+  }
+  if (from.is_auto_batch_size() != 0) {
+    _internal_set_is_auto_batch_size(from._internal_is_auto_batch_size());
+  }
   if (from.device() != 0) {
     _internal_set_device(from._internal_device());
+  }
+  if (from.batch_size() != 0) {
+    _internal_set_batch_size(from._internal_batch_size());
   }
 }
 
@@ -704,9 +750,11 @@ void model_config::InternalSwap(model_config* other) {
     GetArenaNoVirtual());
   swap(version_, other->version_);
   swap(infer_request_num_, other->infer_request_num_);
-  swap(isload_, other->isload_);
   swap(layout_, other->layout_);
+  swap(isload_, other->isload_);
+  swap(is_auto_batch_size_, other->is_auto_batch_size_);
   swap(device_, other->device_);
+  swap(batch_size_, other->batch_size_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata model_config::GetMetadata() const {

@@ -19,7 +19,8 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/train_model/servingmodel/openvino_facenetmodel/202001141108",
       "model_platform":"openvino",
       "isload":true,
-      "layout":2,
+      "batch_size":1,
+      "layout":2
     },
     "config":{
       "name":"openvino_mtcnn-o",
@@ -50,6 +51,8 @@
       "infer_request_num":1,
       "layout":1,
       "isload":true,
+      "is_auto_batch_size":false,
+      "batch_size":1,
       "device":0,
       "precision_map": {
         "data":0

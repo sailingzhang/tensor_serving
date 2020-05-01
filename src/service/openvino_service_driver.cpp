@@ -29,8 +29,14 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
     auto &&modelnamekey = composeModelNameKey(modelname,version);
     Core ie;
     CNNNetwork network = ie.ReadNetwork(modeldir+"/model.xml", modeldir+"/model.bin");
+    auto dyn_batch_c = PluginConfigParams::NO;
+    if(configure.is_auto_batch_size()){
+        dyn_batch_c = PluginConfigParams::YES;
+    }
+    const std::map<std::string, std::string> dyn_config = 
+    { { PluginConfigParams::KEY_DYN_BATCH_ENABLED, dyn_batch_c } };
+    network.setBatchSize(configure.batch_size());
     LOG_INFO("network  batchsize"<<network.getBatchSize());
-    network.setBatchSize(1);
 
     auto getInputInfo =  network.getInputsInfo();
     auto getOutputInfo = network.getOutputsInfo();
@@ -116,11 +122,12 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
     LOG_INFO("device type="<<device_type);
     // std::cout << ie.GetVersions(device_type) << std::endl;
     
-    ExecutableNetwork executable_network =  ie.LoadNetwork(network, device_type);
+    ExecutableNetwork executable_network =  ie.LoadNetwork(network, device_type,dyn_config);
+    // ExecutableNetwork executable_network =  ie.LoadNetwork(network,device_type);
     LOG_INFO("load ok")
     InferRequest infer_request = executable_network.CreateInferRequest();
 
-    this->modelsourceMap[modelnamekey]={getInputInfo,infer_request,getOutputInfo};
+    this->modelsourceMap[modelnamekey]={configure,getInputInfo,infer_request,getOutputInfo};
     LOG_INFO("openvino load over,modelname="<<modelname);
     return 0;
 }
@@ -129,8 +136,31 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
     LOG_DEBUG("enter,inputname="<<inputInfoptr->name()<<" datatype="<<from.dtype());
     InferenceEngine::Blob::Ptr blobptr_ret;
     auto  &ret = *openvinoprotoinfoPtr;
-    ret.allbytesSize = 1;
-    auto getdims = inputInfoptr->getTensorDesc().getDims();
+
+    auto srcdims= inputInfoptr->getTensorDesc().getDims();
+    InferenceEngine::SizeVector getdims;
+    auto allsize = 1;
+    auto &dim = from.tensor_shape().dim();
+    ret.size_t_dimarr.resize(dim.size(),0);
+    for(auto i =0;i < dim.size();i++){
+        ret.size_t_dimarr[i] = dim[i].size();
+        getdims.push_back(dim[i].size());
+        allsize= allsize* dim[i].size();
+    }
+
+    getdims = srcdims;
+    getdims[0]= ret.size_t_dimarr[0];
+    ret.allbytesSize = ret.dtypesize * allsize;
+
+    // {
+    //     string aimdimstr="(";
+    //     for(auto i = 0;i <getdims.size();i++){
+    //         aimdimstr += to_string(getdims[i])+",";
+    //     }
+    //     aimdimstr += ")";
+    //     LOG_TRACE("aimdimstr="<<aimdimstr);
+    // }
+
     switch (from.dtype())
     {
         case tensorflow::DataType::DT_UINT8:
@@ -270,46 +300,11 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             break;
     }
     
-    auto allsize = 1;
-    auto &dim = from.tensor_shape().dim();
-    ret.size_t_dimarr.resize(dim.size(),0);
-    for(auto i =0;i < dim.size();i++){
-        ret.size_t_dimarr[i] = dim[i].size();
-        allsize= allsize* dim[i].size();
-    }
-    ret.allbytesSize = ret.dtypesize * allsize;
 
     
-    LOG_DEBUG("inputinfo precision="<<inputInfoptr->getPrecision()<<" layout="<<inputInfoptr->getLayout());
-
-
-    // InputInfo::Ptr input_info = it->second;
-    // std::string input_name = it->first;
-    // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
-    // inputInfoptr->setLayout(Layout::NHWC);
-    // inputInfoptr->setPrecision(ret.opevino_dtype);
-
-    
-
-    
-    
-    // for(auto & v:getdims){
-    //     LOG_DEBUG("real input dim="<<v);
-    // }
-    // for( auto & v:ret.size_t_dimarr){
-    //     LOG_DEBUG("client dim="<<v);
-    // }
-
     auto layout =  inputInfoptr->getTensorDesc().getLayoutByDims(ret.size_t_dimarr);
-    LOG_DEBUG("layout ="<<layout);
-    // InferenceEngine::TensorDesc tDesc(inputInfo.getPrecision(),inputInfo.getTensorDesc().getDims(),InferenceEngine::Layout::NHWC);
-    
-   
-    // auto blobptr = InferenceEngine::make_shared_blob<float>(tDesc);
 
-    
-    // infer_request.SetBlob(inputInfo.name(), blobptr);
-    LOG_DEBUG("exit");
+    LOG_TRACE("exit,inputinfo precision="<<inputInfoptr->getPrecision()<<" layout="<<inputInfoptr->getLayout());
     return  blobptr_ret;
 
 
@@ -405,6 +400,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
     auto & getInputInfo = std::get<InferenceEngine::InputsDataMap>(modelTt->second);
     auto & infer_request =std::get<InferenceEngine::InferRequest>(modelTt->second);
     auto & OutputsInfo  = std::get<InferenceEngine::OutputsDataMap>(modelTt->second);
+    auto & configure  = std::get<serving_configure::model_config>(modelTt->second);
 
     auto req_inputs = request->inputs();
     for(auto infoIt = getInputInfo.begin();infoIt != getInputInfo.end();infoIt++){
@@ -433,6 +429,11 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         infer_request.SetBlob(it->first,it->second);
     }
 
+    auto batchsize= (*protoinfoptrVec.begin())->size_t_dimarr[0];
+    if(configure.is_auto_batch_size()){
+        infer_request.SetBatch(batchsize);
+    }
+
     infer_request.Infer();
 
     auto &outputmap =  *response->mutable_outputs();
@@ -445,7 +446,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         // LOG_DEBUG("output name="<<output_name<<" data="<<tensorproto.DebugString());
         outputmap[output_name] = std::move(tensorproto);
     }
-
+    LOG_TRACE("exit,batchsize="<<batchsize);
     return ret;
 }
 

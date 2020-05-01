@@ -143,12 +143,11 @@ inline bool device_type_Parse(
 enum precision : int {
   U8 = 0,
   I8 = 1,
-  U32 = 2,
-  I32 = 3,
-  I64 = 4,
-  F16 = 5,
-  F32 = 6,
-  F64 = 7,
+  I32 = 2,
+  I64 = 3,
+  F16 = 4,
+  F32 = 5,
+  F64 = 6,
   precision_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   precision_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
@@ -312,17 +311,19 @@ class model_config :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPrecisionMapFieldNumber = 9,
+    kPrecisionMapFieldNumber = 11,
     kNameFieldNumber = 1,
     kBasePathFieldNumber = 2,
     kModelPlatformFieldNumber = 3,
     kVersionFieldNumber = 4,
     kInferRequestNumFieldNumber = 5,
-    kIsloadFieldNumber = 6,
     kLayoutFieldNumber = 7,
+    kIsloadFieldNumber = 6,
+    kIsAutoBatchSizeFieldNumber = 9,
     kDeviceFieldNumber = 8,
+    kBatchSizeFieldNumber = 10,
   };
-  // map<string, .serving_configure.precision> precision_map = 9;
+  // map<string, .serving_configure.precision> precision_map = 11;
   int precision_map_size() const;
   private:
   int _internal_precision_map_size() const;
@@ -405,15 +406,6 @@ class model_config :
   void _internal_set_infer_request_num(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
-  // bool isload = 6;
-  void clear_isload();
-  bool isload() const;
-  void set_isload(bool value);
-  private:
-  bool _internal_isload() const;
-  void _internal_set_isload(bool value);
-  public:
-
   // .serving_configure.layout_enum layout = 7;
   void clear_layout();
   ::serving_configure::layout_enum layout() const;
@@ -423,6 +415,24 @@ class model_config :
   void _internal_set_layout(::serving_configure::layout_enum value);
   public:
 
+  // bool isload = 6;
+  void clear_isload();
+  bool isload() const;
+  void set_isload(bool value);
+  private:
+  bool _internal_isload() const;
+  void _internal_set_isload(bool value);
+  public:
+
+  // bool is_auto_batch_size = 9;
+  void clear_is_auto_batch_size();
+  bool is_auto_batch_size() const;
+  void set_is_auto_batch_size(bool value);
+  private:
+  bool _internal_is_auto_batch_size() const;
+  void _internal_set_is_auto_batch_size(bool value);
+  public:
+
   // .serving_configure.device_type device = 8;
   void clear_device();
   ::serving_configure::device_type device() const;
@@ -430,6 +440,15 @@ class model_config :
   private:
   ::serving_configure::device_type _internal_device() const;
   void _internal_set_device(::serving_configure::device_type value);
+  public:
+
+  // int32 batch_size = 10;
+  void clear_batch_size();
+  ::PROTOBUF_NAMESPACE_ID::int32 batch_size() const;
+  void set_batch_size(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_batch_size() const;
+  void _internal_set_batch_size(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:serving_configure.model_config)
@@ -448,9 +467,11 @@ class model_config :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_platform_;
   ::PROTOBUF_NAMESPACE_ID::int64 version_;
   ::PROTOBUF_NAMESPACE_ID::int32 infer_request_num_;
-  bool isload_;
   int layout_;
+  bool isload_;
+  bool is_auto_batch_size_;
   int device_;
+  ::PROTOBUF_NAMESPACE_ID::int32 batch_size_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fconfigure_2eproto;
 };
@@ -884,7 +905,47 @@ inline void model_config::set_device(::serving_configure::device_type value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.device)
 }
 
-// map<string, .serving_configure.precision> precision_map = 9;
+// bool is_auto_batch_size = 9;
+inline void model_config::clear_is_auto_batch_size() {
+  is_auto_batch_size_ = false;
+}
+inline bool model_config::_internal_is_auto_batch_size() const {
+  return is_auto_batch_size_;
+}
+inline bool model_config::is_auto_batch_size() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config.is_auto_batch_size)
+  return _internal_is_auto_batch_size();
+}
+inline void model_config::_internal_set_is_auto_batch_size(bool value) {
+  
+  is_auto_batch_size_ = value;
+}
+inline void model_config::set_is_auto_batch_size(bool value) {
+  _internal_set_is_auto_batch_size(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config.is_auto_batch_size)
+}
+
+// int32 batch_size = 10;
+inline void model_config::clear_batch_size() {
+  batch_size_ = 0;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 model_config::_internal_batch_size() const {
+  return batch_size_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 model_config::batch_size() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config.batch_size)
+  return _internal_batch_size();
+}
+inline void model_config::_internal_set_batch_size(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  
+  batch_size_ = value;
+}
+inline void model_config::set_batch_size(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_batch_size(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config.batch_size)
+}
+
+// map<string, .serving_configure.precision> precision_map = 11;
 inline int model_config::_internal_precision_map_size() const {
   return precision_map_.size();
 }
