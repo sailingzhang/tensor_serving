@@ -37,6 +37,13 @@ struct OpenvinoProtoinfoS{
 };
 
 
+struct openvino_configure
+{
+    bool is_auto_batch;
+    InferenceEngine::Precision precision;
+};
+
+
 class openvino_service_driver:public tensorflow::serving::PredictionService::Service{
 public:
     openvino_service_driver(serving_configure::model_config_list configurelist);
