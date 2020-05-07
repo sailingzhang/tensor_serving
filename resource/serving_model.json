@@ -4,14 +4,21 @@
       "version":202001011615,
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/mtcnnmodel/202001011615",
       "model_platform":"tensorflow",
-      "isload":false
+      "isload":true
     },
     "config":{
       "name":"facenetmodel",
       "version":202001141108,
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/facenetmodel/202001141108",
       "model_platform":"tensorflow",
-      "isload":false
+      "isload":true
+    },
+    "config":{
+      "name":"facenetsimilar",
+      "version":202003081404,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/facenetsimilar/202003081404",
+      "model_platform":"tensorflow",
+      "isload":true
     },
     "config":{
       "name":"openvino_facenetmodel",
