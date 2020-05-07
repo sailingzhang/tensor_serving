@@ -42,6 +42,11 @@ tensorflow_service_driver::tensorflow_service_driver(serving_configure::model_co
             if(it->model_platform() != "tensorflow"){
                 continue;
             }
+            if(!it->isload()){
+                LOG_INFO("modelname="<<it->name()<<" disable load");
+                continue;
+            }
+            LOG_INFO("------------------------------------------tf begin load-------------------------------------------------------------");
             LOG_INFO("tensorflow service load, modelname="<<it->name()<<" version="<<it->version()<<" path="<<it->base_path());
             this->loadModel(it->name(),it->version(),it->base_path());
         }
