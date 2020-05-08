@@ -30,6 +30,15 @@
       "layout":2
     },
     "config":{
+      "name":"openvino_faceidenitfy_MobileNetV2",
+      "version":202005081358,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_faceidenitfy_MobileNetV2/202005081358",
+      "model_platform":"openvino",
+      "isload":true,
+      "batch_size":1,
+      "layout":2
+    },
+    "config":{
       "name":"openvino_facenetsimilar",
       "version":202003081404,
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetsimilar/202003081404",
