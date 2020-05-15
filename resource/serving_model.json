@@ -39,6 +39,15 @@
       "layout":2
     },
     "config":{
+      "name":"openvino_vehicleplatedetect_MobileNetV2",
+      "version":202005151521,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_vehicleplatedetect_MobileNetV2/202005151521",
+      "model_platform":"openvino",
+      "isload":true,
+      "batch_size":1,
+      "layout":2
+    },
+    "config":{
       "name":"openvino_facenetsimilar",
       "version":202003081404,
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetsimilar/202003081404",
