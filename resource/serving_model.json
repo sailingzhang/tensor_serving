@@ -45,7 +45,10 @@
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1,
-      "layout":2
+      "layout":2,
+      "precision_map": {
+        "Placeholder":0
+      }
     },
     "config":{
       "name":"openvino_facenetsimilar",

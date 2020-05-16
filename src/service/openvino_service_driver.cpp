@@ -477,7 +477,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         // LOG_DEBUG("output name="<<output_name<<" data="<<tensorproto.DebugString());
         outputmap[output_name] = std::move(tensorproto);
     }
-    LOG_TRACE("exit,batchsize="<<batchsize);
+    LOG_TRACE("exit,batchsize="<<batchsize<<" modelname="<<base_modelname);
     return ret;
 }
 
@@ -499,6 +499,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         LOG_ERROR("Predict error="<<ret);
         return grpc::Status(grpc::StatusCode::FAILED_PRECONDITION,ret);
     }
+    // LOG_TRACE("Predict exit,modelname="<<request->model_spec().name());
    
 }
     // MultiInference API for multi-headed models.
