@@ -51,6 +51,19 @@
       }
     },
     "config":{
+      "name":"openvino_licenseplaterecongnition_sfp",
+      "version":202005161619,
+      "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_licenseplaterecongnition_sfp/202005161619",
+      "model_platform":"openvino",
+      "isload":true,
+      "batch_size":1,
+      "layout":-1,
+      "precision_map": {
+        "data":0,
+        "seq_ind":5
+      }
+    },
+    "config":{
       "name":"openvino_facenetsimilar",
       "version":202003081404,
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetsimilar/202003081404",
