@@ -49,30 +49,35 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
         //set input info here.
         // inputInfoptr->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
         
-        switch (configure.layout())
-        {
-        case serving_configure::ANY:
-            inputInfoptr->setLayout(Layout::ANY);
-            LOG_INFO("set layout="<<Layout::ANY);
-        case serving_configure::NHWC:
-            inputInfoptr->setLayout(Layout::NHWC);
-            LOG_INFO("set layout="<<Layout::NHWC);
-            break;
-        case serving_configure::NCHW:
-            inputInfoptr->setLayout(Layout::NCHW);
-            LOG_INFO("set layout="<<Layout::NCHW);
-            break;
-        case serving_configure::CN:
-            inputInfoptr->setLayout(Layout::CN);
-            LOG_INFO("set layout="<<Layout::CN);
-            break;            
-        case serving_configure::NC:
-            inputInfoptr->setLayout(Layout::NC);
-            LOG_INFO("set layout="<<Layout::NC);
-            break;
-        default:
-            break;
+        auto layoutIt = configure.layout_map().find(infoIt->first);
+        if(layoutIt != configure.layout_map().end()){
+            switch (layoutIt->second)
+            {
+            case serving_configure::ANY:
+                inputInfoptr->setLayout(Layout::ANY);
+                LOG_INFO("set layout="<<Layout::ANY);
+            case serving_configure::NHWC:
+                inputInfoptr->setLayout(Layout::NHWC);
+                LOG_INFO("set layout="<<Layout::NHWC);
+                break;
+            case serving_configure::NCHW:
+                inputInfoptr->setLayout(Layout::NCHW);
+                LOG_INFO("set layout="<<Layout::NCHW);
+                break;
+            case serving_configure::CN:
+                inputInfoptr->setLayout(Layout::CN);
+                LOG_INFO("set layout="<<Layout::CN);
+                break;            
+            case serving_configure::NC:
+                inputInfoptr->setLayout(Layout::NC);
+                LOG_INFO("set layout="<<Layout::NC);
+                break;
+            default:
+                break;
+            }            
         }
+        
+
         
         auto dims = inputInfoptr->getTensorDesc().getDims();
         for(auto& dim:dims){

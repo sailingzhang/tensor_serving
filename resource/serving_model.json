@@ -26,8 +26,7 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetmodel/202001141108",
       "model_platform":"openvino",
       "isload":true,
-      "batch_size":1,
-      "layout":2
+      "batch_size":1
     },
     "config":{
       "name":"openvino_faceidenitfy_MobileNetV2",
@@ -35,8 +34,8 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_faceidenitfy_MobileNetV2/202005081358",
       "model_platform":"openvino",
       "isload":true,
-      "batch_size":1,
-      "layout":2
+      "batch_size":1
+
     },
     "config":{
       "name":"openvino_vehicleplatedetect_MobileNetV2",
@@ -45,9 +44,11 @@
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1,
-      "layout":2,
       "precision_map": {
         "Placeholder":0
+      },
+      "layout_map":{
+        "Placeholder":2
       }
     },
     "config":{
@@ -57,10 +58,12 @@
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1,
-      "layout":-1,
       "precision_map": {
         "data":0,
         "seq_ind":5
+      },
+      "layout_map":{
+        "data":2
       }
     },
     "config":{
@@ -69,7 +72,6 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetsimilar/202003081404",
       "model_platform":"openvino",
       "isload":true,
-      "layout":193,
       "batch_size":1
     },
     "config":{
@@ -99,15 +101,16 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_SqueezeNetlight/202004232120",
       "model_platform":"openvino",
       "infer_request_num":1,
-      "layout":2,
       "isload":true,
       "is_auto_batch_size":false,
       "batch_size":1,
       "device":0,
       "precision_map": {
         "data":0
+      },
+      "layout_map": {
+        "data":2
       }
-      
     }
 
 }

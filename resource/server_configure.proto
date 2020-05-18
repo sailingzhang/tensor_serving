@@ -55,11 +55,12 @@ message model_config {
     int64  version = 4;
     int32  infer_request_num = 5;
     bool  isload = 6;
-    layout_enum layout =7;
-    device_type device =8;
-    bool  is_auto_batch_size =9;
-    int32 batch_size = 10;
-    map<string,precision> precision_map =11;
+    // layout_enum layout =7;
+    device_type device =7;
+    bool  is_auto_batch_size =8;
+    int32 batch_size = 9;
+    map<string,precision> precision_map =10;
+    map<string,layout_enum> layout_map = 11;
 }
 
 message model_config_list{

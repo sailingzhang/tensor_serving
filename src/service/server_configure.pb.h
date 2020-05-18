@@ -51,7 +51,7 @@ struct TableStruct_server_5fconfigure_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[4]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -62,6 +62,9 @@ namespace serving_configure {
 class model_config;
 class model_configDefaultTypeInternal;
 extern model_configDefaultTypeInternal _model_config_default_instance_;
+class model_config_LayoutMapEntry_DoNotUse;
+class model_config_LayoutMapEntry_DoNotUseDefaultTypeInternal;
+extern model_config_LayoutMapEntry_DoNotUseDefaultTypeInternal _model_config_LayoutMapEntry_DoNotUse_default_instance_;
 class model_config_PrecisionMapEntry_DoNotUse;
 class model_config_PrecisionMapEntry_DoNotUseDefaultTypeInternal;
 extern model_config_PrecisionMapEntry_DoNotUseDefaultTypeInternal _model_config_PrecisionMapEntry_DoNotUse_default_instance_;
@@ -71,6 +74,7 @@ extern model_config_listDefaultTypeInternal _model_config_list_default_instance_
 }  // namespace serving_configure
 PROTOBUF_NAMESPACE_OPEN
 template<> ::serving_configure::model_config* Arena::CreateMaybeMessage<::serving_configure::model_config>(Arena*);
+template<> ::serving_configure::model_config_LayoutMapEntry_DoNotUse* Arena::CreateMaybeMessage<::serving_configure::model_config_LayoutMapEntry_DoNotUse>(Arena*);
 template<> ::serving_configure::model_config_PrecisionMapEntry_DoNotUse* Arena::CreateMaybeMessage<::serving_configure::model_config_PrecisionMapEntry_DoNotUse>(Arena*);
 template<> ::serving_configure::model_config_list* Arena::CreateMaybeMessage<::serving_configure::model_config_list>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -204,6 +208,38 @@ public:
 
 // -------------------------------------------------------------------
 
+class model_config_LayoutMapEntry_DoNotUse : public ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<model_config_LayoutMapEntry_DoNotUse, 
+    std::string, ::serving_configure::layout_enum,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
+    0 > {
+public:
+  typedef ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<model_config_LayoutMapEntry_DoNotUse, 
+    std::string, ::serving_configure::layout_enum,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
+    0 > SuperType;
+  model_config_LayoutMapEntry_DoNotUse();
+  model_config_LayoutMapEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  void MergeFrom(const model_config_LayoutMapEntry_DoNotUse& other);
+  static const model_config_LayoutMapEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const model_config_LayoutMapEntry_DoNotUse*>(&_model_config_LayoutMapEntry_DoNotUse_default_instance_); }
+  static bool ValidateKey(std::string* s) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(s->data(), static_cast<int>(s->size()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE, "serving_configure.model_config.LayoutMapEntry.key");
+ }
+  static bool ValidateValue(void*) { return true; }
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& other) final;
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_server_5fconfigure_2eproto);
+    return ::descriptor_table_server_5fconfigure_2eproto.file_level_metadata[1];
+  }
+
+  public:
+};
+
+// -------------------------------------------------------------------
+
 class model_config :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:serving_configure.model_config) */ {
  public:
@@ -246,7 +282,7 @@ class model_config :
                &_model_config_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(model_config& a, model_config& b) {
     a.Swap(&b);
@@ -311,19 +347,19 @@ class model_config :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPrecisionMapFieldNumber = 11,
+    kPrecisionMapFieldNumber = 10,
+    kLayoutMapFieldNumber = 11,
     kNameFieldNumber = 1,
     kBasePathFieldNumber = 2,
     kModelPlatformFieldNumber = 3,
     kVersionFieldNumber = 4,
     kInferRequestNumFieldNumber = 5,
-    kLayoutFieldNumber = 7,
+    kDeviceFieldNumber = 7,
     kIsloadFieldNumber = 6,
-    kIsAutoBatchSizeFieldNumber = 9,
-    kDeviceFieldNumber = 8,
-    kBatchSizeFieldNumber = 10,
+    kIsAutoBatchSizeFieldNumber = 8,
+    kBatchSizeFieldNumber = 9,
   };
-  // map<string, .serving_configure.precision> precision_map = 11;
+  // map<string, .serving_configure.precision> precision_map = 10;
   int precision_map_size() const;
   private:
   int _internal_precision_map_size() const;
@@ -339,6 +375,23 @@ class model_config :
       precision_map() const;
   ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision >*
       mutable_precision_map();
+
+  // map<string, .serving_configure.layout_enum> layout_map = 11;
+  int layout_map_size() const;
+  private:
+  int _internal_layout_map_size() const;
+  public:
+  void clear_layout_map();
+  private:
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >&
+      _internal_layout_map() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >*
+      _internal_mutable_layout_map();
+  public:
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >&
+      layout_map() const;
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >*
+      mutable_layout_map();
 
   // string name = 1;
   void clear_name();
@@ -406,13 +459,13 @@ class model_config :
   void _internal_set_infer_request_num(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
-  // .serving_configure.layout_enum layout = 7;
-  void clear_layout();
-  ::serving_configure::layout_enum layout() const;
-  void set_layout(::serving_configure::layout_enum value);
+  // .serving_configure.device_type device = 7;
+  void clear_device();
+  ::serving_configure::device_type device() const;
+  void set_device(::serving_configure::device_type value);
   private:
-  ::serving_configure::layout_enum _internal_layout() const;
-  void _internal_set_layout(::serving_configure::layout_enum value);
+  ::serving_configure::device_type _internal_device() const;
+  void _internal_set_device(::serving_configure::device_type value);
   public:
 
   // bool isload = 6;
@@ -424,7 +477,7 @@ class model_config :
   void _internal_set_isload(bool value);
   public:
 
-  // bool is_auto_batch_size = 9;
+  // bool is_auto_batch_size = 8;
   void clear_is_auto_batch_size();
   bool is_auto_batch_size() const;
   void set_is_auto_batch_size(bool value);
@@ -433,16 +486,7 @@ class model_config :
   void _internal_set_is_auto_batch_size(bool value);
   public:
 
-  // .serving_configure.device_type device = 8;
-  void clear_device();
-  ::serving_configure::device_type device() const;
-  void set_device(::serving_configure::device_type value);
-  private:
-  ::serving_configure::device_type _internal_device() const;
-  void _internal_set_device(::serving_configure::device_type value);
-  public:
-
-  // int32 batch_size = 10;
+  // int32 batch_size = 9;
   void clear_batch_size();
   ::PROTOBUF_NAMESPACE_ID::int32 batch_size() const;
   void set_batch_size(::PROTOBUF_NAMESPACE_ID::int32 value);
@@ -462,15 +506,20 @@ class model_config :
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
       0 > precision_map_;
+  ::PROTOBUF_NAMESPACE_ID::internal::MapField<
+      model_config_LayoutMapEntry_DoNotUse,
+      std::string, ::serving_configure::layout_enum,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_ENUM,
+      0 > layout_map_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr base_path_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr model_platform_;
   ::PROTOBUF_NAMESPACE_ID::int64 version_;
   ::PROTOBUF_NAMESPACE_ID::int32 infer_request_num_;
-  int layout_;
+  int device_;
   bool isload_;
   bool is_auto_batch_size_;
-  int device_;
   ::PROTOBUF_NAMESPACE_ID::int32 batch_size_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fconfigure_2eproto;
@@ -519,7 +568,7 @@ class model_config_list :
                &_model_config_list_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(model_config_list& a, model_config_list& b) {
     a.Swap(&b);
@@ -621,6 +670,8 @@ class model_config_list :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // model_config
@@ -865,27 +916,7 @@ inline void model_config::set_isload(bool value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.isload)
 }
 
-// .serving_configure.layout_enum layout = 7;
-inline void model_config::clear_layout() {
-  layout_ = 0;
-}
-inline ::serving_configure::layout_enum model_config::_internal_layout() const {
-  return static_cast< ::serving_configure::layout_enum >(layout_);
-}
-inline ::serving_configure::layout_enum model_config::layout() const {
-  // @@protoc_insertion_point(field_get:serving_configure.model_config.layout)
-  return _internal_layout();
-}
-inline void model_config::_internal_set_layout(::serving_configure::layout_enum value) {
-  
-  layout_ = value;
-}
-inline void model_config::set_layout(::serving_configure::layout_enum value) {
-  _internal_set_layout(value);
-  // @@protoc_insertion_point(field_set:serving_configure.model_config.layout)
-}
-
-// .serving_configure.device_type device = 8;
+// .serving_configure.device_type device = 7;
 inline void model_config::clear_device() {
   device_ = 0;
 }
@@ -905,7 +936,7 @@ inline void model_config::set_device(::serving_configure::device_type value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.device)
 }
 
-// bool is_auto_batch_size = 9;
+// bool is_auto_batch_size = 8;
 inline void model_config::clear_is_auto_batch_size() {
   is_auto_batch_size_ = false;
 }
@@ -925,7 +956,7 @@ inline void model_config::set_is_auto_batch_size(bool value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.is_auto_batch_size)
 }
 
-// int32 batch_size = 10;
+// int32 batch_size = 9;
 inline void model_config::clear_batch_size() {
   batch_size_ = 0;
 }
@@ -945,7 +976,7 @@ inline void model_config::set_batch_size(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:serving_configure.model_config.batch_size)
 }
 
-// map<string, .serving_configure.precision> precision_map = 11;
+// map<string, .serving_configure.precision> precision_map = 10;
 inline int model_config::_internal_precision_map_size() const {
   return precision_map_.size();
 }
@@ -972,6 +1003,35 @@ inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::precision
 model_config::mutable_precision_map() {
   // @@protoc_insertion_point(field_mutable_map:serving_configure.model_config.precision_map)
   return _internal_mutable_precision_map();
+}
+
+// map<string, .serving_configure.layout_enum> layout_map = 11;
+inline int model_config::_internal_layout_map_size() const {
+  return layout_map_.size();
+}
+inline int model_config::layout_map_size() const {
+  return _internal_layout_map_size();
+}
+inline void model_config::clear_layout_map() {
+  layout_map_.Clear();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >&
+model_config::_internal_layout_map() const {
+  return layout_map_.GetMap();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >&
+model_config::layout_map() const {
+  // @@protoc_insertion_point(field_map:serving_configure.model_config.layout_map)
+  return _internal_layout_map();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >*
+model_config::_internal_mutable_layout_map() {
+  return layout_map_.MutableMap();
+}
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::serving_configure::layout_enum >*
+model_config::mutable_layout_map() {
+  // @@protoc_insertion_point(field_mutable_map:serving_configure.model_config.layout_map)
+  return _internal_mutable_layout_map();
 }
 
 // -------------------------------------------------------------------
@@ -1020,6 +1080,8 @@ model_config_list::config() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
