@@ -26,7 +26,10 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetmodel/202001141108",
       "model_platform":"openvino",
       "isload":true,
-      "batch_size":1
+      "batch_size":1,
+      "layout_map":{
+        "batch_join/fifo_queue":2
+      }
     },
     "config":{
       "name":"openvino_faceidenitfy_MobileNetV2",

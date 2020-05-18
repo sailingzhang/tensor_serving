@@ -55,22 +55,22 @@ int32_t openvino_service_driver::loadModel(string modelname,int64_t version,stri
             {
             case serving_configure::ANY:
                 inputInfoptr->setLayout(Layout::ANY);
-                LOG_INFO("set layout="<<Layout::ANY);
+                LOG_INFO("set layout="<<Layout::ANY<<" tensorname="<<inputInfoptr->name());
             case serving_configure::NHWC:
                 inputInfoptr->setLayout(Layout::NHWC);
-                LOG_INFO("set layout="<<Layout::NHWC);
+                LOG_INFO("set layout="<<Layout::NHWC<<" tensorname="<<inputInfoptr->name());
                 break;
             case serving_configure::NCHW:
                 inputInfoptr->setLayout(Layout::NCHW);
-                LOG_INFO("set layout="<<Layout::NCHW);
+                LOG_INFO("set layout="<<Layout::NCHW<<" tensorname="<<inputInfoptr->name());
                 break;
             case serving_configure::CN:
                 inputInfoptr->setLayout(Layout::CN);
-                LOG_INFO("set layout="<<Layout::CN);
+                LOG_INFO("set layout="<<Layout::CN<<" tensorname="<<inputInfoptr->name());
                 break;            
             case serving_configure::NC:
                 inputInfoptr->setLayout(Layout::NC);
-                LOG_INFO("set layout="<<Layout::NC);
+                LOG_INFO("set layout="<<Layout::NC<<" tensorname="<<inputInfoptr->name());
                 break;
             default:
                 break;
