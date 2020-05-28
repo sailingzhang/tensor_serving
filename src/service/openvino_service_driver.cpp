@@ -179,10 +179,7 @@ InferenceEngine::Blob::Ptr  openvino_service_driver::TensorProto_To_OpenvinoInpu
             aimdimstr += to_string(getdims[i])+",";
         }
         aimdimstr += ")";
-        LOG_TRACE("aimdimstr="<<aimdimstr);
-
-        // inputInfoptr->setLayout(InferenceEngine::Layout::NHWC);
-        LOG_TRACE("srcdesc layout="<<inputInfoptr->getLayout());
+        LOG_DEBUG("aimdimstr="<<aimdimstr<<"srcdesc layout="<<inputInfoptr->getLayout());
 
     }
 
