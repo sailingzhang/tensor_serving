@@ -104,7 +104,7 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_SqueezeNetlight/202004232120",
       "model_platform":"openvino",
       "infer_request_num":1,
-      "isload":false,
+      "isload":true,
       "is_auto_batch_size":false,
       "batch_size":1,
       "device":0,
@@ -121,7 +121,7 @@
         "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facedetect_MobileNetV2_16F/202005301353",
         "model_platform":"openvino",
         "infer_request_num":1,
-        "isload":true,
+        "isload":false,
         "is_auto_batch_size":false,
         "batch_size":1,
         "device":0,
@@ -130,6 +130,40 @@
         },
         "layout_map": {
           "image":2
+        }
+      },
+      "config":{
+        "name":"openvino_persondetectaction_RMNet",
+        "version":202005310926,
+        "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_persondetectaction_RMNet/202005310926",
+        "model_platform":"openvino",
+        "infer_request_num":1,
+        "isload":false,
+        "is_auto_batch_size":false,
+        "batch_size":1,
+        "device":0,
+        "precision_map": {
+          "input":0
+        },
+        "layout_map": {
+          "input":2
+        }
+      },
+      "config":{
+        "name":"openvino_personvihicledetct_MobileNet",
+        "version":202005311350,
+        "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_personvihicledetct_MobileNet/202005311350",
+        "model_platform":"openvino",
+        "infer_request_num":1,
+        "isload":true,
+        "is_auto_batch_size":false,
+        "batch_size":1,
+        "device":0,
+        "precision_map": {
+          "data":0
+        },
+        "layout_map": {
+          "data":2
         }
       }
 
