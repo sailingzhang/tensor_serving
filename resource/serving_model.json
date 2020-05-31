@@ -104,7 +104,7 @@
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_SqueezeNetlight/202004232120",
       "model_platform":"openvino",
       "infer_request_num":1,
-      "isload":true,
+      "isload":false,
       "is_auto_batch_size":false,
       "batch_size":1,
       "device":0,
@@ -114,6 +114,23 @@
       "layout_map": {
         "data":2
       }
-    }
+    },
+    "config":{
+        "name":"openvino_facedetect_MobileNetV2_16F",
+        "version":202005301353,
+        "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facedetect_MobileNetV2_16F/202005301353",
+        "model_platform":"openvino",
+        "infer_request_num":1,
+        "isload":true,
+        "is_auto_batch_size":false,
+        "batch_size":1,
+        "device":0,
+        "precision_map": {
+          "image":0
+        },
+        "layout_map": {
+          "image":2
+        }
+      }
 
 }
