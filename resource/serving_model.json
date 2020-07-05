@@ -21,6 +21,13 @@
       "isload":true
     },
     "config":{
+        "name":"tf1_efficientdet0",
+        "version":202007051313,
+        "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/tf1_efficientdet0/202007051313",
+        "model_platform":"tensorflow",
+        "isload":true
+      },
+    "config":{
       "name":"openvino_facenetmodel",
       "version":202001141108,
       "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_facenetmodel/202001141108",

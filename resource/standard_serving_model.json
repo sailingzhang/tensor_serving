@@ -1,0 +1,13 @@
+
+model_config_list: {
+    config: {
+        name: "tf1_efficientdet0",
+        base_path: "/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/tf1_efficientdet0",
+        model_platform: "tensorflow"
+    },
+    config: {
+        name: "facenetmodel",
+        base_path: "/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/facenetmodel",
+        model_platform: "tensorflow",
+    }
+}

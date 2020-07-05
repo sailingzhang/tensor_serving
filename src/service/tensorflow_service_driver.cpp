@@ -63,7 +63,7 @@ int32_t tensorflow_service_driver::loadModel(string modelname,int64_t version,st
         TF_Graph* graph = TfOp.TF_NewGraph();
         TF_Session* session = TfOp.TF_LoadSessionFromSavedModel(opt, run_options, modeldir.c_str(), tags, 1, graph, metagraph, s);
         if(this->TfOp.TF_GetCode(s) != TF_OK){
-            LOG_ERROR("status err,code="<<this->TfOp.TF_GetCode(s));
+            LOG_ERROR("status err,code="<<this->TfOp.TF_GetCode(s)<<" modeldir="<<modeldir);
             std::quick_exit(-1);
         }
 
