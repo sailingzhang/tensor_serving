@@ -172,6 +172,23 @@
         "layout_map": {
           "data":2
         }
+      },
+      "config":{
+        "name":"openvino_semantic-segmentation-adas-0001",
+        "version":202007222014,
+        "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_semantic-segmentation-adas-0001/202007222014",
+        "model_platform":"openvino",
+        "infer_request_num":1,
+        "isload":true,
+        "is_auto_batch_size":false,
+        "batch_size":1,
+        "device":0,
+        "precision_map": {
+            "data":0
+          },
+          "layout_map": {
+            "3976.1":0
+          }
       }
 
 }

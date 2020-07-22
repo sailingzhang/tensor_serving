@@ -106,6 +106,7 @@ shared_ptr<tensorflow::serving::PredictionService::StubInterface> createNoNetCli
 
 int tensor_serving_local_server(shared_ptr<grpc::Service> service_ptr,string addr,serving_configure::model_config_list congifureList) {
 	ServerBuilder builder;
+    builder.SetMaxMessageSize(1024*1024*1024);
 	builder.AddListeningPort(addr, grpc::InsecureServerCredentials());
 	builder.RegisterService(service_ptr.get());
     std::unique_ptr<Server> LocalServer;
