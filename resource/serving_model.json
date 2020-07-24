@@ -179,7 +179,7 @@
         "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/openvino_semantic-segmentation-adas-0001/202007222014",
         "model_platform":"openvino",
         "infer_request_num":1,
-        "isload":true,
+        "isload":false,
         "is_auto_batch_size":false,
         "batch_size":1,
         "device":0,
@@ -187,7 +187,25 @@
             "data":0
           },
           "layout_map": {
-            "3976.1":0
+            "data":2
+          }
+      },
+      "config":{
+        "name":"instance-segmentation-security-0050_FP32",
+        "version":202007242003,
+        "base_path":"/home/sailingzhang/develop/mygit_dev/thirdpart/servingmodel/instance-segmentation-security-0050_FP32/202007242003",
+        "model_platform":"openvino",
+        "infer_request_num":1,
+        "isload":true,
+        "is_auto_batch_size":false,
+        "batch_size":1,
+        "device":0,
+        "precision_map": {
+            "im_data":0,
+            "im_info":5
+          },
+          "layout_map": {
+            "im_data":2
           }
       }
 
