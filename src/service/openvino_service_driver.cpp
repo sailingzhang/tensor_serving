@@ -416,6 +416,7 @@ int32_t openvino_service_driver::OpenvinoOutput_To_TensorProto(InferRequest &inf
 
 string openvino_service_driver::run_predict_session(const ::tensorflow::serving::PredictRequest* request, ::tensorflow::serving::PredictResponse* response){
     string ret;
+    StopWatch beginwatch;
     std::map<string,InferenceEngine::Blob::Ptr> Datamap;
     std::vector<shared_ptr<OpenvinoProtoinfoS>> protoinfoptrVec;
 
@@ -479,7 +480,7 @@ string openvino_service_driver::run_predict_session(const ::tensorflow::serving:
         // LOG_DEBUG("output name="<<output_name<<" data="<<tensorproto.DebugString());
         outputmap[output_name] = std::move(tensorproto);
     }
-    LOG_TRACE("exit,batchsize="<<batchsize<<" modelname="<<base_modelname);
+    LOG_TRACE("exit,batchsize="<<batchsize<<" modelname="<<base_modelname<<" costime="<<beginwatch.ElapsedMs());
     return ret;
 }
 

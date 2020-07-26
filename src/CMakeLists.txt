@@ -52,7 +52,8 @@ endif()
 SET(INCLUDE_LIST 
 	${PROJECT_SOURCE_DIR}/include/  	
 	${GRPC_DIR}/include/
-	${THIRD_PART}/log/
+    ${THIRD_PART}/log/
+    ${THIRD_PART}/commoncpp/
 	${THIRD_PART}/libtensorflow1.15/include
 	# ${THIRD_PART}/opencv4.2.0/include/opencv4/
 	${PROJECT_SOURCE_DIR}/tensor_proto
@@ -150,7 +151,7 @@ SET(LIB_LIST
 
 
 link_directories(${LIB_DIRECTORY_LIST})
-
+AUX_SOURCE_DIRECTORY(${THIRD_PART}/commoncpp SRC_LIST)
 AUX_SOURCE_DIRECTORY(${THIRD_PART}/log SRC_LIST)
 AUX_SOURCE_DIRECTORY(${PROJECT_SOURCE_DIR}/service SRC_LIST)
 AUX_SOURCE_DIRECTORY(${PROJECT_SOURCE_DIR}/tensor_proto/google/protobuf SRC_LIST)

@@ -12,6 +12,7 @@
 #include <grpc++/server_builder.h>
 #include "server_configure.pb.h"
 #include <log.h>
+#include <StopWatch.h>
 
 #include <inference_engine.hpp>
 #include <details/os/os_filesystem.hpp>
