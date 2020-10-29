@@ -6,8 +6,8 @@ basepath=`pwd`/..
 mygit_path=${basepath}/..
 build_dir=/tmp/tensor_serving_build
 releasedir=${build_dir}/tensor_serving_release
-# isubuntu=`cat /etc/os-release|grep ubuntu` 
-isubuntu=""
+isubuntu=`cat /etc/os-release|grep ubuntu` 
+# isubuntu=""
 
 mkdir -p ${releasedir}
 cd ${build_dir}

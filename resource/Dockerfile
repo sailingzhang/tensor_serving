@@ -43,7 +43,7 @@ EXPOSE 81
 # EXPOSE 8002
 # COPY app ${APPDIR}
 # RUN chmod +x ${APPDIR}/start
-ENTRYPOINT ["./tensor_serving","/app/models"]
+ENTRYPOINT ["./start.sh"]
 
 
 
