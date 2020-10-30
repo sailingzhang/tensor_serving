@@ -20,7 +20,7 @@ ARG APPDIR=/app
 WORKDIR  ${APPDIR}
 COPY tensor_serving_release  ${APPDIR}
 RUN chmod +x start.sh &&\
-    apt-get update &&\
+    # apt-get update &&\
 #     apt-get install -y nginx &&\
 #     apt-get install -y  openssl &&\
 #     rm -rf /tmp/* && \
@@ -43,7 +43,7 @@ EXPOSE 81
 # EXPOSE 8002
 # COPY app ${APPDIR}
 # RUN chmod +x ${APPDIR}/start
-# ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["./start.sh"]
 
 
 

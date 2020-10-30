@@ -196,7 +196,7 @@
         "base_path":"/app/servingmodel/instance-segmentation-security-0050_FP32/202007242003",
         "model_platform":"openvino",
         "infer_request_num":1,
-        "isload":true,
+        "isload":false,
         "is_auto_batch_size":false,
         "batch_size":1,
         "device":0,

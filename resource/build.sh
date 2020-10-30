@@ -27,7 +27,7 @@ cp tensor_serving ${releasedir}
 
 
 cp ${basepath}/resource/Dockerfile  .
-sudo docker build -t tensor_serving_test:0.1 .
+sudo docker build -t openvino_tensor_serving:latest .
 
 
 
