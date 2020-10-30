@@ -22,11 +22,6 @@ chmod +x ${BASEDIR}/tensor_serving
 # pkill -9 nginx
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${BASEDIR}
 
-cp -rf ${BASEDIR}/webapp/cactus  /var/www
-nginx -c  ${BASEDIR}/webapp/cactus/nginx_static.conf  &
-${BASEDIR}/grpcwebproxy --backend_addr=localhost:8000  --run_tls_server=false --use_websockets --backend_max_call_recv_msg_size=9242880  --allow_all_origins  >/dev/null 2>&1 &
-${BASEDIR}/cactusServer  ${BASEDIR}/share/cactus_configure.json
-
-${BASEDIR}/tensor_serving 
+${BASEDIR}/tensor_serving  ${BASEDIR}/servingmodel/docker_serving_model.json
 # pkill -9 grpcwebproxy
 # pkill -9 nginx

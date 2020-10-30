@@ -6,10 +6,12 @@ basepath=`pwd`/..
 mygit_path=${basepath}/..
 build_dir=/tmp/tensor_serving_build
 releasedir=${build_dir}/tensor_serving_release
-isubuntu=`cat /etc/os-release|grep ubuntu` 
-# isubuntu=""
+# isubuntu=`cat /etc/os-release|grep ubuntu` 
+isubuntu="yes"
 
 mkdir -p ${releasedir}
+cp start.sh ${releasedir}
+
 cd ${build_dir}
 cmake ${basepath}/src
 make -j4
@@ -22,6 +24,7 @@ else
     cp ${mygit_path}/thirdpart/openvino_2020.1.023/inference_engine/ubuntu_lib/* ${releasedir}
 fi
 cp tensor_serving ${releasedir}
+
 
 cp ${basepath}/resource/Dockerfile  .
 sudo docker build -t tensor_serving_test:0.1 .
