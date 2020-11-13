@@ -136,6 +136,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_server_5fconfigure_2eproto::of
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, listen_addr_),
   PROTOBUF_FIELD_OFFSET(::serving_configure::model_config_list, config_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -167,16 +168,17 @@ const char descriptor_table_protodef_server_5fconfigure_2eproto[] PROTOBUF_SECTI
   "key\030\001 \001(\t\022+\n\005value\030\002 \001(\0162\034.serving_confi"
   "gure.precision:\0028\001\032P\n\016LayoutMapEntry\022\013\n\003"
   "key\030\001 \001(\t\022-\n\005value\030\002 \001(\0162\036.serving_confi"
-  "gure.layout_enum:\0028\001\"D\n\021model_config_lis"
-  "t\022/\n\006config\030\001 \003(\0132\037.serving_configure.mo"
-  "del_config*\262\001\n\013layout_enum\022\007\n\003ANY\020\000\022\010\n\004N"
-  "CHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005NCDHW\020\003\022\t\n\005NDHWC\020\004\022\010\n"
-  "\004OIHW\020@\022\t\n\005GOIHW\020A\022\t\n\005OIDHW\020B\022\n\n\006GOIDHW\020"
-  "C\022\n\n\006SCALAR\020_\022\005\n\001C\020`\022\010\n\003CHW\020\200\001\022\007\n\002HW\020\300\001\022"
-  "\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014\n\007BLOCKED\020\310\001*\037\n\013devic"
-  "e_type\022\007\n\003CPU\020\000\022\007\n\003GPU\020\001*H\n\tprecision\022\006\n"
-  "\002U8\020\000\022\006\n\002I8\020\001\022\007\n\003I32\020\002\022\007\n\003I64\020\003\022\007\n\003F16\020\004"
-  "\022\007\n\003F32\020\005\022\007\n\003F64\020\006b\006proto3"
+  "gure.layout_enum:\0028\001\"Y\n\021model_config_lis"
+  "t\022\023\n\013listen_addr\030\001 \001(\t\022/\n\006config\030\002 \003(\0132\037"
+  ".serving_configure.model_config*\262\001\n\013layo"
+  "ut_enum\022\007\n\003ANY\020\000\022\010\n\004NCHW\020\001\022\010\n\004NHWC\020\002\022\t\n\005"
+  "NCDHW\020\003\022\t\n\005NDHWC\020\004\022\010\n\004OIHW\020@\022\t\n\005GOIHW\020A\022"
+  "\t\n\005OIDHW\020B\022\n\n\006GOIDHW\020C\022\n\n\006SCALAR\020_\022\005\n\001C\020"
+  "`\022\010\n\003CHW\020\200\001\022\007\n\002HW\020\300\001\022\007\n\002NC\020\301\001\022\007\n\002CN\020\302\001\022\014"
+  "\n\007BLOCKED\020\310\001*\037\n\013device_type\022\007\n\003CPU\020\000\022\007\n\003"
+  "GPU\020\001*H\n\tprecision\022\006\n\002U8\020\000\022\006\n\002I8\020\001\022\007\n\003I3"
+  "2\020\002\022\007\n\003I64\020\003\022\007\n\003F16\020\004\022\007\n\003F32\020\005\022\007\n\003F64\020\006b"
+  "\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_server_5fconfigure_2eproto_deps[1] = {
 };
@@ -189,7 +191,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ser
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_server_5fconfigure_2eproto_once;
 static bool descriptor_table_server_5fconfigure_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_server_5fconfigure_2eproto = {
-  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 946,
+  &descriptor_table_server_5fconfigure_2eproto_initialized, descriptor_table_protodef_server_5fconfigure_2eproto, "server_configure.proto", 967,
   &descriptor_table_server_5fconfigure_2eproto_once, descriptor_table_server_5fconfigure_2eproto_sccs, descriptor_table_server_5fconfigure_2eproto_deps, 4, 0,
   schemas, file_default_instances, TableStruct_server_5fconfigure_2eproto::offsets,
   file_level_metadata_server_5fconfigure_2eproto, 4, file_level_enum_descriptors_server_5fconfigure_2eproto, file_level_service_descriptors_server_5fconfigure_2eproto,
@@ -871,11 +873,16 @@ model_config_list::model_config_list(const model_config_list& from)
       _internal_metadata_(nullptr),
       config_(from.config_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  listen_addr_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_listen_addr().empty()) {
+    listen_addr_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.listen_addr_);
+  }
   // @@protoc_insertion_point(copy_constructor:serving_configure.model_config_list)
 }
 
 void model_config_list::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_model_config_list_server_5fconfigure_2eproto.base);
+  listen_addr_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 model_config_list::~model_config_list() {
@@ -884,6 +891,7 @@ model_config_list::~model_config_list() {
 }
 
 void model_config_list::SharedDtor() {
+  listen_addr_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void model_config_list::SetCachedSize(int size) const {
@@ -902,6 +910,7 @@ void model_config_list::Clear() {
   (void) cached_has_bits;
 
   config_.Clear();
+  listen_addr_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   _internal_metadata_.Clear();
 }
 
@@ -912,16 +921,25 @@ const char* model_config_list::_InternalParse(const char* ptr, ::PROTOBUF_NAMESP
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // repeated .serving_configure.model_config config = 1;
+      // string listen_addr = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_listen_addr();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "serving_configure.model_config_list.listen_addr"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated .serving_configure.model_config config = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(_internal_add_config(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -950,12 +968,22 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .serving_configure.model_config config = 1;
+  // string listen_addr = 1;
+  if (this->listen_addr().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_listen_addr().data(), static_cast<int>(this->_internal_listen_addr().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "serving_configure.model_config_list.listen_addr");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_listen_addr(), target);
+  }
+
+  // repeated .serving_configure.model_config config = 2;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_config_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_config(i), target, stream);
+      InternalWriteMessage(2, this->_internal_config(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -974,11 +1002,18 @@ size_t model_config_list::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .serving_configure.model_config config = 1;
+  // repeated .serving_configure.model_config config = 2;
   total_size += 1UL * this->_internal_config_size();
   for (const auto& msg : this->config_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string listen_addr = 1;
+  if (this->listen_addr().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_listen_addr());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1013,6 +1048,10 @@ void model_config_list::MergeFrom(const model_config_list& from) {
   (void) cached_has_bits;
 
   config_.MergeFrom(from.config_);
+  if (from.listen_addr().size() > 0) {
+
+    listen_addr_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.listen_addr_);
+  }
 }
 
 void model_config_list::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -1037,6 +1076,8 @@ void model_config_list::InternalSwap(model_config_list* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   config_.InternalSwap(&other->config_);
+  listen_addr_.Swap(&other->listen_addr_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata model_config_list::GetMetadata() const {

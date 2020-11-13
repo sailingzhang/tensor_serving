@@ -22,6 +22,6 @@ chmod +x ${BASEDIR}/tensor_serving
 # pkill -9 nginx
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${BASEDIR}
 
-${BASEDIR}/tensor_serving  ${BASEDIR}/servingmodel/docker_serving_model.json
+${BASEDIR}/tensor_serving  /app/servingmodel/docker_serving_model.json
 # pkill -9 grpcwebproxy
 # pkill -9 nginx

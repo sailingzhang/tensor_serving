@@ -632,9 +632,10 @@ class model_config_list :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kConfigFieldNumber = 1,
+    kConfigFieldNumber = 2,
+    kListenAddrFieldNumber = 1,
   };
-  // repeated .serving_configure.model_config config = 1;
+  // repeated .serving_configure.model_config config = 2;
   int config_size() const;
   private:
   int _internal_config_size() const;
@@ -652,12 +653,29 @@ class model_config_list :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::serving_configure::model_config >&
       config() const;
 
+  // string listen_addr = 1;
+  void clear_listen_addr();
+  const std::string& listen_addr() const;
+  void set_listen_addr(const std::string& value);
+  void set_listen_addr(std::string&& value);
+  void set_listen_addr(const char* value);
+  void set_listen_addr(const char* value, size_t size);
+  std::string* mutable_listen_addr();
+  std::string* release_listen_addr();
+  void set_allocated_listen_addr(std::string* listen_addr);
+  private:
+  const std::string& _internal_listen_addr() const;
+  void _internal_set_listen_addr(const std::string& value);
+  std::string* _internal_mutable_listen_addr();
+  public:
+
   // @@protoc_insertion_point(class_scope:serving_configure.model_config_list)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::serving_configure::model_config > config_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr listen_addr_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_server_5fconfigure_2eproto;
 };
@@ -1038,7 +1056,67 @@ model_config::mutable_layout_map() {
 
 // model_config_list
 
-// repeated .serving_configure.model_config config = 1;
+// string listen_addr = 1;
+inline void model_config_list::clear_listen_addr() {
+  listen_addr_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline const std::string& model_config_list::listen_addr() const {
+  // @@protoc_insertion_point(field_get:serving_configure.model_config_list.listen_addr)
+  return _internal_listen_addr();
+}
+inline void model_config_list::set_listen_addr(const std::string& value) {
+  _internal_set_listen_addr(value);
+  // @@protoc_insertion_point(field_set:serving_configure.model_config_list.listen_addr)
+}
+inline std::string* model_config_list::mutable_listen_addr() {
+  // @@protoc_insertion_point(field_mutable:serving_configure.model_config_list.listen_addr)
+  return _internal_mutable_listen_addr();
+}
+inline const std::string& model_config_list::_internal_listen_addr() const {
+  return listen_addr_.GetNoArena();
+}
+inline void model_config_list::_internal_set_listen_addr(const std::string& value) {
+  
+  listen_addr_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+}
+inline void model_config_list::set_listen_addr(std::string&& value) {
+  
+  listen_addr_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:serving_configure.model_config_list.listen_addr)
+}
+inline void model_config_list::set_listen_addr(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  
+  listen_addr_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:serving_configure.model_config_list.listen_addr)
+}
+inline void model_config_list::set_listen_addr(const char* value, size_t size) {
+  
+  listen_addr_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:serving_configure.model_config_list.listen_addr)
+}
+inline std::string* model_config_list::_internal_mutable_listen_addr() {
+  
+  return listen_addr_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* model_config_list::release_listen_addr() {
+  // @@protoc_insertion_point(field_release:serving_configure.model_config_list.listen_addr)
+  
+  return listen_addr_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void model_config_list::set_allocated_listen_addr(std::string* listen_addr) {
+  if (listen_addr != nullptr) {
+    
+  } else {
+    
+  }
+  listen_addr_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), listen_addr);
+  // @@protoc_insertion_point(field_set_allocated:serving_configure.model_config_list.listen_addr)
+}
+
+// repeated .serving_configure.model_config config = 2;
 inline int model_config_list::_internal_config_size() const {
   return config_.size();
 }

@@ -64,5 +64,6 @@ message model_config {
 }
 
 message model_config_list{
-    repeated model_config config = 1;
+    string  listen_addr = 1;
+    repeated model_config config = 2;
 }

@@ -32,7 +32,7 @@ int main(int argc,char *argv[]){
     LOG_INFO("openvino type");
     #endif
 
-    std::thread  s_thread(tensor_serving_local_server,serviceptr,"0.0.0.0:9001",congifureList);
+    std::thread  s_thread(tensor_serving_local_server,serviceptr,congifureList.listen_addr(),congifureList);
     s_thread.join();
     
     return 0;
