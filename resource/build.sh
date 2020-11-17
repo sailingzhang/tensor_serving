@@ -11,6 +11,8 @@ isubuntu="yes"
 
 mkdir -p ${releasedir}
 cp start.sh ${releasedir}
+cp s_log.conf  ${releasedir}
+cp docker_serving_model.json ${releasedir}
 
 cd ${build_dir}
 cmake ${basepath}/src
@@ -24,6 +26,7 @@ else
     cp ${mygit_path}/thirdpart/openvino_2020.1.023/inference_engine/ubuntu_lib/* ${releasedir}
 fi
 cp tensor_serving ${releasedir}
+
 
 
 cp ${basepath}/resource/Dockerfile  .

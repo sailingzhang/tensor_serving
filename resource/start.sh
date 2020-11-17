@@ -5,13 +5,16 @@ chmod +x ${BASEDIR}/tensor_serving
 # cp ${BASEDIR}/*.proto  ${BASEDIR}/share
 # cp -rf ${BASEDIR}/test  ${BASEDIR}/share
 
+configdir=/app/openvino_tensorserving
 
-# if [ ! -f "${BASEDIR}/share/s_log.conf" ]; then
-# 	cp  -f ${BASEDIR}/s_log.conf  ${BASEDIR}/share
-# fi
-# if [ ! -f "${BASEDIR}/share/cactus_configure.json" ]; then
-# 	cp  -f ${BASEDIR}/openvino_cactus_configure.json  ${BASEDIR}/share/cactus_configure.json
-# fi
+mkdir -p ${configdir}
+
+if [ ! -f "${configdir}/s_log.conf" ]; then
+	cp  -f ${BASEDIR}/s_log.conf  ${configdir}
+fi
+if [ ! -f "${configdir}/docker_serving_model.json" ]; then
+	cp  -f ${BASEDIR}/docker_serving_model.json ${configdir}
+fi
 
 
 # cp -rf ${BASEDIR}/webapp/cactus /var/www
@@ -22,6 +25,6 @@ chmod +x ${BASEDIR}/tensor_serving
 # pkill -9 nginx
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${BASEDIR}
 
-${BASEDIR}/tensor_serving  /app/servingmodel/docker_serving_model.json
+${BASEDIR}/tensor_serving  /${configdir}/docker_serving_model.json
 # pkill -9 grpcwebproxy
 # pkill -9 nginx

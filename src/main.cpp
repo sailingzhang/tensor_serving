@@ -17,7 +17,7 @@ using grpc::Status;
 
 
 int main(int argc,char *argv[]){
-	log_init("s_log.conf");
+	log_init("/app/openvino_tensorserving/s_log.conf");
     LOG_INFO("hello world");
 	serving_configure::model_config_list congifureList;
 	loadconfigure(argv[1],congifureList);
