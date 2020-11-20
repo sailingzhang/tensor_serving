@@ -5,7 +5,7 @@ set -e
 basepath=`pwd`/..
 mygit_path=${basepath}/..
 build_dir=/tmp/tensor_serving_build
-releasedir=${build_dir}/tensor_serving_release
+releasedir=/app/tensor_serving
 # isubuntu=`cat /etc/os-release|grep ubuntu` 
 isubuntu="yes"
 

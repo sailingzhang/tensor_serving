@@ -5,7 +5,7 @@ chmod +x ${BASEDIR}/tensor_serving
 # cp ${BASEDIR}/*.proto  ${BASEDIR}/share
 # cp -rf ${BASEDIR}/test  ${BASEDIR}/share
 
-configdir=/app/openvino_tensorserving
+configdir=/app_config/openvino_tensorserving
 
 mkdir -p ${configdir}
 
@@ -25,6 +25,6 @@ fi
 # pkill -9 nginx
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${BASEDIR}
 
-${BASEDIR}/tensor_serving  /${configdir}/docker_serving_model.json
+${BASEDIR}/tensor_serving  ${configdir}/docker_serving_model.json
 # pkill -9 grpcwebproxy
 # pkill -9 nginx

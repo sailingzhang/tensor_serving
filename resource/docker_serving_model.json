@@ -3,35 +3,35 @@
     "config":{
       "name":"mtcnnmodel",
       "version":202001011615,
-      "base_path":"/app/servingmodel/mtcnnmodel/202001011615",
+      "base_path":"/app_config/servingmodel/mtcnnmodel/202001011615",
       "model_platform":"tensorflow",
       "isload":true
     },
     "config":{
       "name":"facenetmodel",
       "version":202001141108,
-      "base_path":"/app/servingmodel/facenetmodel/202001141108",
+      "base_path":"/app_config/servingmodel/facenetmodel/202001141108",
       "model_platform":"tensorflow",
       "isload":true
     },
     "config":{
       "name":"facenetsimilar",
       "version":202003081404,
-      "base_path":"/app/servingmodel/facenetsimilar/202003081404",
+      "base_path":"/app_config/servingmodel/facenetsimilar/202003081404",
       "model_platform":"tensorflow",
       "isload":true
     },
     "config":{
         "name":"tf1_efficientdet0",
         "version":202007051313,
-        "base_path":"/app/servingmodel/tf1_efficientdet0/202007051313",
+        "base_path":"/app_config/servingmodel/tf1_efficientdet0/202007051313",
         "model_platform":"tensorflow",
         "isload":true
       },
     "config":{
       "name":"openvino_facenetmodel",
       "version":202001141108,
-      "base_path":"/app/servingmodel/openvino_facenetmodel/202001141108",
+      "base_path":"/app_config/servingmodel/openvino_facenetmodel/202001141108",
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1,
@@ -42,7 +42,7 @@
     "config":{
       "name":"openvino_faceidenitfy_MobileNetV2",
       "version":202005081358,
-      "base_path":"/app/servingmodel/openvino_faceidenitfy_MobileNetV2/202005081358",
+      "base_path":"/app_config/servingmodel/openvino_faceidenitfy_MobileNetV2/202005081358",
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1
@@ -51,7 +51,7 @@
     "config":{
       "name":"openvino_vehicleplatedetect_MobileNetV2",
       "version":202005151521,
-      "base_path":"/app/servingmodel/openvino_vehicleplatedetect_MobileNetV2/202005151521",
+      "base_path":"/app_config/servingmodel/openvino_vehicleplatedetect_MobileNetV2/202005151521",
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1,
@@ -65,7 +65,7 @@
     "config":{
       "name":"openvino_licenseplaterecongnition_sfp",
       "version":202005161619,
-      "base_path":"/app/servingmodel/openvino_licenseplaterecongnition_sfp/202005161619",
+      "base_path":"/app_config/servingmodel/openvino_licenseplaterecongnition_sfp/202005161619",
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1,
@@ -80,7 +80,7 @@
     "config":{
       "name":"openvino_facenetsimilar",
       "version":202003081404,
-      "base_path":"/app/servingmodel/openvino_facenetsimilar/202003081404",
+      "base_path":"/app_config/servingmodel/openvino_facenetsimilar/202003081404",
       "model_platform":"openvino",
       "isload":true,
       "batch_size":1
@@ -88,28 +88,28 @@
     "config":{
       "name":"openvino_mtcnn-o",
       "version":202004202120,
-      "base_path":"/app/servingmodel/openvino_mtcnn-o/202004202120",
+      "base_path":"/app_config/servingmodel/openvino_mtcnn-o/202004202120",
       "model_platform":"openvino",
       "isload":false
     },
     "config":{
       "name":"openvino_mtcnn-p",
       "version":202004202120,
-      "base_path":"/app/servingmodel/openvino_mtcnn-p/202004202120",
+      "base_path":"/app_config/servingmodel/openvino_mtcnn-p/202004202120",
       "model_platform":"openvino",
       "isload":false
     },
     "config":{
       "name":"openvino_mtcnn-r",
       "version":202004202120,
-      "base_path":"/app/servingmodel/openvino_mtcnn-r/202004202120",
+      "base_path":"/app_config/servingmodel/openvino_mtcnn-r/202004202120",
       "model_platform":"openvino",
       "isload":false
     },
     "config":{
       "name":"openvino_SqueezeNetlight",
       "version":202004232120,
-      "base_path":"/app/servingmodel/openvino_SqueezeNetlight/202004232120",
+      "base_path":"/app_config/servingmodel/openvino_SqueezeNetlight/202004232120",
       "model_platform":"openvino",
       "infer_request_num":1,
       "isload":true,
@@ -126,7 +126,7 @@
     "config":{
         "name":"openvino_facedetect_MobileNetV2_16F",
         "version":202005301353,
-        "base_path":"/app/servingmodel/openvino_facedetect_MobileNetV2_16F/202005301353",
+        "base_path":"/app_config/servingmodel/openvino_facedetect_MobileNetV2_16F/202005301353",
         "model_platform":"openvino",
         "infer_request_num":1,
         "isload":false,
@@ -143,7 +143,7 @@
       "config":{
         "name":"openvino_persondetectaction_RMNet",
         "version":202005310926,
-        "base_path":"/app/servingmodel/openvino_persondetectaction_RMNet/202005310926",
+        "base_path":"/app_config/servingmodel/openvino_persondetectaction_RMNet/202005310926",
         "model_platform":"openvino",
         "infer_request_num":1,
         "isload":false,
@@ -160,7 +160,7 @@
       "config":{
         "name":"openvino_personvihicledetct_MobileNet",
         "version":202005311350,
-        "base_path":"/app/servingmodel/openvino_personvihicledetct_MobileNet/202005311350",
+        "base_path":"/app_config/servingmodel/openvino_personvihicledetct_MobileNet/202005311350",
         "model_platform":"openvino",
         "infer_request_num":1,
         "isload":true,
@@ -177,7 +177,7 @@
       "config":{
         "name":"openvino_semantic-segmentation-adas-0001",
         "version":202007222014,
-        "base_path":"/app/servingmodel/openvino_semantic-segmentation-adas-0001/202007222014",
+        "base_path":"/app_config/servingmodel/openvino_semantic-segmentation-adas-0001/202007222014",
         "model_platform":"openvino",
         "infer_request_num":1,
         "isload":false,
@@ -194,7 +194,7 @@
       "config":{
         "name":"instance-segmentation-security-0050_FP32",
         "version":202007242003,
-        "base_path":"/app/servingmodel/instance-segmentation-security-0050_FP32/202007242003",
+        "base_path":"/app_config/servingmodel/instance-segmentation-security-0050_FP32/202007242003",
         "model_platform":"openvino",
         "infer_request_num":1,
         "isload":false,
