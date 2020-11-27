@@ -8,7 +8,7 @@ FROM ubuntu:20.04
 # MAINTAINER sailingzhang
 
 ######################################arg#########################################################################
-ARG APPDIR=/app 
+ARG APPDIR=/app/openvino_tensor_serving 
 
 
 
@@ -18,7 +18,7 @@ ARG APPDIR=/app
 ################################################################################################################
 #ENV PATH ${APPDIR}:$PATH
 WORKDIR  ${APPDIR}
-COPY tensor_serving_release  ${APPDIR}
+COPY tensor_serving  ${APPDIR}
 RUN chmod +x start.sh &&\
     # apt-get update &&\
 #     apt-get install -y nginx &&\
@@ -36,9 +36,12 @@ RUN chmod +x start.sh &&\
 
 ##############################################################################################################
 
-EXPOSE 8080
-EXPOSE 8000
-EXPOSE 81
+# EXPOSE 8080
+# EXPOSE 8000
+# EXPOSE 81
+
+
+EXPOSE 9001
 
 # EXPOSE 8002
 # COPY app ${APPDIR}
