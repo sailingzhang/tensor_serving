@@ -18,9 +18,11 @@ ARG APPDIR=/app/openvino_tensor_serving
 ################################################################################################################
 #ENV PATH ${APPDIR}:$PATH
 WORKDIR  ${APPDIR}
-COPY tensor_serving  ${APPDIR}
+COPY openvino_tensor_serving  ${APPDIR}
 RUN chmod +x start.sh &&\
-    # apt-get update &&\
+    apt-get -y update &&\
+    apt-get install  -y net-tools &&\
+    apt-get install -y iputils-ping &&\
 #     apt-get install -y nginx &&\
 #     apt-get install -y  openssl &&\
 #     rm -rf /tmp/* && \
@@ -46,7 +48,7 @@ EXPOSE 9001
 # EXPOSE 8002
 # COPY app ${APPDIR}
 # RUN chmod +x ${APPDIR}/start
-ENTRYPOINT ["./start.sh"]
+# ENTRYPOINT ["./start.sh"]
 
 
 
