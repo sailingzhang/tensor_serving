@@ -7,9 +7,11 @@ ARG BUILD_IMAGE=cactusRelease:${TF_VERSION}
 FROM ubuntu:20.04
 # MAINTAINER sailingzhang
 
+
+
 ######################################arg#########################################################################
 ARG APPDIR=/app/openvino_tensor_serving 
-
+ENV LD_LIBRARY_PATH="${APPDIR}:${LD_LIBRARY_PATH}"
 
 
 ###############################tensorflow serving#############################################################
@@ -30,6 +32,7 @@ RUN chmod +x start.sh &&\
 # RUN echo "root:xtygajp2243374"|chpasswd 
 ###########################################################################################################
 #COPY cactus ${APPDIR}
+
 
 
 

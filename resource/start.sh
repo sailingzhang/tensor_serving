@@ -28,3 +28,9 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${BASEDIR}
 ${BASEDIR}/tensor_serving  ${configdir}/docker_serving_model.json
 # pkill -9 grpcwebproxy
 # pkill -9 nginx
+
+
+
+
+
+# docker container   run --rm  -v /app_config/servingmodel:/app_config/servingmodel -p 9001:9001 -it openvino_tensor_serving:latest   /app/openvino_tensor_serving/tensor_serving /app_config/servingmodel/docker_serving_model.json
